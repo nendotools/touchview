@@ -24,7 +24,8 @@ bl_info = {
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
-    "wiki_url": "",
+    "doc_url": "",
+    "tracker_url": "https://github.com/nendotools/touchview/issues",
     "category": "3D View",
 }
 
