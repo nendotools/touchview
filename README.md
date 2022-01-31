@@ -17,7 +17,7 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 ##### KNOWN ISSUES:
 
-lock camera to Object and lock camera to 3D Cursor cause move and dolly function to move to Object within the scene
+- lock camera to Object and lock camera to 3D Cursor cause move and dolly function to move to Object within the scene
 
 Please [report any issues](https://github.com/nendotools/touchview/issues) you find and I'll do my best to address them.
 
