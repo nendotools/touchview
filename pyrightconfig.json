@@ -1,0 +1,16 @@
+{
+  "include": [
+    "src"
+  ],
+  
+  "exclude": [
+    "**/__pycache__",
+    "src/typestubs"
+  ],
+
+  "reportMissingImports": true,
+  "reportMissingTypeStubs": false,
+
+  "pythonVersion": "3.9",
+  "pythonPlatform": "Linux"
+}
