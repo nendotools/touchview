@@ -14,8 +14,14 @@ v0.1
 - Camera rotate in any other area of viewport
 - Toggleable overlay to simplify resizing controls
 
-v0.2
+v0.2 (unpublished)
+- minor bug fixes and code cleanup
+
+v0.3
 - Double-tap to toggle "focus" mode
+- Toggle Tools LEFT/RIGHT in UI
+- Fixed incorrect viewport calculation when N-panel is open
+- refactored screen/area management code (additional major refactor needed)
 
 *many more features are planned for the final version.*
 

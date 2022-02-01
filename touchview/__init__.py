@@ -29,7 +29,7 @@ bl_info = {
     "category": "3D View",
 }
 
-from types import SimpleNamespace
+from types import SimpleNamespace
 import bpy
 from bpy import ops
 import math
@@ -169,6 +169,28 @@ class OverlayAgent:
         ao = self.findView(view)
         if ao == False: return self.indexView(view)
         return ao
+
+## PLEASE IMPLEMENT THIS
+##  --- will need a lot of cleanup and address possible double assignment
+    def getViewport(self, context):
+        area = context.area
+        if area.type != "VIEW_3D": return (False)
+
+        viewport = {
+                "view": Region,
+                "ui": Region,
+                "tools": Region
+        }
+        for region in area.regions:
+            if region.type == "WINDOW":
+                viewport["view"] = region
+            if region.type == "UI":
+                viewport["ui"] = region
+            if region.type == "TOOLS":
+                viewport["tools"] = region
+
+        return SimpleNamespace(**viewport)
+
 
     def update_overlay(self):
         self.clearAll()
