@@ -8,10 +8,14 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 ##### Features:
 
+v0.1
 - Camera dolly on left and right of viewport
 - Camera pan from center of viewport
 - Camera rotate in any other area of viewport
 - Toggleable overlay to simplify resizing controls
+
+v0.2
+- Double-tap to toggle "focus" mode
 
 *many more features are planned for the final version.*
 

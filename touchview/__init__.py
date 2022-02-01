@@ -20,7 +20,7 @@ bl_info = {
     "name": "Touch Viewport",
     "description": "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (0, 1),
+    "version": (0, 2),
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -30,18 +30,25 @@ bl_info = {
 }
 
 import bpy
+from bpy import ops
 import math
 from mathutils import Vector
 import gpu
-from bgl import *
+import bgl
 from gpu_extras.batch import batch_for_shader    
 
-class TouchInput(bpy.types.Operator):
+from bpy.types import Operator, Panel, WindowManager
+from bpy.props import EnumProperty
+
+from bpy.utils import register_class, unregister_class
+from bpy.app import timers
+
+class TouchInput(Operator):
     """ Active Viewport control zones """
     bl_idname = "view3d.view_ops"
     bl_label = "Viewport Control Regions"
     
-    mode: bpy.props.EnumProperty(
+    mode: EnumProperty(
         name="Mode", 
         description="Sets the viewport control type",
         items={
@@ -49,18 +56,30 @@ class TouchInput(bpy.types.Operator):
             ('PAN','pan','Move the viewport'),
             ('DOLLY','zoom','Zoom in/out the viewport')
         },
-        default="ORBIT")
+        default='ORBIT',
+        options={"HIDDEN"}
+    )
 
     def execute(self, context):    
         if self.mode == "ORBIT":
-            bpy.ops.view3d.rotate('INVOKE_DEFAULT')
+            ops.view3d.rotate('INVOKE_DEFAULT')
         elif self.mode == "PAN":
-            bpy.ops.view3d.move('INVOKE_DEFAULT')
+            ops.view3d.move('INVOKE_DEFAULT')
         elif self.mode == "DOLLY":
-            bpy.ops.view3d.dolly('INVOKE_DEFAULT')
+            ops.view3d.dolly('INVOKE_DEFAULT')
         return {'FINISHED'}
+
+    # NEED TO ADD A CHECK FOR CURRENT STATE AND SYNC INTENDED MODE
+    def handle_doubletap(self, event):
+        if event.value == "DOUBLE_CLICK" and event.type != "PEN":
+            ops.screen.screen_full_area()
+            ops.wm.window_fullscreen_toggle()
+            return True
+        return False
     
     def invoke(self, context, event):
+        if self.handle_doubletap(event): return {'FINISHED'}
+
         self.delta = Vector((event.mouse_region_x, event.mouse_region_y))
         wm = bpy.context.window_manager
         mid_point = self.getMidPoint(context.area)
@@ -136,8 +155,24 @@ class OverlayAgent:
             for area in bpy.context.window.screen.areas.values():
                 if area.type != "VIEW_3D": continue
                 a, ov = self.init_viewport(area)
-                wd = a.width
+
+## bpy.context.window may be global window
+## area.region[WINDOW] is the actual viewport, subtracting the UI sizes
+                ui_wd = 0
+                w_wd = 0
+                for r in a.regions:
+                    if r.type == "WINDOW":
+                        w_wd = r.width
+                    if r.type == "UI":
+                        ui_wd = r.width
+                    print(r.type, ".width = ", r.width)
+                print("ui_wd =", ui_wd)
+                print("w_wd=", w_wd)
+
+                wd = w_wd
                 ht = a.height
+
+
                 pan_diameter = math.dist((0,0), (wd/2, ht/2)) * (wm.pan_rad * 0.4)
                 
                 left_rail = (
@@ -145,9 +180,10 @@ class OverlayAgent:
                     Vector((wd/2*wm.dolly_wid, ht))
                 )
                 right_rail = (
-                    Vector((wd,0.0)), 
+                    Vector((wd, 0.0)), 
                     Vector((wd - wd/2*wm.dolly_wid, ht))
                 )
+
                 mid_ring = (
                     Vector((wd/2, ht/2)),
                     pan_diameter
@@ -247,7 +283,7 @@ class View3DPanel:
     bl_region_type = 'UI'
     bl_category = "NENDO"
     
-class PanelOne(View3DPanel, bpy.types.Panel):
+class PanelOne(View3DPanel, Panel):
     bl_idname = "VIEW3D_PT_view_ops"
     bl_label = "Viewport Settings"
 
@@ -261,31 +297,54 @@ class PanelOne(View3DPanel, bpy.types.Panel):
         self.layout.prop(wm, "pan_rad")
         self.layout.row()
         self.layout.prop(wm, "isVisible", text="Show Overlay")
+        
+        self.layout.label(text="Viewoprt Options")
+        self.layout.row()
+
+        op = self.layout.operator("view3d.tools_region_flip", text="Flip Tools")
+
+class FlipTools(Operator):
+    """ Relocate Tools panel between left and right """
+    bl_idname = "view3d.tools_region_flip"
+    bl_label = "Tools Region Swap"
+
+    def execute(self, context):
+        override = bpy.context.copy()
+        for r in context.area.regions:
+            if r.type == 'TOOLS':
+                override["region"] = r
+        bpy.ops.screen.region_flip(override)
+        return {'FINISHED'}
+        
+    @classmethod
+    def poll(cls, context):
+        return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
 addon_keymaps = []
 
 def register():
-    bpy.utils.register_class(TouchInput)
-    bpy.utils.register_class(PanelOne)
+    register_class(TouchInput)
+    register_class(FlipTools)
+    register_class(PanelOne)
 
     global overlay_manager
     overlay_manager = OverlayAgent()
-    if not bpy.app.timers.is_registered(handle_redraw):
-        bpy.app.timers.register(handle_redraw, first_interval=1)
+    if not timers.is_registered(handle_redraw):
+        timers.register(handle_redraw, first_interval=1)
     
-    bpy.types.WindowManager.dolly_wid = bpy.props.FloatProperty(
+    WindowManager.dolly_wid = bpy.props.FloatProperty(
         name="Width", 
         default=0.4, 
         min=0.1, 
         max=1
     )
-    bpy.types.WindowManager.pan_rad = bpy.props.FloatProperty(
+    WindowManager.pan_rad = bpy.props.FloatProperty(
         name="Radius", 
         default=0.35, 
         min=0.1, 
         max=1.0
     )
-    bpy.types.WindowManager.isVisible = bpy.props.BoolProperty(
+    WindowManager.isVisible = bpy.props.BoolProperty(
         name="Show Overlay", 
         default=False 
     )
@@ -294,8 +353,13 @@ def register():
     km = wm.keyconfigs.addon.keymaps.new(name='', space_type='EMPTY')
     kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi)) 
+
     km = wm.keyconfigs.addon.keymaps.new(name='Sculpt', space_type='EMPTY')
     kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
+    addon_keymaps.append((km, kmi))
+
+    km = wm.keyconfigs.addon.keymaps.new(name='Sculpt', space_type='EMPTY')
+    kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'DOUBLE_CLICK')
     addon_keymaps.append((km, kmi))
     
     kmi = km.keymap_items.new('sculpt.brush_stroke', 'PEN', 'PRESS')
@@ -308,20 +372,21 @@ def register():
 
 def unregister():
     global overlay_manager
-    if bpy.app.timers.is_registered(handle_redraw):
-        bpy.app.timers.unregister(handle_redraw)
+    if timers.is_registered(handle_redraw):
+        timers.unregister(handle_redraw)
     overlay_manager.clearAll()
     del overlay_manager
-    del bpy.types.WindowManager.dolly_wid
-    del bpy.types.WindowManager.pan_rad
-    del bpy.types.WindowManager.isVisible
+    del WindowManager.dolly_wid
+    del WindowManager.pan_rad
+    del WindowManager.isVisible
 
     for km, kmi in addon_keymaps:
         km.keymap_items.remove(kmi)
     addon_keymaps.clear()
 
-    bpy.utils.unregister_class(PanelOne)
-    bpy.utils.unregister_class(TouchInput)
+    unregister_class(PanelOne)
+    unregister_class(FlipTools)
+    unregister_class(TouchInput)
     
 
 if __name__ == "__main__":
