@@ -20,7 +20,7 @@ bl_info = {
     "name": "Touch Viewport",
     "description": "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (0, 2),
+    "version": (0, 3),
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -29,16 +29,17 @@ bl_info = {
     "category": "3D View",
 }
 
+from types import SimpleNamespace
 import bpy
 from bpy import ops
 import math
 from mathutils import Vector
 import gpu
-import bgl
+from bgl import glEnable, glDisable, GL_BLEND
 from gpu_extras.batch import batch_for_shader    
 
-from bpy.types import Operator, Panel, WindowManager
-from bpy.props import EnumProperty
+from bpy.types import Operator, Panel, Region, WindowManager
+from bpy.props import EnumProperty, BoolProperty, IntProperty, FloatProperty, StringProperty
 
 from bpy.utils import register_class, unregister_class
 from bpy.app import timers
@@ -76,20 +77,43 @@ class TouchInput(Operator):
             ops.wm.window_fullscreen_toggle()
             return True
         return False
+
+    def getViewport(self, context):
+        area = context.area
+        if area.type != "VIEW_3D": return (False)
+
+        viewport = {
+                "view": Region,
+                "ui": Region,
+                "tools": Region
+        }
+        for region in area.regions:
+            if region.type == "WINDOW":
+                viewport["view"] = region
+            if region.type == "UI":
+                viewport["ui"] = region
+            if region.type == "TOOLS":
+                viewport["tools"] = region
+
+        return SimpleNamespace(**viewport)
+
     
     def invoke(self, context, event):
         if self.handle_doubletap(event): return {'FINISHED'}
 
         self.delta = Vector((event.mouse_region_x, event.mouse_region_y))
+
+        viewport = self.getViewport(context)
+
         wm = bpy.context.window_manager
-        mid_point = self.getMidPoint(context.area)
+        mid_point = self.getMidPoint(viewport.view)
         dolly_scale = wm.dolly_wid
         pan_scale = wm.pan_rad
         
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale*0.4)
         
-        if dolly_wid > self.delta.x or self.delta.x > context.area.width-dolly_wid:
+        if dolly_wid > self.delta.x or self.delta.x > viewport.view.width-dolly_wid:
             self.mode = "DOLLY"
         elif math.dist(self.delta, mid_point) < pan_diameter:
             self.mode = "PAN"
@@ -165,10 +189,6 @@ class OverlayAgent:
                         w_wd = r.width
                     if r.type == "UI":
                         ui_wd = r.width
-                    print(r.type, ".width = ", r.width)
-                print("ui_wd =", ui_wd)
-                print("w_wd=", w_wd)
-
                 wd = w_wd
                 ht = a.height
 
@@ -332,19 +352,19 @@ def register():
     if not timers.is_registered(handle_redraw):
         timers.register(handle_redraw, first_interval=1)
     
-    WindowManager.dolly_wid = bpy.props.FloatProperty(
+    WindowManager.dolly_wid = FloatProperty(
         name="Width", 
         default=0.4, 
         min=0.1, 
         max=1
     )
-    WindowManager.pan_rad = bpy.props.FloatProperty(
+    WindowManager.pan_rad = FloatProperty(
         name="Radius", 
         default=0.35, 
         min=0.1, 
         max=1.0
     )
-    WindowManager.isVisible = bpy.props.BoolProperty(
+    WindowManager.isVisible = BoolProperty(
         name="Show Overlay", 
         default=False 
     )
