@@ -62,55 +62,18 @@ class ViewportManager:
             if region.type == "TOOLS":
                 viewport.tools = region
         viewport.overlay = Overlay()
+        viewport.overlay.drawUI(viewport.view)
 
         self.viewports.append(viewport)
         return viewport
 
     def update_viewport(self):
-        self.clearAll()
         if not hasattr(bpy.context.scene, "overlay_settings"): return False
-        settings = bpy.context.scene.overlay_settings
-
-        if settings.isVisible:
-            for area in bpy.context.window.screen.areas:
-                if area.type != "VIEW_3D": continue
-                vp = self.getViewport(area)
-
-                dimensions = vp.getSize()
-                mid_point = vp.getMidpoint()
-
-                pan_diameter = math.dist((0,0), mid_point) * (settings.pan_rad * 0.4)
-                
-                left_rail = (
-                    Vector((0.0,0.0)), 
-                    Vector((dimensions.x/2*settings.dolly_wid, dimensions.y))
-                )
-                right_rail = (
-                    Vector((dimensions.x, 0.0)), 
-                    Vector((dimensions.x - dimensions.x/2*settings.dolly_wid, dimensions.y))
-                )
-
-                mid_ring = (
-                    mid_point,
-                    pan_diameter
-                )
-                vp.overlay.renderShape(
-                    "left_rail", "RECT", left_rail, (1,1,1,0.01)
-                )
-                vp.overlay.renderShape(
-                    "right_rail",
-                    "RECT",
-                    right_rail,
-                    (1,1,1,0.01)
-                )
-                vp.overlay.renderShape(
-                    "mid_ring",
-                    "CIRC",
-                    mid_ring,
-                    (1,1,1,0.01)
-                )
-                return True
-        return False
+        for area in bpy.context.window.screen.areas:
+            if area.type != "VIEW_3D": continue
+            vp = self.getViewport(area)
+            vp.tag_redraw()
+        return True
 
     def clearAll(self):
         for vp in self.viewports:
