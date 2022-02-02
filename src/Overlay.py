@@ -14,7 +14,6 @@ class Overlay:
         for mesh in self.meshes:
             SpaceView3D.draw_handler_remove(mesh, 'WINDOW')
         self.meshes = []
-        print("Cleared, maybe...")
 
     def getMidpoint(self, view: Region) -> Vector:
         return self.getSize(view, 0.5)

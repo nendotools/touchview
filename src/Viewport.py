@@ -22,6 +22,7 @@ class Viewport:
 
     def tag_redraw(self):
         self._area.tag_redraw()
+        self.view.tag_redraw()
 
     def getMidpoint(self) -> Vector:
         return self.getSize(0.5)
@@ -63,6 +64,7 @@ class ViewportManager:
         return viewport
 
     def update_viewport(self):
+        print("update triggered")
         if not hasattr(bpy.context.scene, "overlay_settings"): return False
         for area in bpy.context.window.screen.areas:
             if area.type != "VIEW_3D": continue

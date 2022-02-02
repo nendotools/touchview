@@ -43,6 +43,7 @@ from . Viewport import Viewport, ViewportManager
 from . items import input_mode_items
 from . constants import OverlaySettings
 from . Panel import NendoViewport, View3DPanel
+from . touch_input import register_keymaps, unregister_keymaps
 
 class TouchInput(Operator):
     """ Active Viewport control zones """
@@ -119,8 +120,6 @@ class FlipTools(Operator):
     def poll(cls, context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
-addon_keymaps = []
-
 def register():
     register_class(TouchInput)
     register_class(FlipTools)
@@ -129,34 +128,13 @@ def register():
     Scene.overlay_settings = bpy.props.PointerProperty(type=OverlaySettings)
     Scene.vm = ViewportManager()
     
-    wm = bpy.context.window_manager   
-    km = wm.keyconfigs.addon.keymaps.new(name='', space_type='EMPTY')
-    kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
-    addon_keymaps.append((km, kmi)) 
-
-    km = wm.keyconfigs.addon.keymaps.new(name='Sculpt', space_type='EMPTY')
-    kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
-    addon_keymaps.append((km, kmi))
-
-    km = wm.keyconfigs.addon.keymaps.new(name='Sculpt', space_type='EMPTY')
-    kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'DOUBLE_CLICK')
-    addon_keymaps.append((km, kmi))
-    
-    kmi = km.keymap_items.new('sculpt.brush_stroke', 'PEN', 'PRESS')
-    kmi.properties.mode = "NORMAL"
-    addon_keymaps.append((km, kmi))
-    
-    kmi = km.keymap_items.new('sculpt.brush_stroke', 'ERASER', 'PRESS')
-    kmi.properties.mode = "INVERT"
-    addon_keymaps.append((km, kmi))
+    register_keymaps()
 
 def unregister():
     Scene.vm.unload()
     del Scene.vm
 
-    for km, kmi in addon_keymaps:
-        km.keymap_items.remove(kmi)
-    addon_keymaps.clear()
+    unregister_keymaps()
 
     unregister_class(OverlaySettings)
     unregister_class(NendoViewport)
