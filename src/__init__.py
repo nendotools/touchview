@@ -153,7 +153,6 @@ def register():
 def unregister():
     Scene.vm.unload()
     del Scene.vm
-    del Scene.overlay_settings
 
     for km, kmi in addon_keymaps:
         km.keymap_items.remove(kmi)

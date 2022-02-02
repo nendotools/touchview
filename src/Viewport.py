@@ -35,12 +35,7 @@ class ViewportManager:
     def __init__(self):
         self.viewports = []
 
-        if not timers.is_registered(self.handle_redraw):
-            timers.register(self.handle_redraw, first_interval=1)
-
     def unload(self):
-        if timers.is_registered(self.handle_redraw):
-            timers.unregister(self.handle_redraw)
         self.clearAll()
 
 
@@ -79,7 +74,3 @@ class ViewportManager:
         for vp in self.viewports:
             vp.overlay.clear_overlays()
             vp.tag_redraw()
-
-    def handle_redraw(self):
-        self.update_viewport()
-        return 0.1
