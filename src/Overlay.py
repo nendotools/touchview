@@ -21,13 +21,7 @@ class Overlay:
     def getSize(self, view:Region, scalar: float = 1) -> Vector:
         return Vector((view.width * scalar, view.height * scalar))
 
-##################
-####    SpaceView3D is the handler assignment
-####        Need to detect if the SV3D should react to the draw call by checking
-####        if it is in the _area region list before drawing
-##################
     def drawUI(self, view: Area):
-
         _handle = SpaceView3D.draw_handler_add(
             self.renderCircle, 
             (view, (1,1,1,0.01)), 
@@ -42,20 +36,12 @@ class Overlay:
             'POST_PIXEL'
         )
         self.meshes.append(_handle)
-        view.tag_redraw()
-
-    def verifySpace(self, view: Region, origin: Region):
-        view_check = view.as_pointer()
-        origin_check = origin.as_pointer()
-        if view_check != origin_check: return False
-        return True
 
     def renderRailing(self, view: Area, color: tuple):
         settings = bpy.context.screen.overlay_settings
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer():
-                print("passed", region, bpy.context.region.as_pointer())
                 self.makeBox(region, color)
 
     def makeBox(self, view: Region, color:tuple):
@@ -90,14 +76,21 @@ class Overlay:
         glDisable(GL_BLEND)
 
 
-    def renderCircle(self, view: Region, color: tuple):
+    def renderCircle(self, view: Area, color: tuple):
         settings = bpy.context.screen.overlay_settings
         if not settings.isVisible: return
-        if not self.verifySpace(view, bpy.context.region): return
+        for region in view.regions:
+            if bpy.context.region.as_pointer() == region.as_pointer():
+                self.makeCircle(region, color)
 
-        segments = 100
+    def makeCircle(self, view: Region, color:tuple):
+        settings = bpy.context.screen.overlay_settings
         mid = self.getMidpoint(view)
         radius = math.dist((0,0), mid) * (settings.pan_rad * 0.4)
+        self.drawCircle(mid, radius, color)
+
+    def drawCircle(self, mid: Vector, radius:float, color: tuple):
+        segments = 40
         vertices = [mid]
         indices = []
         p = 0
