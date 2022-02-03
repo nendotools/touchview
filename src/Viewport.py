@@ -12,7 +12,7 @@ class Viewport:
     """ Container Object for Window Areas and related view Regions """
     window: Window
     _area: Area
-    view: Region
+    views: list[Region]
     ui: Region
     tools: Region
     overlay: Overlay
@@ -22,7 +22,6 @@ class Viewport:
 
     def tag_redraw(self):
         self._area.tag_redraw()
-        self.view.tag_redraw()
 
     def getMidpoint(self) -> Vector:
         return self.getSize(0.5)
@@ -50,6 +49,10 @@ class ViewportManager:
         viewport = Viewport()
         viewport._area = area
 
+#############
+####    Need changes here to address multi-viewport situations
+#############
+
         for region in area.regions:      #type: ignore
             if region.type == "WINDOW":
                 viewport.view = region
@@ -58,14 +61,13 @@ class ViewportManager:
             if region.type == "TOOLS":
                 viewport.tools = region
         viewport.overlay = Overlay()
-        viewport.overlay.drawUI(viewport.view)
+        viewport.overlay.drawUI(viewport._area)
 
         self.viewports.append(viewport)
         return viewport
 
     def update_viewport(self):
-        print("update triggered")
-        if not hasattr(bpy.context.scene, "overlay_settings"): return False
+        if not hasattr(bpy.context.screen, "overlay_settings"): return False
         for area in bpy.context.window.screen.areas:
             if area.type != "VIEW_3D": continue
             vp = self.getViewport(area)

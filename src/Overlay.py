@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Region, SpaceView3D
+from bpy.types import Area, Region, SpaceView3D
 import math
 from mathutils import Vector
 import gpu
@@ -21,7 +21,13 @@ class Overlay:
     def getSize(self, view:Region, scalar: float = 1) -> Vector:
         return Vector((view.width * scalar, view.height * scalar))
 
-    def drawUI(self, view: Region):
+##################
+####    SpaceView3D is the handler assignment
+####        Need to detect if the SV3D should react to the draw call by checking
+####        if it is in the _area region list before drawing
+##################
+    def drawUI(self, view: Area):
+
         _handle = SpaceView3D.draw_handler_add(
             self.renderCircle, 
             (view, (1,1,1,0.01)), 
@@ -44,11 +50,16 @@ class Overlay:
         if view_check != origin_check: return False
         return True
 
-    def renderRailing(self, view: Region, color: tuple):
-        settings = bpy.context.scene.overlay_settings
+    def renderRailing(self, view: Area, color: tuple):
+        settings = bpy.context.screen.overlay_settings
         if not settings.isVisible: return
-        if not self.verifySpace(view, bpy.context.region): return
+        for region in view.regions:
+            if bpy.context.region.as_pointer() == region.as_pointer():
+                print("passed", region, bpy.context.region.as_pointer())
+                self.makeBox(region, color)
 
+    def makeBox(self, view: Region, color:tuple):
+        settings = bpy.context.screen.overlay_settings
         mid = self.getMidpoint(view)
         dimensions = self.getSize(view)
         left_rail = (
@@ -80,7 +91,7 @@ class Overlay:
 
 
     def renderCircle(self, view: Region, color: tuple):
-        settings = bpy.context.scene.overlay_settings
+        settings = bpy.context.screen.overlay_settings
         if not settings.isVisible: return
         if not self.verifySpace(view, bpy.context.region): return
 

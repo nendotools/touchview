@@ -33,17 +33,15 @@ import bpy
 import math
 from bpy import ops
 
-from bpy.types import Operator, Scene
-from bpy.props import EnumProperty
+from bpy.types import Operator, Area, Screen, Window
+from bpy.props import EnumProperty, PointerProperty
 
-from bpy.utils import register_class, unregister_class
 from bpy.app import timers
 
 from . Viewport import Viewport, ViewportManager
 from . items import input_mode_items
 from . constants import OverlaySettings
 from . Panel import NendoViewport, View3DPanel
-from . touch_input import register_keymaps, unregister_keymaps
 
 class TouchInput(Operator):
     """ Active Viewport control zones """
@@ -79,9 +77,9 @@ class TouchInput(Operator):
         if self.handle_doubletap(event): return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
-        viewport = context.scene.vm.getViewport(context.area)
+        viewport = context.window.vm.getViewport(context.area)
 
-        settings = bpy.context.scene.overlay_settings
+        settings = bpy.context.screen.overlay_settings
         mid_point = viewport.getMidpoint()
         dolly_scale = settings.dolly_wid
         pan_scale = settings.pan_rad
@@ -120,26 +118,34 @@ class FlipTools(Operator):
     def poll(cls, context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
+__classes__ = (
+        TouchInput,
+        FlipTools,
+        OverlaySettings,
+        NendoViewport
+    )
+
 def register():
-    register_class(TouchInput)
-    register_class(FlipTools)
-    register_class(OverlaySettings)
-    register_class(NendoViewport)
-    Scene.overlay_settings = bpy.props.PointerProperty(type=OverlaySettings)
-    Scene.vm = ViewportManager()
-    
+    from bpy.utils import register_class
+    from . touch_input import register_keymaps    
+    for cls in __classes__:
+        register_class(cls)
+
+    Screen.overlay_settings = PointerProperty(name="Overlay Settings", type=OverlaySettings)
+
     register_keymaps()
+    Window.vm = ViewportManager()
 
 def unregister():
-    Scene.vm.unload()
-    del Scene.vm
+    from bpy.utils import unregister_class
+    from . touch_input import unregister_keymaps
+    for cls in __classes__:
+        unregister_class(cls)
+
+    Window.vm.unload()
+    del Window.vm
 
     unregister_keymaps()
-
-    unregister_class(OverlaySettings)
-    unregister_class(NendoViewport)
-    unregister_class(TouchInput)
-    unregister_class(FlipTools)
 
 if __name__ == "__main__":
     register()

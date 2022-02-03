@@ -1,5 +1,7 @@
 import bpy
-from bpy.types import Panel
+from bpy.types import Area, Panel
+
+from . constants import OverlaySettings
 
 class View3DPanel:
     bl_space_type = 'VIEW_3D'
@@ -11,7 +13,7 @@ class NendoViewport(View3DPanel, Panel):
     bl_label = "Viewport Settings"
 
     def draw(self, context):
-        settings = context.scene.overlay_settings
+        settings = context.screen.overlay_settings
         self.layout.label(text="Control Zones")
         self.layout.row()
         self.layout.prop(settings, "dolly_wid")
