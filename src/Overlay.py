@@ -80,7 +80,7 @@ class Overlay:
         settings = bpy.context.screen.overlay_settings
         if not settings.isVisible: return
         for region in view.regions:
-            if bpy.context.region.as_pointer() == region.as_pointer():
+            if bpy.context.region.as_pointer() == region.as_pointer() and not region.data.lock_rotation:
                 self.makeCircle(region, color)
 
     def makeCircle(self, view: Region, color:tuple):

@@ -23,11 +23,15 @@ v0.3
 - Fixed incorrect viewport calculation when N-panel is open
 - refactored screen/area management code (additional major refactor needed)
 
+v0.5
+- fixed Quad-view overlay compatibility
+- added camera rotation lock in N-panel
+- replace rotation when panning when rotation is locked
+- fixed issue when locking view to Object or 3D Cursor
+
 *many more features are planned for the final version.*
 
 ##### KNOWN ISSUES:
-
-- lock camera to Object and lock camera to 3D Cursor cause move and dolly function to move to Object within the scene
 
 Please [report any issues](https://github.com/nendotools/touchview/issues) you find and I'll do my best to address them.
 

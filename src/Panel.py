@@ -27,3 +27,7 @@ class NendoViewport(View3DPanel, Panel):
 
         self.layout.operator("view3d.tools_region_flip", text="Flip Tools")
 
+        view = context.space_data
+        self.layout.row()
+        self.layout.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
+
