@@ -59,12 +59,12 @@ class TouchInput(Operator):
     def execute(self, context):
         is_locked = context.space_data.region_3d.lock_rotation
 
-        if self.mode == "ORBIT" and not is_locked:
-            ops.view3d.rotate('INVOKE_DEFAULT')
-        elif self.mode == "PAN":
-            ops.view3d.move('INVOKE_DEFAULT')
-        elif self.mode == "DOLLY":
+        if self.mode == "DOLLY":
             ops.view3d.zoom('INVOKE_DEFAULT')
+        elif self.mode == "ORBIT" and not is_locked:
+            ops.view3d.rotate('INVOKE_DEFAULT')
+        else:
+            bpy.ops.view3d.move('INVOKE_DEFAULT')
         return {'FINISHED'}
 
     # NEED TO ADD A CHECK FOR CURRENT STATE AND SYNC INTENDED MODE

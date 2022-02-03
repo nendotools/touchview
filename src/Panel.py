@@ -22,7 +22,7 @@ class NendoViewport(View3DPanel, Panel):
         self.layout.row()
         self.layout.prop(settings, "isVisible", text="Show Overlay")
         
-        self.layout.label(text="Viewoprt Options")
+        self.layout.label(text="Viewport Options")
         self.layout.row()
 
         self.layout.operator("view3d.tools_region_flip", text="Flip Tools")
