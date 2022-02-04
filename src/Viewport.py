@@ -1,6 +1,6 @@
 import bpy
 import math
-from bpy.types import Area, Context, Region, Screen, Window
+from bpy.types import Area, Context, Region, RegionView3D, Screen, Window
 from bpy.app import timers
 
 from mathutils import Vector
@@ -16,6 +16,7 @@ class Viewport:
     ui: Region
     tools: Region
     overlay: Overlay
+    quadview: list[RegionView3D]
 
     def __init__(self):
         self.window = bpy.context.window
@@ -27,7 +28,9 @@ class Viewport:
         return self.getSize(0.5)
 
     def getSize(self, scalar: float = 1) -> Vector:
-        return Vector((self.view.width * scalar, self.view.height * scalar))
+        if len(self.quadview) > 0:
+            scalar *= 0.5
+        return Vector((self._area.width * scalar, self._area.height * scalar))
 
 class ViewportManager:
     """ Object responsible for storing and recalling viewports by Area references """
@@ -52,7 +55,7 @@ class ViewportManager:
 #############
 ####    Need changes here to address multi-viewport situations
 #############
-
+        viewport.quadview = area.spaces[0].region_quadviews
         for region in area.regions:      #type: ignore
             if region.type == "WINDOW":
                 viewport.view = region

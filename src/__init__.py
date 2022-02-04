@@ -20,7 +20,7 @@ bl_info = {
     "name": "Touch Viewport",
     "description": "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (0, 5),
+    "version": (0, 6),
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -57,7 +57,7 @@ class TouchInput(Operator):
     )
 
     def execute(self, context):
-        is_locked = context.space_data.region_3d.lock_rotation
+        is_locked = context.region.data.lock_rotation
 
         if self.mode == "DOLLY":
             ops.view3d.zoom('INVOKE_DEFAULT')
@@ -83,8 +83,8 @@ class TouchInput(Operator):
 
         settings = bpy.context.screen.overlay_settings
         mid_point = viewport.getMidpoint()
-        dolly_scale = settings.dolly_wid
-        pan_scale = settings.pan_rad
+        dolly_scale = settings.getWidth()
+        pan_scale = settings.getRadius()
         
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale*0.4)

@@ -50,11 +50,11 @@ class Overlay:
         dimensions = self.getSize(view)
         left_rail = (
             Vector((0.0,0.0)), 
-            Vector((mid.x*settings.dolly_wid, dimensions.y))
+            Vector((mid.x*settings.getWidth(), dimensions.y))
         )
         right_rail = (
             Vector((dimensions.x, 0.0)), 
-            Vector((dimensions.x - mid.x*settings.dolly_wid, dimensions.y))
+            Vector((dimensions.x - mid.x*settings.getWidth(), dimensions.y))
         )
         
         self.drawVectorBox(left_rail[0], left_rail[1], color)
@@ -86,7 +86,7 @@ class Overlay:
     def makeCircle(self, view: Region, color:tuple):
         settings = bpy.context.screen.overlay_settings
         mid = self.getMidpoint(view)
-        radius = math.dist((0,0), mid) * (settings.pan_rad * 0.4)
+        radius = math.dist((0,0), mid) * (settings.getRadius() * 0.4)
         self.drawCircle(mid, radius, color)
 
     def drawCircle(self, mid: Vector, radius:float, color: tuple):

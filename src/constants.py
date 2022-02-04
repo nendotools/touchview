@@ -11,18 +11,18 @@ class OverlaySettings(bpy.types.PropertyGroup):
             subscriber()
 
     subscribers: list
-    dolly_wid: FloatProperty(
+    width: FloatProperty(
         name="Width", 
-        default=0.4, 
-        min=0.1, 
-        max=1,
+        default=40.0, 
+        min=10.0, 
+        max=100,
         update=updateSubscribers
     )
-    pan_rad: FloatProperty(
+    radius: FloatProperty(
         name="Radius", 
-        default=0.35, 
-        min=0.1, 
-        max=1.0,
+        default=35.0, 
+        min=10.0, 
+        max=100.0,
         update=updateSubscribers
     )
     isVisible: BoolProperty(
@@ -37,3 +37,9 @@ class OverlaySettings(bpy.types.PropertyGroup):
         except:
             self.subscribers = []
         self.subscribers.append(function)
+
+    def getWidth(self):
+        return self.width / 100
+
+    def getRadius(self):
+        return self.radius / 100

@@ -26,8 +26,12 @@ v0.3
 v0.5
 - fixed Quad-view overlay compatibility
 - added camera rotation lock in N-panel
-- replace rotation when panning when rotation is locked
+- replace rotation with panning when rotation is locked
 - fixed issue when locking view to Object or 3D Cursor
+
+v0.6 hotfix
+- addressed issues with determining locked state with quadviews
+- changed scale of viewport overlay settings for more precision
 
 *many more features are planned for the final version.*
 
