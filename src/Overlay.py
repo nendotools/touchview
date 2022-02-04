@@ -86,7 +86,7 @@ class Overlay:
     def makeCircle(self, view: Region, color:tuple):
         settings = bpy.context.screen.overlay_settings
         mid = self.getMidpoint(view)
-        radius = math.dist((0,0), mid) * (settings.getRadius() * 0.4)
+        radius = math.dist((0,0), mid) * (settings.getRadius() * 0.5)
         self.drawCircle(mid, radius, color)
 
     def drawCircle(self, mid: Vector, radius:float, color: tuple):

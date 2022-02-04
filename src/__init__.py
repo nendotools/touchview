@@ -80,14 +80,16 @@ class TouchInput(Operator):
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
         viewport = context.window.vm.getViewport(context.area)
+        viewport.setRegionContext(context.region)
 
         settings = bpy.context.screen.overlay_settings
         mid_point = viewport.getMidpoint()
+
         dolly_scale = settings.getWidth()
         pan_scale = settings.getRadius()
         
         dolly_wid = mid_point.x * dolly_scale
-        pan_diameter = math.dist((0,0), mid_point) * (pan_scale*0.4)
+        pan_diameter = math.dist((0,0), mid_point) * (pan_scale * 0.5)
         
         if dolly_wid > self.delta[0] or self.delta[0] > viewport.view.width-dolly_wid:
             self.mode = "DOLLY"

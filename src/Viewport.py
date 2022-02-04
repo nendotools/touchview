@@ -1,3 +1,4 @@
+from typing import Type
 import bpy
 import math
 from bpy.types import Area, Context, Region, RegionView3D, Screen, Window
@@ -12,6 +13,7 @@ class Viewport:
     """ Container Object for Window Areas and related view Regions """
     window: Window
     _area: Area
+    view: Region
     views: list[Region]
     ui: Region
     tools: Region
@@ -24,13 +26,16 @@ class Viewport:
     def tag_redraw(self):
         self._area.tag_redraw()
 
+    def setRegionContext(self, region: Region):
+        self.view = region
+
     def getMidpoint(self) -> Vector:
         return self.getSize(0.5)
 
     def getSize(self, scalar: float = 1) -> Vector:
         if len(self.quadview) > 0:
             scalar *= 0.5
-        return Vector((self._area.width * scalar, self._area.height * scalar))
+        return Vector((self.view.width * scalar, self.view.height * scalar))
 
 class ViewportManager:
     """ Object responsible for storing and recalling viewports by Area references """
