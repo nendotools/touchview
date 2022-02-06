@@ -1,8 +1,9 @@
 import bpy
-from bpy.props import BoolProperty, CollectionProperty, FloatProperty
+from bpy.types import Context
+from bpy.props import BoolProperty, FloatProperty
 
 class OverlaySettings(bpy.types.PropertyGroup):
-    def updateSubscribers(self, context):
+    def updateSubscribers(self, context:Context):
         try:
             len(self.subscribers)
         except:
@@ -30,6 +31,10 @@ class OverlaySettings(bpy.types.PropertyGroup):
         default=False, 
         update=updateSubscribers
     )
+    show_lock: BoolProperty(
+        name="Show Lock Button", 
+        default=True 
+    )
 
     def subscribe(self, function):
         try:
@@ -37,6 +42,9 @@ class OverlaySettings(bpy.types.PropertyGroup):
         except:
             self.subscribers = []
         self.subscribers.append(function)
+
+    def getShowLock(self):
+        return self.show_lock
 
     def getWidth(self):
         return self.width / 100

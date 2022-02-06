@@ -1,7 +1,4 @@
-import bpy
-from bpy.types import Area, Panel
-
-from . constants import OverlaySettings
+from bpy.types import Panel
 
 class View3DPanel:
     bl_space_type = 'VIEW_3D'
@@ -14,6 +11,9 @@ class NendoViewport(View3DPanel, Panel):
 
     def draw(self, context):
         settings = context.screen.overlay_settings
+        view = context.space_data
+        space = context.area.spaces.active
+
         self.layout.label(text="Control Zones")
         self.layout.row()
         self.layout.prop(settings, "width")
@@ -26,10 +26,13 @@ class NendoViewport(View3DPanel, Panel):
         self.layout.row()
 
         self.layout.operator("view3d.tools_region_flip", text="Flip Tools")
-
-        view = context.space_data
-        self.layout.row()
-        self.layout.operator("screen.region_quadview", text="Toggle Quadview")
-        self.layout.row()
-        self.layout.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
-
+        if len(space.region_quadviews) > 0:
+            self.layout.row()
+            self.layout.operator("screen.region_quadview", text="Disable Quadview")
+        else:
+            self.layout.row()
+            self.layout.operator("screen.region_quadview", text="Enable Quadview")
+            self.layout.row()
+            self.layout.prop(space, "lock_cursor", text="Lock to Cursor")
+            self.layout.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
+        context.area.tag_redraw()

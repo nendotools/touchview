@@ -1,20 +1,14 @@
-from typing import Type
 import bpy
-import math
-from bpy.types import Area, Context, Region, RegionView3D, Screen, Window
-from bpy.app import timers
-
 from mathutils import Vector
+from bpy.types import Area, Region, RegionView3D, SpaceView3D, Window
 
-from . constants import OverlaySettings
-from . Overlay import OverlayManager, Overlay
+from . Overlay import Overlay
 
 class Viewport:
     """ Container Object for Window Areas and related view Regions """
     window: Window
-    _area: Area
+    area: Area
     view: Region
-    views: list[Region]
     ui: Region
     tools: Region
     overlay: Overlay
@@ -24,7 +18,7 @@ class Viewport:
         self.window = bpy.context.window
 
     def tag_redraw(self):
-        self._area.tag_redraw()
+        self.area.tag_redraw()
 
     def setRegionContext(self, region: Region):
         self.view = region
@@ -32,8 +26,8 @@ class Viewport:
     def getMidpoint(self) -> Vector:
         return self.getSize(0.5)
 
-    def getSize(self, scalar: float = 1) -> Vector:
-        if len(self.quadview) > 0:
+    def getSize(self, scalar: float = 1, ignore_region: bool = False) -> Vector:
+        if len(self.quadview) > 0 and not ignore_region:
             scalar *= 0.5
         return Vector((self.view.width * scalar, self.view.height * scalar))
 
@@ -46,22 +40,17 @@ class ViewportManager:
     def unload(self):
         self.clearAll()
 
-
     def getViewport(self, area: Area) -> Viewport:
         if area.type != "VIEW_3D":
             raise TypeError('Area type must be VIEW_3D! {} provided.'.format(area.type))
 
         for v in self.viewports:
-            if v._area == area: return v
+            if v.area == area: return v
 
         viewport = Viewport()
-        viewport._area = area
-
-#############
-####    Need changes here to address multi-viewport situations
-#############
-        viewport.quadview = area.spaces[0].region_quadviews
-        for region in area.regions:      #type: ignore
+        viewport.area = area
+        viewport.quadview = area.spaces.active.region_quadviews
+        for region in area.regions:
             if region.type == "WINDOW":
                 viewport.view = region
             if region.type == "UI":
@@ -69,12 +58,12 @@ class ViewportManager:
             if region.type == "TOOLS":
                 viewport.tools = region
         viewport.overlay = Overlay()
-        viewport.overlay.drawUI(viewport._area)
+        viewport.overlay.drawUI(viewport.area)
 
         self.viewports.append(viewport)
         return viewport
 
-    def update_viewport(self):
+    def update_viewport(self) -> bool:
         if not hasattr(bpy.context.screen, "overlay_settings"): return False
         for area in bpy.context.window.screen.areas:
             if area.type != "VIEW_3D": continue

@@ -33,20 +33,21 @@ import bpy
 import math
 from bpy import ops
 
-from bpy.types import Operator, Area, Screen, Window
+from bpy.types import Context, Event, Operator, Screen, Window
 from bpy.props import EnumProperty, PointerProperty
 
-from bpy.app import timers
-
-from . Viewport import Viewport, ViewportManager
+from . Viewport import ViewportManager
 from . items import input_mode_items
 from . constants import OverlaySettings
-from . Panel import NendoViewport, View3DPanel
+from . Panel import NendoViewport
+from . Gizmos import ViewportGizmoGroup, ViewportLock, draw_lock
 
 class TouchInput(Operator):
     """ Active Viewport control zones """
     bl_idname = "view3d.view_ops"
     bl_label = "Viewport Control Regions"
+
+    delta: tuple[float, float]
 
     mode: EnumProperty(
         name="Mode", 
@@ -56,8 +57,8 @@ class TouchInput(Operator):
         options={"HIDDEN"}
     )
 
-    def execute(self, context):
-        is_locked = context.region.data.lock_rotation
+    def execute(self, context: Context):
+        is_locked = context.region.data.lock_rotation | context.region.data.is_orthographic_side_view
 
         if self.mode == "DOLLY":
             ops.view3d.zoom('INVOKE_DEFAULT')
@@ -68,14 +69,14 @@ class TouchInput(Operator):
         return {'FINISHED'}
 
     # NEED TO ADD A CHECK FOR CURRENT STATE AND SYNC INTENDED MODE
-    def handle_doubletap(self, event):
+    def handle_doubletap(self, event: Event):
         if event.value == "DOUBLE_CLICK" and event.type != "PEN":
             ops.screen.screen_full_area()
             ops.wm.window_fullscreen_toggle()
             return True
         return False
 
-    def invoke(self, context, event):
+    def invoke(self, context: Context, event: Event):
         if self.handle_doubletap(event): return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
@@ -102,7 +103,7 @@ class TouchInput(Operator):
         return {'FINISHED'}
         
     @classmethod
-    def poll(cls, context):
+    def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
 class FlipTools(Operator):
@@ -110,7 +111,7 @@ class FlipTools(Operator):
     bl_idname = "view3d.tools_region_flip"
     bl_label = "Tools Region Swap"
 
-    def execute(self, context):
+    def execute(self, context: Context):
         override = bpy.context.copy()
         for r in context.area.regions:
             if r.type == 'TOOLS':
@@ -119,14 +120,16 @@ class FlipTools(Operator):
         return {'FINISHED'}
         
     @classmethod
-    def poll(cls, context):
+    def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
 __classes__ = (
         TouchInput,
         FlipTools,
         OverlaySettings,
-        NendoViewport
+        NendoViewport,
+        ViewportLock,
+        ViewportGizmoGroup
     )
 
 def register():
@@ -137,12 +140,16 @@ def register():
 
     Screen.overlay_settings = PointerProperty(name="Overlay Settings", type=OverlaySettings)
 
+    bpy.types.VIEW3D_PT_gizmo_display.append(draw_lock)
+
     register_keymaps()
     Window.vm = ViewportManager()
 
 def unregister():
     from bpy.utils import unregister_class
     from . touch_input import unregister_keymaps
+
+    bpy.types.VIEW3D_PT_gizmo_display.remove(draw_lock)
     for cls in __classes__:
         unregister_class(cls)
 

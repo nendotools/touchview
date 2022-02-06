@@ -6,7 +6,11 @@ import gpu
 from bgl import glEnable, glDisable, GL_BLEND
 from gpu_extras.batch import batch_for_shader
 
+from . constants import OverlaySettings
+
 class Overlay:
+    meshes: list[object]
+
     def __init__(self):
         self.meshes = []
 
@@ -15,39 +19,43 @@ class Overlay:
             SpaceView3D.draw_handler_remove(mesh, 'WINDOW')
         self.meshes = []
 
-    def getMidpoint(self, view: Region) -> Vector:
-        return self.getSize(view, 0.5)
+    def __getSettings(self) -> OverlaySettings:
+        return bpy.context.screen.overlay_settings
 
-    def getSize(self, view:Region, scalar: float = 1) -> Vector:
+    def __getMidpoint(self, view: Region) -> Vector:
+        return self.__getSize(view, 0.5)
+
+    def __getSize(self, view:Region, scalar: float = 1) -> Vector:
         return Vector((view.width * scalar, view.height * scalar))
 
     def drawUI(self, view: Area):
         _handle = SpaceView3D.draw_handler_add(
-            self.renderCircle, 
-            (view, (1,1,1,0.01)), 
-            'WINDOW', 
-            'POST_PIXEL'
-        )
-        self.meshes.append(_handle)
-        _handle = SpaceView3D.draw_handler_add(
-            self.renderRailing, 
+            self.__renderCircle, 
             (view, (1,1,1,0.01)), 
             'WINDOW', 
             'POST_PIXEL'
         )
         self.meshes.append(_handle)
 
-    def renderRailing(self, view: Area, color: tuple):
-        settings = bpy.context.screen.overlay_settings
+        _handle = SpaceView3D.draw_handler_add(
+            self.__renderRailing, 
+            (view, (1,1,1,0.01)), 
+            'WINDOW', 
+            'POST_PIXEL'
+        )
+        self.meshes.append(_handle)
+
+    def __renderRailing(self, view: Area, color: tuple[float, float, float, float]):
+        settings = self.__getSettings()
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer():
-                self.makeBox(region, color)
+                self.__makeBox(region, color)
 
-    def makeBox(self, view: Region, color:tuple):
-        settings = bpy.context.screen.overlay_settings
-        mid = self.getMidpoint(view)
-        dimensions = self.getSize(view)
+    def __makeBox(self, view: Region, color: tuple[float, float, float, float]):
+        settings = self.__getSettings()
+        mid = self.__getMidpoint(view)
+        dimensions = self.__getSize(view)
         left_rail = (
             Vector((0.0,0.0)), 
             Vector((mid.x*settings.getWidth(), dimensions.y))
@@ -57,10 +65,10 @@ class Overlay:
             Vector((dimensions.x - mid.x*settings.getWidth(), dimensions.y))
         )
         
-        self.drawVectorBox(left_rail[0], left_rail[1], color)
-        self.drawVectorBox(right_rail[0], right_rail[1], color)
+        self.__drawVectorBox(left_rail[0], left_rail[1], color)
+        self.__drawVectorBox(right_rail[0], right_rail[1], color)
 
-    def drawVectorBox(self, a, b, color):
+    def __drawVectorBox(self, a, b, color):
         vertices = (
             (a.x,a.y),(b.x,a.y),
             (a.x,b.y),(b.x,b.y)
@@ -76,20 +84,20 @@ class Overlay:
         glDisable(GL_BLEND)
 
 
-    def renderCircle(self, view: Area, color: tuple):
-        settings = bpy.context.screen.overlay_settings
+    def __renderCircle(self, view: Area, color: tuple[float, float, float, float]):
+        settings = self.__getSettings()
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer() and not region.data.lock_rotation:
-                self.makeCircle(region, color)
+                self.__makeCircle(region, color)
 
-    def makeCircle(self, view: Region, color:tuple):
-        settings = bpy.context.screen.overlay_settings
-        mid = self.getMidpoint(view)
+    def __makeCircle(self, view: Region, color: tuple[float, float, float, float]):
+        settings = self.__getSettings()
+        mid = self.__getMidpoint(view)
         radius = math.dist((0,0), mid) * (settings.getRadius() * 0.5)
-        self.drawCircle(mid, radius, color)
+        self.__drawCircle(mid, radius, color)
 
-    def drawCircle(self, mid: Vector, radius:float, color: tuple):
+    def __drawCircle(self, mid: Vector, radius:float, color: tuple):
         segments = 40
         vertices = [mid]
         indices = []
@@ -112,7 +120,3 @@ class Overlay:
         batch.draw(shader)
         glDisable(GL_BLEND)
 
-
-class OverlayManager:
-    def __init__(self):
-        self.overlays = []
