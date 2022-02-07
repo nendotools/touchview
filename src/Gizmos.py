@@ -108,9 +108,9 @@ class ViewportRecenter(Operator):
         return {'FINISHED'}
 
 class ViewportLock(Operator):
-    """ Active Viewport control zones """
+    """ Toggle Viewport Rotation """
     bl_idname = "view3d.viewport_lock"
-    bl_label = "Viewport lock toggle"
+    bl_label = "Viewport rotation lock toggle"
 
     def execute(self, context: Context):
         if len(context.area.spaces.active.region_quadviews) == 0:
