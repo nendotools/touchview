@@ -31,10 +31,57 @@ class OverlaySettings(bpy.types.PropertyGroup):
         default=False, 
         update=updateSubscribers
     )
-    show_lock: BoolProperty(
-        name="Show Lock Button", 
+    gizmo_colors = {
+            "disabled": {
+                "color": [0.0,0.0,0.0],
+                "color_highlight": [0.0,0.0,0.0],
+                "alpha": 0.3,
+                "alpha_highlight": 0.3
+        },
+            "active": {
+                "color": [0.0,0.0,0.0],
+                "color_highlight": [0.8,0.8,0.8],
+                "alpha": 0.3,
+                "alpha_highlight": 0.3
+        }
+    }
+    show_quadview: BoolProperty(
+        name="Show Quadview", 
         default=True 
     )
+    show_snap_view: BoolProperty(
+        name="Show Snap View", 
+        default=True 
+    )
+    show_rotation_lock: BoolProperty(
+        name="Show Rotation Lock", 
+        default=True 
+    )
+    show_voxel_resize: BoolProperty(
+        name="Show Voxel Resize", 
+        default=True 
+    )
+    show_voxel_remesh: BoolProperty(
+        name="Show Voxel Remesh", 
+        default=True 
+    )
+    gizmo_sets = {
+        # ALL includes only the modes in this list
+        "ALL": {
+            "quadview",
+            "snap_view",
+            "center_on_cursor",
+            "rotation_lock"
+        },
+        "SCULPT": {
+            "voxel_resize",
+            "voxel_remesh"
+        },
+        "OBJECT":{},
+        "EDIT":{},
+        "POSE":{},
+        "TEXTURE_PAINT":{}
+    }
 
     def subscribe(self, function):
         try:

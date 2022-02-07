@@ -40,7 +40,7 @@ from . Viewport import ViewportManager
 from . items import input_mode_items
 from . constants import OverlaySettings
 from . Panel import NendoViewport
-from . Gizmos import ViewportGizmoGroup, ViewportLock, draw_lock
+from . Gizmos import ViewportGizmoGroup, ViewportRecenter, ViewportLock, draw_lock
 
 class TouchInput(Operator):
     """ Active Viewport control zones """
@@ -58,11 +58,9 @@ class TouchInput(Operator):
     )
 
     def execute(self, context: Context):
-        is_locked = context.region.data.lock_rotation | context.region.data.is_orthographic_side_view
-
         if self.mode == "DOLLY":
             ops.view3d.zoom('INVOKE_DEFAULT')
-        elif self.mode == "ORBIT" and not is_locked:
+        elif self.mode == "ORBIT":
             ops.view3d.rotate('INVOKE_DEFAULT')
         else:
             bpy.ops.view3d.move('INVOKE_DEFAULT')
@@ -72,7 +70,7 @@ class TouchInput(Operator):
     def handle_doubletap(self, event: Event):
         if event.value == "DOUBLE_CLICK" and event.type != "PEN":
             ops.screen.screen_full_area()
-            ops.wm.window_fullscreen_toggle()
+            #ops.wm.window_fullscreen_toggle()
             return True
         return False
 
@@ -91,10 +89,13 @@ class TouchInput(Operator):
         
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale * 0.5)
+
+        is_quadview_orthographic = context.region.data.is_orthographic_side_view and len(viewport.quadview) > 0
+        is_locked = context.region.data.lock_rotation | is_quadview_orthographic
         
         if dolly_wid > self.delta[0] or self.delta[0] > viewport.view.width-dolly_wid:
             self.mode = "DOLLY"
-        elif math.dist(self.delta, mid_point) < pan_diameter:
+        elif math.dist(self.delta, mid_point) < pan_diameter or is_locked:
             self.mode = "PAN"
         else:
             self.mode = "ORBIT"
@@ -129,6 +130,7 @@ __classes__ = (
         OverlaySettings,
         NendoViewport,
         ViewportLock,
+        ViewportRecenter,
         ViewportGizmoGroup
     )
 

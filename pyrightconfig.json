@@ -14,7 +14,7 @@
   ],
 
   "reportPropertyTypeMismatch": true,
-  "reportGeneralTypeIssues": "basic",
+  "reportGeneralTypeIssues": false,
   "reportMissingImports": "error",
   "reportMissingTypeStubs": "none",
   "reportUnusedClass": true,
