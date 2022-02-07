@@ -1,5 +1,4 @@
 import bpy
-import math
 from mathutils import Matrix, Vector
 from bpy.types import Context, Gizmo, GizmoGroup, Operator
 
@@ -14,14 +13,9 @@ class ViewportGizmoGroup(GizmoGroup):
 
     def setup(self, context: Context):
         self.gizmo_actions = []
-        view = context.space_data
-        size = Vector((context.region.width, context.region.height, 0))
 
         viewport = context.window.vm.getViewport(context.area)
         viewport.setRegionContext(context.region)
-
-        settings = self.__getSettings()
-        size = viewport.getSize(1, True)
         
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE")
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")
@@ -33,46 +27,37 @@ class ViewportGizmoGroup(GizmoGroup):
         viewport = context.window.vm.getViewport(context.area)
         viewport.setRegionContext(context.region)
 
-        settings = self.__getSettings()
-        size = viewport.getSize(1, True)
-        offset = 0
         self.__validateMode()
         active_gizmos = self.__getActive()
+
+        position = self.__getGizmoOrientation(viewport.getSize(1, True))
         for i, gizmo in enumerate(active_gizmos):
-            bottom = gizmo.scale_basis * 4
-            top = size.y - gizmo.scale_basis * 4
-            offset = len(active_gizmos) * gizmo.scale_basis * 5 
-            position = i * gizmo.scale_basis * 6 
-            position = Vector((size.x/2 - offset/2 + position, bottom, 0))
-            gizmo.matrix_basis = Matrix.Translation(position)
+            gizmo_bar = (len(active_gizmos) * gizmo.scale_basis * -5)/2
+            offset = gizmo_bar + i * gizmo.scale_basis * 6
+            gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1])*offset)
 
-    def __validateMode(self):
+    def __getGizmoOrientation(self, size:Vector) -> tuple[Vector, tuple[int, int]]:
+        position = (0,0,0)
         settings = self.__getSettings()
-        mode = bpy.context.active_object.mode
-        for name, gizmo, on_state, off_state in self.gizmo_actions:
-            if name not in settings.gizmo_sets[mode] and name not in settings.gizmo_sets["ALL"] or mode not in settings.gizmo_sets or not getattr(settings, "show_"+name):
-                gizmo.hide = True
-            else:
-                gizmo.hide = False
+        scale_basis = (80 * 0.35) / 2
+        orientation = (0,0,0)
 
-    def __getActive(self):
-        active = []
-        for g in self.gizmos:
-            if not g.hide:
-                active.append(g)
-        return active
+        if settings.gizmo_position == "BOTTOM":
+            position = ( size.x/2, scale_basis * 4, 0)
+            orientation = (1,0,0)
+        elif settings.gizmo_position == "TOP":
+            position = (size.x/2, size.y - scale_basis * 4, 0)
+            orientation = (1,0,0)
+        elif settings.gizmo_position == "LEFT":
+            position = (scale_basis * 4, size.y/2, 0)
+            orientation = (0,1,0)
+        elif settings.gizmo_position == "RIGHT":
+            position = (size.x - scale_basis * 4, size.y/2, 0)
+            orientation = (0,1,0)
 
-    def __getSettings(self):
-        return bpy.context.screen.overlay_settings
+        return (Vector(position), orientation)
 
-    def __enableGizmo(self, gizmo:Gizmo):
-        gizmo.hide_select = False
-        gizmo.alpha = 0.3
-
-    def __disableGizmo(self, gizmo:Gizmo):
-        gizmo.hide_select = True
-        gizmo.alpha = 0.1
-
+    # initialize each gizmo, add them to named list with icon name(s)
     def __buildGizmo(self, name: str, operator_name: str, on_icon: str, off_icon: str = "") -> Gizmo:
         gizmo = self.gizmos.new("GIZMO_GT_button_2d")
         self.gizmo_actions.append((name, gizmo, on_icon, off_icon))
@@ -82,7 +67,29 @@ class ViewportGizmoGroup(GizmoGroup):
         self.__setColors(gizmo)
         gizmo.scale_basis = (80 * 0.35) / 2
         return gizmo
+
+    # determine if each gizmo should be visible based on what edit mode is being used
+    def __validateMode(self):
+        settings = self.__getSettings()
+        mode = bpy.context.active_object.mode
+        for name, gizmo, on_state, off_state in self.gizmo_actions:
+            if name not in settings.gizmo_sets[mode] and name not in settings.gizmo_sets["ALL"] or mode not in settings.gizmo_sets or not getattr(settings, "show_"+name):
+                gizmo.hide = True
+            else:
+                gizmo.hide = False
+
+    # build list of active gizmos to begin draw step
+    def __getActive(self):
+        active = []
+        for g in self.gizmos:
+            if not g.hide:
+                active.append(g)
+        return active
+
+    def __getSettings(self):
+        return bpy.context.screen.overlay_settings
     
+    # fetch colors from config and assign to gizmo
     def __setColors(self, gizmo):
         settings = self.__getSettings()
         gizmo.color = settings.gizmo_colors["active"]["color"]

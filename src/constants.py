@@ -1,6 +1,7 @@
 import bpy
 from bpy.types import Context
-from bpy.props import BoolProperty, FloatProperty
+from bpy.props import BoolProperty, EnumProperty, FloatProperty
+from . items import position_items
 
 class OverlaySettings(bpy.types.PropertyGroup):
     def updateSubscribers(self, context:Context):
@@ -64,6 +65,11 @@ class OverlaySettings(bpy.types.PropertyGroup):
     show_voxel_remesh: BoolProperty(
         name="Show Voxel Remesh", 
         default=True 
+    )
+    gizmo_position: EnumProperty(
+        items=position_items,
+        name="Gizmo Position",
+        default="BOTTOM"
     )
     gizmo_sets = {
         # ALL includes only the modes in this list
