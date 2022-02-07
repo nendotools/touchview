@@ -33,6 +33,12 @@ v0.6 hotfix
 - addressed issues with determining locked state with quadviews
 - changed scale of viewport overlay settings for more precision
 
+v0.7
+- added Gizmos for key features
+- added hide/show Gizmo and layout options
+- locked viewport rotation for isometric viewports in quadview to address lock/unlock inconsistencies
+- Fullscreen Toggle no longer maximizes the window, only expands the View3D region
+
 *many more features are planned for the final version.*
 
 ##### KNOWN ISSUES:
