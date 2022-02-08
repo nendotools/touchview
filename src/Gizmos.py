@@ -1,6 +1,6 @@
 import bpy
 from mathutils import Matrix, Vector
-from bpy.types import Context, Gizmo, GizmoGroup, Operator
+from bpy.types import Context, Gizmo, GizmoGroup, Operator, bpy_prop_collection
 
 class ViewportGizmoGroup(GizmoGroup):
     bl_idname = "GIZMO_GT_navigate_lock"
@@ -17,9 +17,9 @@ class ViewportGizmoGroup(GizmoGroup):
         viewport = context.window.vm.getViewport(context.area)
         viewport.setRegionContext(context.region)
         
-        self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE")
+        self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")
-        self.__buildGizmo("rotation_lock", "view3d.viewport_lock", "LOCKED", "UNLOCKED")
+        self.__buildGizmo("rotation_lock", "view3d.viewport_lock", "LOCKED", "UNLOCKED", "lock_rotation", context.region_data)
         self.__buildGizmo("voxel_resize", "object.voxel_size_edit", "MESH_GRID")
         self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
         
@@ -58,9 +58,11 @@ class ViewportGizmoGroup(GizmoGroup):
         return (Vector(position), orientation)
 
     # initialize each gizmo, add them to named list with icon name(s)
-    def __buildGizmo(self, name: str, operator_name: str, on_icon: str, off_icon: str = "") -> Gizmo:
+    def __buildGizmo(self, name: str, operator_name: str, on_icon: str, off_icon: str = "", watch_var:str = "", source = None) -> Gizmo:
+        if off_icon != "":
+            self.__buildGizmo(name, operator_name, off_icon, "", watch_var, source)
         gizmo = self.gizmos.new("GIZMO_GT_button_2d")
-        self.gizmo_actions.append((name, gizmo, on_icon, off_icon))
+        self.gizmo_actions.append((name, gizmo, on_icon, off_icon, watch_var, source))
         gizmo.target_set_operator(operator_name)
         gizmo.icon = on_icon
         gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
@@ -72,11 +74,23 @@ class ViewportGizmoGroup(GizmoGroup):
     def __validateMode(self):
         settings = self.__getSettings()
         mode = bpy.context.active_object.mode
-        for name, gizmo, on_state, off_state in self.gizmo_actions:
+        for name, gizmo, on_state, off_state, watch_var, source in self.gizmo_actions:
             if name not in settings.gizmo_sets[mode] and name not in settings.gizmo_sets["ALL"] or mode not in settings.gizmo_sets or not getattr(settings, "show_"+name):
                 gizmo.hide = True
+                continue
             else:
                 gizmo.hide = False
+
+            if watch_var != "" and source is not None:
+                data = getattr(source, watch_var)
+                state = (off_state == "")
+
+                if type(data) == bpy_prop_collection:
+                    if (len(data) == 0) == state: gizmo.hide = True
+                    else: gizmo.hide = False
+                else:
+                    if data == state: gizmo.hide = True
+                    else: gizmo.hide = False
 
     # build list of active gizmos to begin draw step
     def __getActive(self):

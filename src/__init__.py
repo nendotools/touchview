@@ -70,7 +70,6 @@ class TouchInput(Operator):
     def handle_doubletap(self, event: Event):
         if event.value == "DOUBLE_CLICK" and event.type != "PEN":
             ops.screen.screen_full_area()
-            #ops.wm.window_fullscreen_toggle()
             return True
         return False
 
