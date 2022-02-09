@@ -30,7 +30,7 @@ class ViewportGizmoGroup(GizmoGroup):
         self.__validateMode()
         active_gizmos = self.__getActive()
 
-        position = self.__getGizmoOrientation(viewport.getSize(1, True))
+        position = self.__getGizmoOrientation(viewport.getSize())
         for i, gizmo in enumerate(active_gizmos):
             gizmo_bar = (len(active_gizmos) * gizmo.scale_basis * -5)/2
             offset = gizmo_bar + i * gizmo.scale_basis * 6
@@ -117,8 +117,12 @@ class ViewportRecenter(Operator):
     bl_label = "Recenter Viewport and Cursor on Selected"
 
     def execute(self, context: Context):
+        current = context.scene.tool_settings.transform_pivot_point
+        context.scene.tool_settings.transform_pivot_point = "ACTIVE_ELEMENT"
         bpy.ops.view3d.snap_cursor_to_selected()
         bpy.ops.view3d.view_center_cursor()
+        bpy.ops.view3d.view_selected()
+        context.scene.tool_settings.transform_pivot_point = current
         return {'FINISHED'}
 
 class ViewportLock(Operator):

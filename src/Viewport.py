@@ -26,9 +26,7 @@ class Viewport:
     def getMidpoint(self) -> Vector:
         return self.getSize(0.5)
 
-    def getSize(self, scalar: float = 1, ignore_region: bool = False) -> Vector:
-        if len(self.quadview) > 0 and not ignore_region:
-            scalar *= 0.5
+    def getSize(self, scalar: float = 1) -> Vector:
         return Vector((self.view.width * scalar, self.view.height * scalar))
 
 class ViewportManager:
