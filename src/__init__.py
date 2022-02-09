@@ -69,7 +69,7 @@ class TouchInput(Operator):
     # NEED TO ADD A CHECK FOR CURRENT STATE AND SYNC INTENDED MODE
     def handle_doubletap(self, event: Event):
         if event.value == "DOUBLE_CLICK" and event.type != "PEN":
-            ops.screen.screen_full_area()
+            bpy.ops.object.transfer_mode('INVOKE_DEFAULT')
             return True
         return False
 

@@ -17,6 +17,7 @@ class ViewportGizmoGroup(GizmoGroup):
         viewport = context.window.vm.getViewport(context.area)
         viewport.setRegionContext(context.region)
         
+        self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  bpy.context.screen)
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")
         self.__buildGizmo("rotation_lock", "view3d.viewport_lock", "LOCKED", "UNLOCKED", "lock_rotation", context.region_data)
@@ -147,6 +148,7 @@ def draw_lock(panel, context):
     row = layout.row()
 
     col = row.column()
+    col.prop(settings, 'show_fullscreen')
     col.prop(settings, 'show_quadview')
     col.prop(settings, 'show_snap_view')
     col.prop(settings, 'show_rotation_lock')

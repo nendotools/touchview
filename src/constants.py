@@ -46,6 +46,10 @@ class OverlaySettings(bpy.types.PropertyGroup):
                 "alpha_highlight": 0.3
         }
     }
+    show_fullscreen: BoolProperty(
+        name="Show Quadview", 
+        default=True 
+    )
     show_quadview: BoolProperty(
         name="Show Quadview", 
         default=True 
@@ -74,6 +78,7 @@ class OverlaySettings(bpy.types.PropertyGroup):
     gizmo_sets = {
         # ALL includes only the modes in this list
         "ALL": {
+            "fullscreen",
             "quadview",
             "snap_view",
             "center_on_cursor",
