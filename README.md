@@ -39,6 +39,12 @@ v0.7
 - locked viewport rotation for isometric viewports in quadview to address lock/unlock inconsistencies
 - Fullscreen Toggle no longer maximizes the window, only expands the View3D region
 
+v0.8
+- relocated settings to addon preferences to save across projects and scenes
+- addressed a handful of bugs impacting user experience
+- added gizmo to toggle fullscreen mode
+- doubletap now selects/activates tapped object instead of triggering fullscreen
+
 *many more features are planned for the final version.*
 
 ##### KNOWN ISSUES:
