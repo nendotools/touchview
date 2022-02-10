@@ -13,10 +13,6 @@ class ViewportGizmoGroup(GizmoGroup):
 
     def setup(self, context: Context):
         self.gizmo_actions = []
-
-        viewport = context.window.vm.getViewport(context.area)
-        viewport.setRegionContext(context.region)
-        
         self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  bpy.context.screen)
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")
@@ -25,13 +21,12 @@ class ViewportGizmoGroup(GizmoGroup):
         self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
         
     def draw_prepare(self, context:Context):
-        viewport = context.window.vm.getViewport(context.area)
-        viewport.setRegionContext(context.region)
-
+        region = context.region
+        size = Vector((region.width, region.height))
         self.__validateMode()
         active_gizmos = self.__getActive()
 
-        position = self.__getGizmoOrientation(viewport.getSize())
+        position = self.__getGizmoOrientation(size)
         for i, gizmo in enumerate(active_gizmos):
             gizmo_bar = (len(active_gizmos) * gizmo.scale_basis * -5)/2
             offset = gizmo_bar + i * gizmo.scale_basis * 6
