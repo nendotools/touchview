@@ -61,6 +61,7 @@ class ViewportGizmoGroup(GizmoGroup):
         self.gizmo_actions.append((name, gizmo, on_icon, off_icon, watch_var, source))
         gizmo.target_set_operator(operator_name)
         gizmo.icon = on_icon
+        gizmo.use_event_handle_all = True
         gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
         self.__setColors(gizmo)
         gizmo.scale_basis = (80 * 0.35) / 2
