@@ -62,7 +62,6 @@ class ViewportManager:
         return viewport
 
     def update_viewport(self) -> bool:
-        if not hasattr(bpy.context.screen, "overlay_settings"): return False
         for area in bpy.context.window.screen.areas:
             if area.type != "VIEW_3D": continue
             vp = self.getViewport(area)

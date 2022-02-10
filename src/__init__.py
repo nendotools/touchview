@@ -20,7 +20,7 @@ bl_info = {
     "name": "Touch Viewport",
     "description": "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (0, 7),
+    "version": (0, 8),
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -33,8 +33,8 @@ import bpy
 import math
 from bpy import ops
 
-from bpy.types import Context, Event, Operator, Screen, Window
-from bpy.props import EnumProperty, PointerProperty
+from bpy.types import Context, Event, Operator, Window
+from bpy.props import EnumProperty
 
 from . Viewport import ViewportManager
 from . items import input_mode_items
@@ -80,7 +80,7 @@ class TouchInput(Operator):
         viewport = context.window.vm.getViewport(context.area)
         viewport.setRegionContext(context.region)
 
-        settings = bpy.context.screen.overlay_settings
+        settings = bpy.context.preferences.addons['touchview'].preferences
         mid_point = viewport.getMidpoint()
 
         dolly_scale = settings.getWidth()
@@ -124,9 +124,9 @@ class FlipTools(Operator):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
 __classes__ = (
+        OverlaySettings,
         TouchInput,
         FlipTools,
-        OverlaySettings,
         NendoViewport,
         ViewportLock,
         ViewportRecenter,
@@ -138,8 +138,6 @@ def register():
     from . touch_input import register_keymaps    
     for cls in __classes__:
         register_class(cls)
-
-    Screen.overlay_settings = PointerProperty(name="Overlay Settings", type=OverlaySettings)
 
     bpy.types.VIEW3D_PT_gizmo_display.append(draw_lock)
 

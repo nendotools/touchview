@@ -3,34 +3,24 @@ from bpy.types import Context
 from bpy.props import BoolProperty, EnumProperty, FloatProperty
 from . items import position_items
 
-class OverlaySettings(bpy.types.PropertyGroup):
-    def updateSubscribers(self, context:Context):
-        try:
-            len(self.subscribers)
-        except:
-            return
-        for subscriber in self.subscribers:
-            subscriber()
+class OverlaySettings(bpy.types.AddonPreferences):
+    bl_idname = "touchview"
 
-    subscribers: list
     width: FloatProperty(
         name="Width", 
         default=40.0, 
         min=10.0, 
         max=100,
-        update=updateSubscribers
     )
     radius: FloatProperty(
         name="Radius", 
         default=35.0, 
         min=10.0, 
         max=100.0,
-        update=updateSubscribers
     )
     isVisible: BoolProperty(
         name="Show Overlay", 
         default=False, 
-        update=updateSubscribers
     )
     gizmo_colors = {
             "disabled": {
@@ -47,27 +37,27 @@ class OverlaySettings(bpy.types.PropertyGroup):
         }
     }
     show_fullscreen: BoolProperty(
-        name="Show Quadview", 
+        name="Fullscreen", 
         default=True 
     )
     show_quadview: BoolProperty(
-        name="Show Quadview", 
+        name="Quadview", 
         default=True 
     )
     show_snap_view: BoolProperty(
-        name="Show Snap View", 
+        name="Snap View", 
         default=True 
     )
     show_rotation_lock: BoolProperty(
-        name="Show Rotation Lock", 
+        name="Rotation Lock", 
         default=True 
     )
     show_voxel_resize: BoolProperty(
-        name="Show Voxel Resize", 
+        name="Voxel Resize", 
         default=True 
     )
     show_voxel_remesh: BoolProperty(
-        name="Show Voxel Remesh", 
+        name="Voxel Remesh", 
         default=True 
     )
     gizmo_position: EnumProperty(
@@ -94,12 +84,15 @@ class OverlaySettings(bpy.types.PropertyGroup):
         "TEXTURE_PAINT":{}
     }
 
-    def subscribe(self, function):
-        try:
-            len(self.subscribers)
-        except:
-            self.subscribers = []
-        self.subscribers.append(function)
+    def draw(self, context:Context):
+        self.layout.column()
+        self.layout.label(text="Control Zones")
+        self.layout.prop(self, "width")
+        self.layout.prop(self, "radius")
+        self.layout.prop(self, "isVisible", text="Show Overlay")
+        
+        self.layout.label(text="Viewport Options")
+        self.layout.prop_menu_enum(self, "gizmo_position")
 
     def getShowLock(self):
         return self.show_lock

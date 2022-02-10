@@ -102,7 +102,7 @@ class ViewportGizmoGroup(GizmoGroup):
         return active
 
     def __getSettings(self):
-        return bpy.context.screen.overlay_settings
+        return bpy.context.preferences.addons['touchview'].preferences
     
     # fetch colors from config and assign to gizmo
     def __setColors(self, gizmo):
@@ -141,13 +141,10 @@ class ViewportLock(Operator):
 
 def draw_lock(panel, context):
     layout = panel.layout
-    settings = bpy.context.screen.overlay_settings
+    settings = bpy.context.preferences.addons['touchview'].preferences
     row = layout.row()
-
-    row.label(text="Touchview Buttons")
-    row = layout.row()
-
     col = row.column()
+    col.label(text="Touchview Buttons")
     col.prop(settings, 'show_fullscreen')
     col.prop(settings, 'show_quadview')
     col.prop(settings, 'show_snap_view')

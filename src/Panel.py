@@ -1,3 +1,4 @@
+import bpy
 from bpy.types import Panel
 
 class View3DPanel:
@@ -10,7 +11,7 @@ class NendoViewport(View3DPanel, Panel):
     bl_label = "Viewport Settings"
 
     def draw(self, context):
-        settings = context.screen.overlay_settings
+        settings = bpy.context.preferences.addons['touchview'].preferences
         view = context.space_data
         space = context.area.spaces.active
 

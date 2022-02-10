@@ -20,7 +20,7 @@ class Overlay:
         self.meshes = []
 
     def __getSettings(self) -> OverlaySettings:
-        return bpy.context.screen.overlay_settings
+        return bpy.context.preferences.addons['touchview'].preferences
 
     def __getMidpoint(self, view: Region) -> Vector:
         return self.__getSize(view, 0.5)
