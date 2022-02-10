@@ -4,7 +4,7 @@ from bpy.props import BoolProperty, EnumProperty, FloatProperty
 from . items import position_items
 
 class OverlaySettings(bpy.types.AddonPreferences):
-    bl_idname = "touchview"
+    bl_idname = __package__
 
     width: FloatProperty(
         name="Width", 
@@ -85,14 +85,16 @@ class OverlaySettings(bpy.types.AddonPreferences):
     }
 
     def draw(self, context:Context):
-        self.layout.column()
-        self.layout.label(text="Control Zones")
-        self.layout.prop(self, "width")
-        self.layout.prop(self, "radius")
-        self.layout.prop(self, "isVisible", text="Show Overlay")
+        row = self.layout.row()
+        col = row.column()
+        col.label(text="Control Zones")
+        col.prop(self, "width")
+        col.prop(self, "radius")
+        col.prop(self, "isVisible", text="Show Overlay")
         
-        self.layout.label(text="Viewport Options")
-        self.layout.prop_menu_enum(self, "gizmo_position")
+        col = row.column()
+        col.label(text="Viewport Options")
+        col.prop_menu_enum(self, "gizmo_position")
 
     def getShowLock(self):
         return self.show_lock
