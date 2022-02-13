@@ -1,6 +1,6 @@
 import bpy
 from mathutils import Vector
-from bpy.types import Area, Region, RegionView3D, SpaceView3D, Window
+from bpy.types import Window, Area, Region, RegionView3D
 
 from . Overlay import Overlay
 

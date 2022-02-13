@@ -11,6 +11,7 @@ class ViewportGizmoGroup(GizmoGroup):
 
     gizmo_actions: list[tuple[str, Gizmo, str, str]]
 
+    # set up gizmo collection
     def setup(self, context: Context):
         self.gizmo_actions = []
         self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  bpy.context.screen)
@@ -20,6 +21,7 @@ class ViewportGizmoGroup(GizmoGroup):
         self.__buildGizmo("voxel_resize", "object.voxel_size_edit", "MESH_GRID")
         self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
         
+    # handle redraw call
     def draw_prepare(self, context:Context):
         region = context.region
         size = Vector((region.width, region.height))
@@ -32,6 +34,7 @@ class ViewportGizmoGroup(GizmoGroup):
             offset = gizmo_bar + i * gizmo.scale_basis * 6
             gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1])*offset)
 
+    # determine viewport position and spacing
     def __getGizmoOrientation(self, size:Vector) -> tuple[Vector, tuple[int, int]]:
         position = (0,0,0)
         settings = self.__getSettings()
@@ -67,7 +70,7 @@ class ViewportGizmoGroup(GizmoGroup):
         gizmo.scale_basis = (80 * 0.35) / 2
         return gizmo
 
-    # determine if each gizmo should be visible based on what edit mode is being used
+    # determine if each gizmo should be visible based on what edit mode is being used and toggle states
     def __validateMode(self):
         settings = self.__getSettings()
         mode = bpy.context.active_object.mode
@@ -97,6 +100,7 @@ class ViewportGizmoGroup(GizmoGroup):
                 active.append(g)
         return active
 
+    # get settings pointer
     def __getSettings(self):
         return bpy.context.preferences.addons['touchview'].preferences
     
@@ -107,6 +111,20 @@ class ViewportGizmoGroup(GizmoGroup):
         gizmo.color_highlight = settings.gizmo_colors["active"]["color_highlight"]
         gizmo.alpha = settings.gizmo_colors["active"]["alpha"]
         gizmo.alpha_highlight = settings.gizmo_colors["active"]["alpha_highlight"]
+
+    # UI panel to append Gizmo menu
+def gizmo_toggle(panel, context:Context):
+    layout = panel.layout
+    settings = bpy.context.preferences.addons['touchview'].preferences
+    row = layout.row()
+    col = row.column()
+    col.label(text="Touchview Buttons")
+    col.prop(settings, 'show_fullscreen')
+    col.prop(settings, 'show_quadview')
+    col.prop(settings, 'show_snap_view')
+    col.prop(settings, 'show_rotation_lock')
+    col.prop(settings, 'show_voxel_resize')
+    col.prop(settings, 'show_voxel_remesh')
 
 class ViewportRecenter(Operator):
     """ Recenter Viewport and Cursor on Selected Object """
@@ -134,16 +152,3 @@ class ViewportLock(Operator):
 
         context.region.data.lock_rotation=False
         return {'FINISHED'}
-
-def draw_lock(panel, context):
-    layout = panel.layout
-    settings = bpy.context.preferences.addons['touchview'].preferences
-    row = layout.row()
-    col = row.column()
-    col.label(text="Touchview Buttons")
-    col.prop(settings, 'show_fullscreen')
-    col.prop(settings, 'show_quadview')
-    col.prop(settings, 'show_snap_view')
-    col.prop(settings, 'show_rotation_lock')
-    col.prop(settings, 'show_voxel_resize')
-    col.prop(settings, 'show_voxel_remesh')
