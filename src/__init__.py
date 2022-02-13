@@ -20,7 +20,7 @@ bl_info = {
     "name": "Touch Viewport",
     "description": "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (0, 8),
+    "version": (0, 9),
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -33,7 +33,7 @@ import bpy
 from bpy.types import Window
 from . Viewport import ViewportManager
 from . Settings import OverlaySettings
-from . Operators import TouchInput, FlipTools
+from . Operators import TouchInput, FlipTools, ToggleNPanel
 from . Panel import NendoViewport
 from . Gizmos import ViewportGizmoGroup, ViewportRecenter, ViewportLock, gizmo_toggle
 
@@ -41,6 +41,7 @@ __classes__ = (
         OverlaySettings,
         TouchInput,
         FlipTools,
+        ToggleNPanel,
         NendoViewport,
         ViewportLock,
         ViewportRecenter,

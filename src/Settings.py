@@ -48,6 +48,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
         name="Snap View", 
         default=True 
     )
+    show_n_panel: BoolProperty(
+        name="N Panel", 
+        default=True 
+    )
     show_rotation_lock: BoolProperty(
         name="Rotation Lock", 
         default=True 
@@ -71,6 +75,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
             "fullscreen",
             "quadview",
             "snap_view",
+            "n_panel",
             "center_on_cursor",
             "rotation_lock"
         },
@@ -84,6 +89,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
         "TEXTURE_PAINT":{}
     }
 
+# set up addon preferences UI
     def draw(self, context:Context):
         row = self.layout.row()
         col = row.column()

@@ -1,5 +1,6 @@
 import bpy
 import math
+import time
 
 from bpy import ops
 from bpy.props import EnumProperty
@@ -11,6 +12,8 @@ class TouchInput(Operator):
     """ Active Viewport control zones """
     bl_idname = "view3d.view_ops"
     bl_label = "Viewport Control Regions"
+
+    start_time: float = time.time()
 
     delta: tuple[float, float]
 
@@ -31,6 +34,14 @@ class TouchInput(Operator):
             bpy.ops.view3d.move('INVOKE_DEFAULT')
         return {'FINISHED'}
 
+# consider adding gestures. requires handling moving manually rather than relying on built-in operators.
+    def handle_swipe(self, event: Event):
+        if event.value == "PRESS" and event.type == "LEFTMOUSE":
+            self.start_time = time.time()
+        if event.value == "RELEASE" and event.type == "LEFTMOUSE" and self.start_time:
+            pass
+        return False
+
     def handle_doubletap(self, event: Event):
         if event.value == "DOUBLE_CLICK" and event.type != "PEN":
             bpy.ops.object.transfer_mode('INVOKE_DEFAULT')
@@ -39,6 +50,8 @@ class TouchInput(Operator):
 
     def invoke(self, context: Context, event: Event):
         if self.handle_doubletap(event): return {'FINISHED'}
+        if self.handle_swipe(event): return {'FINISHED'}
+        if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
         viewport = context.window.vm.getViewport(context.area)
@@ -81,6 +94,19 @@ class FlipTools(Operator):
             if r.type == 'TOOLS':
                 override["region"] = r
         bpy.ops.screen.region_flip(override)
+        return {'FINISHED'}
+        
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
+class ToggleNPanel(Operator):
+    """ Toggle Settings Panel """
+    bl_idname = "view3d.toggle_n_panel"
+    bl_label = "Display settings Panel"
+
+    def execute(self, context: Context):
+        context.space_data.show_region_ui ^= True
         return {'FINISHED'}
         
     @classmethod

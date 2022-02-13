@@ -17,10 +17,11 @@ class ViewportGizmoGroup(GizmoGroup):
         self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  bpy.context.screen)
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")
+        self.__buildGizmo("n_panel", "view3d.toggle_n_panel", "EVENT_N")
         self.__buildGizmo("rotation_lock", "view3d.viewport_lock", "LOCKED", "UNLOCKED", "lock_rotation", context.region_data)
         self.__buildGizmo("voxel_resize", "object.voxel_size_edit", "MESH_GRID")
         self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
-        
+ 
     # handle redraw call
     def draw_prepare(self, context:Context):
         region = context.region
@@ -122,6 +123,7 @@ def gizmo_toggle(panel, context:Context):
     col.prop(settings, 'show_fullscreen')
     col.prop(settings, 'show_quadview')
     col.prop(settings, 'show_snap_view')
+    col.prop(settings, 'show_n_panel')
     col.prop(settings, 'show_rotation_lock')
     col.prop(settings, 'show_voxel_resize')
     col.prop(settings, 'show_voxel_remesh')
