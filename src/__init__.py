@@ -38,7 +38,7 @@ from bpy.props import EnumProperty
 
 from . Viewport import ViewportManager
 from . items import input_mode_items
-from . constants import OverlaySettings
+from . Settings import OverlaySettings
 from . Panel import NendoViewport
 from . Gizmos import ViewportGizmoGroup, ViewportRecenter, ViewportLock, draw_lock
 
