@@ -9,7 +9,7 @@ def register_keymaps():
     addon_keymaps.append((km, kmi)) 
 
     km = wm.keyconfigs.addon.keymaps.new(name='Sculpt', space_type='EMPTY')
-    kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'ANY')
+    kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi))
     
     kmi = km.keymap_items.new('sculpt.brush_stroke', 'PEN', 'PRESS')
