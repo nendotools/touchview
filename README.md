@@ -53,6 +53,10 @@ v0.9
 v0.9.1
 - added tap for menu scroll
 
+v0.9.2
+- removed viewport manager class
+- fixed issue delaying overlay viewport binding
+
 
 *many more features are planned for the final version.*
 
