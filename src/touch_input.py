@@ -20,6 +20,11 @@ def register_keymaps():
     kmi.properties.mode = "INVERT"
     addon_keymaps.append((km, kmi))
 
+    # bpy.context.window_manager.keyconfigs.active.keymaps.find('View2D Buttons List')
+    km = wm.keyconfigs.addon.keymaps.new(name='View2D Buttons List', space_type='EMPTY')
+    kmi = km.keymap_items.new('view2d.pan', 'LEFTMOUSE', 'PRESS')
+    addon_keymaps.append((km, kmi))
+
 def unregister_keymaps():
     for km, kmi in addon_keymaps:
         km.keymap_items.remove(kmi)

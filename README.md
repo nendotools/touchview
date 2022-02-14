@@ -45,6 +45,15 @@ v0.8
 - added gizmo to toggle fullscreen mode
 - doubletap now selects/activates tapped object instead of triggering fullscreen
 
+v0.9
+- code restructure
+- added N Panel gizmo
+- fixed dragging over gizmo moves selected object
+
+v0.9.1
+- added tap for menu scroll
+
+
 *many more features are planned for the final version.*
 
 ##### KNOWN ISSUES:
