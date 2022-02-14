@@ -1,4 +1,5 @@
 import bpy
+from bpy.types import Context
 from bpy.types import Area, Region, SpaceView3D
 import math
 from mathutils import Vector
@@ -8,7 +9,7 @@ from gpu_extras.batch import batch_for_shader
 
 from . Settings import OverlaySettings
 
-class Overlay:
+class Overlay():
     meshes: list[object]
 
     def __init__(self):
@@ -28,10 +29,10 @@ class Overlay:
     def __getSize(self, view:Region, scalar: float = 1) -> Vector:
         return Vector((view.width * scalar, view.height * scalar))
 
-    def drawUI(self, view: Area):
+    def drawUI(self):
         _handle = SpaceView3D.draw_handler_add(
             self.__renderCircle, 
-            (view, (1,1,1,0.01)), 
+            ([1,1,1,0.01], ), 
             'WINDOW', 
             'POST_PIXEL'
         )
@@ -39,14 +40,15 @@ class Overlay:
 
         _handle = SpaceView3D.draw_handler_add(
             self.__renderRailing, 
-            (view, (1,1,1,0.01)), 
+            ([1,1,1,0.01], ), 
             'WINDOW', 
             'POST_PIXEL'
         )
         self.meshes.append(_handle)
 
-    def __renderRailing(self, view: Area, color: tuple[float, float, float, float]):
+    def __renderRailing(self, color: list[float, float, float, float]):
         settings = self.__getSettings()
+        view = bpy.context.area
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer():
@@ -84,8 +86,9 @@ class Overlay:
         glDisable(GL_BLEND)
 
 
-    def __renderCircle(self, view: Area, color: tuple[float, float, float, float]):
+    def __renderCircle(self, color: list[float, float, float, float]):
         settings = self.__getSettings()
+        view = bpy.context.area
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer() and not region.data.lock_rotation:

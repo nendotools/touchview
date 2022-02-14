@@ -30,8 +30,7 @@ bl_info = {
 }
 
 import bpy
-from bpy.types import Window
-from . Viewport import ViewportManager
+from . Overlay import Overlay
 from . Settings import OverlaySettings
 from . Operators import TouchInput, FlipTools, ToggleNPanel
 from . Panel import NendoViewport
@@ -48,6 +47,8 @@ __classes__ = (
         ViewportGizmoGroup
     )
 
+ov = Overlay()
+
 def register():
     from bpy.utils import register_class
     from . touch_input import register_keymaps    
@@ -55,20 +56,18 @@ def register():
         register_class(cls)
 
     bpy.types.VIEW3D_PT_gizmo_display.append(gizmo_toggle)
+    ov.drawUI()
 
     register_keymaps()
-    Window.vm = ViewportManager()
 
 def unregister():
     from bpy.utils import unregister_class
     from . touch_input import unregister_keymaps
 
+    ov.clear_overlays()
     bpy.types.VIEW3D_PT_gizmo_display.remove(gizmo_toggle)
     for cls in __classes__:
         unregister_class(cls)
-
-    Window.vm.unload()
-    del Window.vm
 
     unregister_keymaps()
 

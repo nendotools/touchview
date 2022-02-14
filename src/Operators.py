@@ -1,5 +1,6 @@
 import bpy
 import math
+from mathutils import Vector
 import time
 
 from bpy import ops
@@ -54,11 +55,8 @@ class TouchInput(Operator):
         if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
-        viewport = context.window.vm.getViewport(context.area)
-        viewport.setRegionContext(context.region)
-
         settings = bpy.context.preferences.addons['touchview'].preferences
-        mid_point = viewport.getMidpoint()
+        mid_point = Vector((context.region.width/2 , context.region.height/2))
 
         dolly_scale = settings.getWidth()
         pan_scale = settings.getRadius()
@@ -66,10 +64,10 @@ class TouchInput(Operator):
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale * 0.5)
 
-        is_quadview_orthographic = context.region.data.is_orthographic_side_view and len(viewport.quadview) > 0
+        is_quadview_orthographic = context.region.data.is_orthographic_side_view and len(context.space_data.quadview) > 0
         is_locked = context.region.data.lock_rotation | is_quadview_orthographic
         
-        if dolly_wid > self.delta[0] or self.delta[0] > viewport.view.width-dolly_wid:
+        if dolly_wid > self.delta[0] or self.delta[0] > context.region.width-dolly_wid:
             self.mode = "DOLLY"
         elif math.dist(self.delta, mid_point) < pan_diameter or is_locked:
             self.mode = "PAN"
