@@ -85,7 +85,7 @@ class ViewportGizmoGroup(GizmoGroup):
             orientation = (1 * dpi_factor(), 0, 0)
 
         elif settings.gizmo_position == 'LEFT':
-            position = (22 + panel('TOOLS')[0], size.y / 2 + (gizmo_bar / 2 * dpi_factor()), 0)
+            position = (22 * dpi_factor() + panel('TOOLS')[0], size.y / 2 + (gizmo_bar / 2 * dpi_factor()), 0)
             orientation = (0, -1 * dpi_factor(), 0)
 
         return (Vector(position), orientation)
