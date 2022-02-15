@@ -2,6 +2,26 @@ import bpy
 from mathutils import Matrix, Vector
 from bpy.types import Context, Gizmo, GizmoGroup, Operator, bpy_prop_collection
 
+def dpi_factor() -> float:
+    systemPreferences = bpy.context.preferences.system
+    retinaFactor = getattr(systemPreferences, "pixel_size", 1)
+    return int(systemPreferences.dpi * retinaFactor) / 72
+
+def panel(type) -> tuple:
+    ''' Panel in the region.
+    
+    type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS', 'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE', 'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
+    return (tuple) - Dimension of the region.
+    '''
+    width = 0
+    height = 0
+    for region in bpy.context.area.regions:
+        if region.type == type:
+            width = region.width
+            height = region.height
+    return (width, height)
+
+
 class ViewportGizmoGroup(GizmoGroup):
     bl_idname = "GIZMO_GT_navigate_lock"
     bl_label = "Tools Region Swap"
@@ -30,30 +50,43 @@ class ViewportGizmoGroup(GizmoGroup):
         active_gizmos = self.__getActive()
 
         position = self.__getGizmoOrientation(size)
-        for i, gizmo in enumerate(active_gizmos):
-            gizmo_bar = (len(active_gizmos) * gizmo.scale_basis * -5)/2
-            offset = gizmo_bar + i * gizmo.scale_basis * 6
-            gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1])*offset)
+        # for i, gizmo in enumerate(active_gizmos):
+        #     gizmo_bar = (len(active_gizmos) * (gizmo.scale_basis * -2.2))
+        #     offset = gizmo_bar + i * gizmo.scale_basis * 2.2
+        #     gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1]) * offset)
+        #     if not context.space_data.show_gizmo_navigate:
+        #         gizmo.hide = True
+        offset = 0
+        gap = 2.2
+        for gizmo in active_gizmos:
+            gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1]) * offset)
+            offset += gizmo.scale_basis * 2 + gap
+            if not context.space_data.show_gizmo_navigate:
+                gizmo.hide = True
 
     # determine viewport position and spacing
     def __getGizmoOrientation(self, size:Vector) -> tuple[Vector, tuple[int, int]]:
-        position = (0,0,0)
         settings = self.__getSettings()
-        scale_basis = (80 * 0.35) / 2
-        orientation = (0,0,0)
+        active_gizmos = self.__getActive()
+        gap = 2.2
+        for gizmo in active_gizmos:
+            gizmo_bar = (gizmo.scale_basis * 2 * len(active_gizmos) + (2.2 * len(active_gizmos) - 32 + gap))
 
-        if settings.gizmo_position == "BOTTOM":
-            position = ( size.x/2, scale_basis * 4, 0)
-            orientation = (1,0,0)
-        elif settings.gizmo_position == "TOP":
-            position = (size.x/2, size.y - scale_basis * 4, 0)
-            orientation = (1,0,0)
-        elif settings.gizmo_position == "LEFT":
-            position = (scale_basis * 4, size.y/2, 0)
-            orientation = (0,1,0)
-        elif settings.gizmo_position == "RIGHT":
-            position = (size.x - scale_basis * 4, size.y/2, 0)
-            orientation = (0,1,0)
+        if settings.gizmo_position == 'TOP':
+            position = (size.x / 2 - (gizmo_bar / 2 * dpi_factor()), size.y - (panel('HEADER')[1] + panel('TOOL_HEADER')[1]), 0)
+            orientation = (1 * dpi_factor(), 0, 0)
+
+        elif settings.gizmo_position == 'RIGHT':
+            position = (size.x - (22 * dpi_factor() + panel('UI')[0]), size.y - 251.2 * dpi_factor(), 0)
+            orientation = (0, -1 * dpi_factor(), 0)
+
+        elif settings.gizmo_position == 'BOTTOM':
+            position = (size.x / 2 - (gizmo_bar / 2 * dpi_factor()), 22 * dpi_factor(), 0)
+            orientation = (1 * dpi_factor(), 0, 0)
+
+        elif settings.gizmo_position == 'LEFT':
+            position = (22 + panel('TOOLS')[0], size.y / 2 + (gizmo_bar / 2 * dpi_factor()), 0)
+            orientation = (0, -1 * dpi_factor(), 0)
 
         return (Vector(position), orientation)
 
@@ -68,7 +101,7 @@ class ViewportGizmoGroup(GizmoGroup):
         gizmo.use_event_handle_all = True
         gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
         self.__setColors(gizmo)
-        gizmo.scale_basis = (80 * 0.35) / 2
+        gizmo.scale_basis = 14
         return gizmo
 
     # determine if each gizmo should be visible based on what edit mode is being used and toggle states
