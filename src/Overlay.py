@@ -1,6 +1,5 @@
 import bpy
-from bpy.types import Context
-from bpy.types import Area, Region, SpaceView3D
+from bpy.types import Region, SpaceView3D
 import math
 from mathutils import Vector
 import gpu
