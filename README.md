@@ -56,6 +56,7 @@ v0.9.1
 v0.9.2
 - removed viewport manager class
 - fixed issue delaying overlay viewport binding
+- fixed gizmo tools/panel overlap issue when "Region Overlap" enabled
 
 
 *many more features are planned for the final version.*
