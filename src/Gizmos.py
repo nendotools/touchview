@@ -77,7 +77,12 @@ class ViewportGizmoGroup(GizmoGroup):
             orientation = (1 * dpi_factor(), 0, 0)
 
         elif settings.gizmo_position == 'RIGHT':
-            position = (size.x - (22 * dpi_factor() + panel('UI')[0]), size.y - 251.2 * dpi_factor(), 0)
+            if bpy.context.preferences.view.mini_axis_type == 'GIZMO':
+                position = (size.x - (panel('UI')[0] + 22 * dpi_factor()), size.y - (171.2 + bpy.context.preferences.view.gizmo_size_navigate_v3d) * dpi_factor(), 0)
+            elif bpy.context.preferences.view.mini_axis_type == 'MINIMAL':
+                position = (size.x - (panel('UI')[0] + 22 * dpi_factor()), size.y - ((196.2 + bpy.context.preferences.view.mini_axis_size) + bpy.context.preferences.view.mini_axis_size) * dpi_factor(), 0)
+            else:
+                position = (size.x - (panel('UI')[0] + 22 * dpi_factor()), size.y - 168.2 * dpi_factor(), 0)
             orientation = (0, -1 * dpi_factor(), 0)
 
         elif settings.gizmo_position == 'BOTTOM':
