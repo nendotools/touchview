@@ -1,7 +1,7 @@
 import bpy
 from bpy.types import Context
 from bpy.props import BoolProperty, EnumProperty, FloatProperty
-from .lib.items import position_items
+from .lib.items import position_items, pivot_items
 
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__
@@ -21,6 +21,11 @@ class OverlaySettings(bpy.types.AddonPreferences):
     isVisible: BoolProperty(
         name="Show Overlay", 
         default=False, 
+    )
+    pivot_mode: EnumProperty(
+            name="Sculpt Pivot Mode",
+            items=pivot_items,
+            default="ACTIVE"
     )
     gizmo_colors = {
             "disabled": {
@@ -42,6 +47,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
     )
     show_quadview: BoolProperty(
         name="Quadview", 
+        default=True 
+    )
+    show_pivot_mode: BoolProperty(
+        name="Pivot Mode", 
         default=True 
     )
     show_snap_view: BoolProperty(
@@ -80,6 +89,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
             "rotation_lock"
         },
         "SCULPT": {
+            "pivot_mode",
             "voxel_resize",
             "voxel_remesh"
         },

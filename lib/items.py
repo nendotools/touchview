@@ -8,14 +8,14 @@ position_items   = [('TOP','top','Set Gizmo position to top of viewport'),
                     ('BOTTOM','bottom','Set Gizmo position to bottom of viewport'),
                     ('LEFT','left','Set Gizmo position to left of viewport')]
 
-pivot_items      = [('BOUNDING_BOX_CENTER','Bounding Box','Pivot around bounding box center of selected object'),
-                    ('CURSOR','3D Cursor','Pivot around 3D cursor'),
-                    ('INDIVIDUAL_ORIGINS','Individual Origins','Pivot around each object\'s own origin'),
-                    ('MEDIAN_POINT','Median Point','Pivot around median of selected objects'),
-                    ('ACTIVE_ELEMENT','Active Element','Pivot around active object')]
+pivot_items      = [("ORIGIN", "Origin", "Sets the pivot to the origin of the sculpt."),
+                    ("UNMASKED", "Unmasked", "Sets the pivot position to the average position of the unmasked vertices."),
+                    ("BORDER", "Mask Border", "Sets the pivot position to the center of the border of the mask."),
+                    ("ACTIVE", "Active Vertex", "Sets the pivot position to the active vertex position."),
+                    ("SURFACE", "Surface", "Sets the pivot position to the surface under the cursor.")]
 
-pivot_icon_items = [("BOUNDING_BOX_CENTER","PIVOT_BOUNDINGBOX"),
-                    ("CURSOR","PIVOT_CURSOR"),
-                    ("INDIVIDUAL_ORIGINS","PIVOT_INDIVIDUAL"),
-                    ("MEDIAN_POINT","PIVOT_MEDIAN"),
-                    ("ACTIVE_ELEMENT","PIVOT_ACTIVE")]
+pivot_icon_items = [("BORDER","PIVOT_BOUNDBOX"),
+                    ("ORIGIN","PIVOT_CURSOR"),
+                    ("UNMASKED","PIVOT_INDIVIDUAL"),
+                    ("ACTIVE","PIVOT_MEDIAN"),
+                    ("SURFACE","PIVOT_ACTIVE")]

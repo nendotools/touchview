@@ -7,7 +7,7 @@ from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
 
-from . items import input_mode_items
+from . items import input_mode_items, pivot_items
 
 class TouchInput(Operator):
     """ Active Viewport control zones """
@@ -92,6 +92,30 @@ class FlipTools(Operator):
             if r.type == 'TOOLS':
                 override["region"] = r
         bpy.ops.screen.region_flip(override)
+        return {'FINISHED'}
+        
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
+class NextPivotMode(Operator):
+    """ Step through Pivot modes """
+    bl_idname = "view3d.step_pivot_mode"
+    bl_label = "Use next Pivot mode"
+
+    def execute(self, context: Context):
+        settings = context.preferences.addons["touchview"].preferences
+        count = 0
+        for enum, name, desc in pivot_items:
+            if enum == settings.pivot_mode:
+                count += 1
+                if count == len(pivot_items): count = 0
+                pivot = pivot_items[count][0]
+                bpy.ops.sculpt.set_pivot_position(mode=pivot)
+                settings.pivot_mode = pivot
+                context.area.tag_redraw()
+                return {'FINISHED'}
+            count+=1
         return {'FINISHED'}
         
     @classmethod
