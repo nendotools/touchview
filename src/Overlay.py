@@ -6,7 +6,7 @@ import gpu
 from bgl import glEnable, glDisable, GL_BLEND
 from gpu_extras.batch import batch_for_shader
 
-from . Settings import OverlaySettings
+from ..Settings import OverlaySettings
 
 class Overlay():
     meshes: list[object]

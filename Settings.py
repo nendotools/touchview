@@ -1,7 +1,7 @@
 import bpy
 from bpy.types import Context
 from bpy.props import BoolProperty, EnumProperty, FloatProperty
-from . items import position_items
+from .src.items import position_items
 
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__
@@ -31,9 +31,9 @@ class OverlaySettings(bpy.types.AddonPreferences):
         },
             "active": {
                 "color": [0.0,0.0,0.0],
-                "color_highlight": [0.8,0.8,0.8],
-                "alpha": 0.3,
-                "alpha_highlight": 0.3
+                "alpha": 0.5,
+                "color_highlight": [0.5,0.5,0.5],
+                "alpha_highlight": 0.5
         }
     }
     show_fullscreen: BoolProperty(
@@ -67,7 +67,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
     gizmo_position: EnumProperty(
         items=position_items,
         name="Gizmo Position",
-        default="BOTTOM"
+        default="RIGHT"
     )
     gizmo_sets = {
         # ALL includes only the modes in this list
