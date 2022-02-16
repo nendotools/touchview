@@ -4,6 +4,12 @@ addon_keymaps = []
 
 def register_keymaps():
     wm = bpy.context.window_manager   
+    
+    km = wm.keyconfigs['Blender'].keymaps['3D View']
+    for kmap in km.keymap_items:
+        if kmap.type == "EVT_TWEAK_L":
+            kmap.active = False
+
     km = wm.keyconfigs.addon.keymaps.new(name='', space_type='EMPTY')
     kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi)) 
