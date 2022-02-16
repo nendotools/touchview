@@ -59,6 +59,9 @@ v0.9.2
 - fixed gizmo tools/panel overlap issue when "Region Overlap" enabled
 - removed default keymap causing Move Operator to trigger when dragging over non-modal gizmos
 
+v0.9.3
+- added sculpt pivot mode gizmo
+
 
 *many more features are planned for the final version.*
 
