@@ -7,7 +7,7 @@ from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
 
-from . items import input_mode_items
+from . items import input_mode_items, pivot_items
 
 class TouchInput(Operator):
     """ Active Viewport control zones """
@@ -64,7 +64,7 @@ class TouchInput(Operator):
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale * 0.5)
 
-        is_quadview_orthographic = context.region.data.is_orthographic_side_view and len(context.space_data.quadview) > 0
+        is_quadview_orthographic = context.region.data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
         is_locked = context.region.data.lock_rotation | is_quadview_orthographic
         
         if dolly_wid > self.delta[0] or self.delta[0] > context.region.width-dolly_wid:
@@ -92,6 +92,30 @@ class FlipTools(Operator):
             if r.type == 'TOOLS':
                 override["region"] = r
         bpy.ops.screen.region_flip(override)
+        return {'FINISHED'}
+        
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
+class NextPivotMode(Operator):
+    """ Step through Pivot modes """
+    bl_idname = "view3d.step_pivot_mode"
+    bl_label = "Use next Pivot mode"
+
+    def execute(self, context: Context):
+        settings = context.preferences.addons["touchview"].preferences
+        count = 0
+        for enum, name, desc in pivot_items:
+            if enum == settings.pivot_mode:
+                count += 1
+                if count == len(pivot_items): count = 0
+                pivot = pivot_items[count][0]
+                bpy.ops.sculpt.set_pivot_position(mode=pivot)
+                settings.pivot_mode = pivot
+                context.area.tag_redraw()
+                return {'FINISHED'}
+            count+=1
         return {'FINISHED'}
         
     @classmethod

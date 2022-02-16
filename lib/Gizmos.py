@@ -1,6 +1,7 @@
 import bpy
 from mathutils import Matrix, Vector
 from bpy.types import Context, Gizmo, GizmoGroup, Operator, bpy_prop_collection
+from .items import pivot_items, pivot_icon_items
 
 def dpi_factor() -> float:
     systemPreferences = bpy.context.preferences.system
@@ -29,7 +30,7 @@ class ViewportGizmoGroup(GizmoGroup):
     bl_region_type = 'WINDOW'
     bl_options = {'PERSISTENT', 'SCALE'}
 
-    gizmo_actions: list[tuple[str, Gizmo, str, str]]
+    gizmo_actions: list[tuple[str, list[Gizmo], str, str]]
 
     # set up gizmo collection
     def setup(self, context: Context):
@@ -37,6 +38,7 @@ class ViewportGizmoGroup(GizmoGroup):
         self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  bpy.context.screen)
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")
+        self.__buildEnumGizmo("pivot_mode", "view3d.step_pivot_mode", pivot_items, pivot_icon_items, "pivot_mode", context.preferences.addons["touchview"].preferences)
         self.__buildGizmo("n_panel", "view3d.toggle_n_panel", "EVENT_N")
         self.__buildGizmo("rotation_lock", "view3d.viewport_lock", "LOCKED", "UNLOCKED", "lock_rotation", context.region_data)
         self.__buildGizmo("voxel_resize", "object.voxel_size_edit", "MESH_GRID")
@@ -50,12 +52,6 @@ class ViewportGizmoGroup(GizmoGroup):
         active_gizmos = self.__getActive()
 
         position = self.__getGizmoOrientation(size)
-        # for i, gizmo in enumerate(active_gizmos):
-        #     gizmo_bar = (len(active_gizmos) * (gizmo.scale_basis * -2.2))
-        #     offset = gizmo_bar + i * gizmo.scale_basis * 2.2
-        #     gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1]) * offset)
-        #     if not context.space_data.show_gizmo_navigate:
-        #         gizmo.hide = True
         offset = 0
         gap = 2.2
         for gizmo in active_gizmos:
@@ -69,6 +65,10 @@ class ViewportGizmoGroup(GizmoGroup):
         settings = self.__getSettings()
         active_gizmos = self.__getActive()
         gap = 2.2
+        position = (0.0,0.0,0.0)
+        orientation = (0.0,0.0,0.0)
+        gizmo_bar = 0.0
+
         for gizmo in active_gizmos:
             gizmo_bar = (gizmo.scale_basis * 2 * len(active_gizmos) + (2.2 * len(active_gizmos) - 32 + gap))
 
@@ -96,40 +96,76 @@ class ViewportGizmoGroup(GizmoGroup):
         return (Vector(position), orientation)
 
     # initialize each gizmo, add them to named list with icon name(s)
-    def __buildGizmo(self, name: str, operator_name: str, on_icon: str, off_icon: str = "", watch_var:str = "", source = None) -> Gizmo:
-        if off_icon != "":
-            self.__buildGizmo(name, operator_name, off_icon, "", watch_var, source)
+    def __buildGizmo(self, name: str, operator_name: str, on_icon: str, off_icon: str = "", watch_var:str = "", source = None, sub:bool = False) -> Gizmo:
         gizmo = self.gizmos.new("GIZMO_GT_button_2d")
-        self.gizmo_actions.append((name, gizmo, on_icon, off_icon, watch_var, source))
         gizmo.target_set_operator(operator_name)
         gizmo.icon = on_icon
         gizmo.use_event_handle_all = True
         gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
         self.__setColors(gizmo)
         gizmo.scale_basis = 14
+        if sub: return gizmo
+
+        group = [gizmo]
+        if off_icon != "":
+            off_gizmo = self.__buildGizmo(name, operator_name, off_icon, "", watch_var, source, True)
+            group.append(off_gizmo)
+        self.gizmo_actions.append((name, group, on_icon, off_icon, watch_var, source))
         return gizmo
+
+    # initialize set of gizmos from enum list, add them to named list with icon name(s)
+    def __buildEnumGizmo(self, name: str, operator_name: str, gizmo_list:list, gizmo_icons:list, watch_var:str, source) -> Gizmo:
+        group = []
+        for state in gizmo_list:
+            icon = next((icon for icon in gizmo_icons if icon[0] == state[0]), ["","",""])
+            gizmo = self.gizmos.new("GIZMO_GT_button_2d")
+            gizmo.target_set_operator(operator_name)
+            gizmo.icon = icon[1]
+            gizmo.use_event_handle_all = True
+            gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
+            self.__setColors(gizmo)
+            gizmo.scale_basis = 14
+            group.append(gizmo)
+        self.gizmo_actions.append((name, group, gizmo_list, gizmo_icons, watch_var, source))
+        return 
 
     # determine if each gizmo should be visible based on what edit mode is being used and toggle states
     def __validateMode(self):
         settings = self.__getSettings()
         mode = bpy.context.active_object.mode
-        for name, gizmo, on_state, off_state, watch_var, source in self.gizmo_actions:
+        for name, gizmos, on_state, off_state, watch_var, source in self.gizmo_actions:
             if name not in settings.gizmo_sets[mode] and name not in settings.gizmo_sets["ALL"] or mode not in settings.gizmo_sets or not getattr(settings, "show_"+name):
-                gizmo.hide = True
-                continue
+                for gizmo in gizmos:
+                    gizmo.hide = True
+                    continue
             else:
-                gizmo.hide = False
+                for gizmo in gizmos:
+                    gizmo.hide = True
+                    gizmo.hide = False
 
             if watch_var != "" and source is not None:
-                data = getattr(source, watch_var)
-                state = (off_state == "")
+                if len(gizmos) < 3:
+                    data = getattr(source, watch_var)
 
-                if type(data) == bpy_prop_collection:
-                    if (len(data) == 0) == state: gizmo.hide = True
-                    else: gizmo.hide = False
-                else:
-                    if data == state: gizmo.hide = True
-                    else: gizmo.hide = False
+                    for i, gizmo in enumerate(gizmos):
+                        if type(data) == bpy_prop_collection:
+                            if (len(data) == 0) == bool(i): gizmo.hide = True
+                            else: gizmo.hide = False
+                        else:
+                            if data == bool(i): gizmo.hide = True
+                            else: gizmo.hide = False
+######
+### NEED TO HANDLE ENUM GIZMO GROUPS
+######
+                else: # THIS IS AN ENUM GROUP, SO on_state HOLDS ENUM LIST, off_state HOLDS ICONS
+                    data = getattr(source, watch_var)
+
+                    for i, gizmo in enumerate(gizmos):
+                        gizmo.hide = True
+                        icon = [icon for icon in off_state if icon[1] == gizmo.icon][0]
+                        if icon[0] == data:
+                            gizmo.hide = False
+
 
     # build list of active gizmos to begin draw step
     def __getActive(self):
@@ -161,6 +197,7 @@ def gizmo_toggle(panel, context:Context):
     col.prop(settings, 'show_fullscreen')
     col.prop(settings, 'show_quadview')
     col.prop(settings, 'show_snap_view')
+    col.prop(settings, 'show_pivot_mode')
     col.prop(settings, 'show_n_panel')
     col.prop(settings, 'show_rotation_lock')
     col.prop(settings, 'show_voxel_resize')
