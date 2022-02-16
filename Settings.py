@@ -1,7 +1,7 @@
 import bpy
 from bpy.types import Context
 from bpy.props import BoolProperty, EnumProperty, FloatProperty
-from .src.items import position_items
+from .lib.items import position_items
 
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__

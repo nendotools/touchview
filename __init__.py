@@ -30,13 +30,13 @@ bl_info = {
 }
 
 import bpy
-from . import src
+from . import lib
 from .Settings import OverlaySettings
 
 def register():
-    src.register()
+    lib.register()
     bpy.utils.register_class(OverlaySettings)
 
 def unregister():
-    src.unregister()
+    lib.unregister()
     bpy.utils.unregister_class(OverlaySettings)
