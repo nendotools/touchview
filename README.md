@@ -57,6 +57,7 @@ v0.9.2
 - removed viewport manager class
 - fixed issue delaying overlay viewport binding
 - fixed gizmo tools/panel overlap issue when "Region Overlap" enabled
+- removed default keymap causing Move Operator to trigger when dragging over non-modal gizmos
 
 
 *many more features are planned for the final version.*
