@@ -69,6 +69,10 @@ class ViewportGizmoGroup(GizmoGroup):
         settings = self.__getSettings()
         active_gizmos = self.__getActive()
         gap = 2.2
+        position = (0.0,0.0,0.0)
+        orientation = (0.0,0.0,0.0)
+        gizmo_bar = 0.0
+
         for gizmo in active_gizmos:
             gizmo_bar = (gizmo.scale_basis * 2 * len(active_gizmos) + (2.2 * len(active_gizmos) - 32 + gap))
 
