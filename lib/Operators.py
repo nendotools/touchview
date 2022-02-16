@@ -64,7 +64,7 @@ class TouchInput(Operator):
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale * 0.5)
 
-        is_quadview_orthographic = context.region.data.is_orthographic_side_view and len(context.space_data.quadview) > 0
+        is_quadview_orthographic = context.region.data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
         is_locked = context.region.data.lock_rotation | is_quadview_orthographic
         
         if dolly_wid > self.delta[0] or self.delta[0] > context.region.width-dolly_wid:
