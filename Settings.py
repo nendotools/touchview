@@ -6,11 +6,6 @@ from .lib.items import position_items, pivot_items
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__
 
-    is_dirty: BoolProperty(
-        name="Dirty",
-        default=True
-    )
-
     width: FloatProperty(
         name="Width", 
         default=40.0, 
