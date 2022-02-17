@@ -1,4 +1,5 @@
 import bpy
+from bpy.app.handlers import persistent
 from . Overlay import Overlay
 from . Operators import TouchInput, NextPivotMode, FlipTools, ToggleNPanel
 from . Panel import NendoViewport
@@ -17,6 +18,10 @@ __classes__ = (
 
 ov = Overlay()
 
+@persistent
+def flag_revalidate(ctx):
+    bpy.context.preferences.addons["touchview"].preferences.is_dirty=True
+
 def register():
     from bpy.utils import register_class
     from . touch_input import register_keymaps
@@ -25,6 +30,8 @@ def register():
 
     bpy.types.VIEW3D_PT_gizmo_display.append(gizmo_toggle)
     ov.drawUI()
+
+    bpy.app.handlers.load_post.append(flag_revalidate)
 
     register_keymaps()
 

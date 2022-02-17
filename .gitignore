@@ -1,2 +1,3 @@
 bin
+deploy.sh
 __pycache__/

@@ -6,6 +6,11 @@ from .lib.items import position_items, pivot_items
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__
 
+    is_dirty: BoolProperty(
+        name="Dirty",
+        default=True
+    )
+
     width: FloatProperty(
         name="Width", 
         default=40.0, 
@@ -25,7 +30,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
     pivot_mode: EnumProperty(
             name="Sculpt Pivot Mode",
             items=pivot_items,
-            default="ACTIVE"
+            default="SURFACE"
     )
     gizmo_colors = {
             "disabled": {
