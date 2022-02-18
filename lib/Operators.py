@@ -74,7 +74,8 @@ class TouchInput(Operator):
         else:
             self.mode = "ORBIT"
         
-        bpy.ops.sculpt.set_pivot_position(mode=settings.pivot_mode)
+        if context.object.mode == "SCULPT":
+            bpy.ops.sculpt.set_pivot_position(mode=settings.pivot_mode)
         self.execute(context)
         return {'FINISHED'}
         
