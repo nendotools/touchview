@@ -2,7 +2,7 @@ import bpy
 from . Overlay import Overlay
 from . Operators import TouchInput, NextPivotMode, FlipTools, ToggleNPanel
 from . Panel import NendoViewport
-from . Gizmos import ViewportGizmoGroup, ViewportRecenter, ViewportLock, gizmo_toggle
+from . Gizmos import ViewportGizmoGroup, ViewportRecenter, ViewportLock, touch_gizmo_display
 
 __classes__ = (
     TouchInput,
@@ -23,7 +23,7 @@ def register():
     for cls in __classes__:
         register_class(cls)
 
-    bpy.types.VIEW3D_PT_gizmo_display.append(gizmo_toggle)
+    bpy.types.VIEW3D_PT_gizmo_display.append(touch_gizmo_display)
     ov.drawUI()
 
     register_keymaps()
@@ -33,7 +33,7 @@ def unregister():
     from . touch_input import unregister_keymaps
 
     ov.clear_overlays()
-    bpy.types.VIEW3D_PT_gizmo_display.remove(gizmo_toggle)
+    bpy.types.VIEW3D_PT_gizmo_display.remove(touch_gizmo_display)
     for cls in __classes__:
         unregister_class(cls)
 

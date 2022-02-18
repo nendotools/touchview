@@ -85,7 +85,6 @@ class OverlaySettings(bpy.types.AddonPreferences):
             "quadview",
             "snap_view",
             "n_panel",
-            "center_on_cursor",
             "rotation_lock"
         },
         "SCULPT": {
@@ -111,6 +110,13 @@ class OverlaySettings(bpy.types.AddonPreferences):
         col = row.column()
         col.label(text="Viewport Options")
         col.prop_menu_enum(self, "gizmo_position")
+
+    def getGizmoSet(self, mode:str):
+        available = list(self.gizmo_sets["ALL"])
+        
+        if not self.gizmo_sets[mode]: return available
+        return available + list(self.gizmo_sets[mode])
+        
 
     def getShowLock(self):
         return self.show_lock

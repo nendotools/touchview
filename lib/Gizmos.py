@@ -24,8 +24,8 @@ def panel(type) -> tuple:
 
 
 class ViewportGizmoGroup(GizmoGroup):
-    bl_idname = "GIZMO_GT_navigate_lock"
-    bl_label = "Tools Region Swap"
+    bl_idname = "GIZMO_GT_touch_tools"
+    bl_label = "Fast access tools for touch viewport"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'WINDOW'
     bl_options = {'PERSISTENT', 'SCALE'}
@@ -144,6 +144,7 @@ class ViewportGizmoGroup(GizmoGroup):
                     gizmo.hide = False
 
             if watch_var != "" and source is not None:
+                # Handle Boolean state toggling
                 if len(gizmos) < 3:
                     data = getattr(source, watch_var)
 
@@ -154,10 +155,9 @@ class ViewportGizmoGroup(GizmoGroup):
                         else:
                             if data == bool(i): gizmo.hide = True
                             else: gizmo.hide = False
-######
-### NEED TO HANDLE ENUM GIZMO GROUPS
-######
-                else: # THIS IS AN ENUM GROUP, SO on_state HOLDS ENUM LIST, off_state HOLDS ICONS
+
+                # Handle Enum state toggling
+                else: 
                     data = getattr(source, watch_var)
 
                     for i, gizmo in enumerate(gizmos):
@@ -165,7 +165,6 @@ class ViewportGizmoGroup(GizmoGroup):
                         icon = [icon for icon in off_state if icon[1] == gizmo.icon][0]
                         if icon[0] == data:
                             gizmo.hide = False
-
 
     # build list of active gizmos to begin draw step
     def __getActive(self):
@@ -188,20 +187,19 @@ class ViewportGizmoGroup(GizmoGroup):
         gizmo.alpha_highlight = settings.gizmo_colors["active"]["alpha_highlight"]
 
     # UI panel to append Gizmo menu
-def gizmo_toggle(panel, context:Context):
+def touch_gizmo_display(panel, context:Context):
     layout = panel.layout
+
+    col = layout.column()
+    col.active = context.space_data.show_gizmo
+    col.separator()
+
+    col.label(text="Touch Gizmos")
     settings = bpy.context.preferences.addons['touchview'].preferences
-    row = layout.row()
-    col = row.column()
-    col.label(text="Touchview Buttons")
-    col.prop(settings, 'show_fullscreen')
-    col.prop(settings, 'show_quadview')
-    col.prop(settings, 'show_snap_view')
-    col.prop(settings, 'show_pivot_mode')
-    col.prop(settings, 'show_n_panel')
-    col.prop(settings, 'show_rotation_lock')
-    col.prop(settings, 'show_voxel_resize')
-    col.prop(settings, 'show_voxel_remesh')
+    available_gizmos = settings.getGizmoSet(context.object.mode)
+
+    for toggle in available_gizmos:
+        col.prop(settings, 'show_'+toggle)
 
 class ViewportRecenter(Operator):
     """ Recenter Viewport and Cursor on Selected Object """
