@@ -1,11 +1,13 @@
 import bpy
+from bpy.ops import op_as_string
+
 import math
 from mathutils import Vector
 import time
 
 from bpy import ops
 from bpy.props import EnumProperty
-from bpy.types import Context, Event, Operator
+from bpy.types import Context, Event, Menu, Operator
 
 from . items import input_mode_items, pivot_items
 
@@ -136,3 +138,73 @@ class ToggleNPanel(Operator):
     @classmethod
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
+class PIE_MT_Floating_Menu(Menu):
+    bl_idname = "PIE_MT_Floating_Menu"
+    bl_label = "Floating Menu"
+
+    def draw(self, context:Context):
+        settings = context.preferences.addons['touchview'].preferences
+
+        layout = self.layout
+        pie = layout.menu_pie()
+        for i in range(8):
+            op = getattr(settings, "menu_slot_"+str(i+1))
+            if op == "":
+                continue
+            if self.__operator_exists(op):
+                pie.operator(op) 
+
+    def __operator_exists(self, idname):
+        try:
+            names = idname.split(".")
+            a = bpy.ops
+            for prop in names:
+                a = getattr(a, prop)
+            a.__repr__()
+        except:
+            return False
+        return True
+
+class MoveFloatMenu(Operator):
+    bl_idname = "view3d.move_float_menu"
+    bl_label = "Relocate Floating Gizmo"
+
+    def execute(self, context):
+        settings = context.preferences.addons['touchview'].preferences
+        settings.floating_position[0] = self.x/context.region.width*100
+        settings.floating_position[1] = self.y/context.region.height*100
+        return {'FINISHED'}
+
+    def modal(self, context, event):
+        if event.type == 'MOUSEMOVE':  # Apply
+            context.region.tag_redraw()
+            self.x = event.mouse_x
+            self.y = event.mouse_y-22*self.dpi_factor()
+            self.execute(context)
+        elif event.type == 'LEFTMOUSE':  # Confirm
+            return {'FINISHED'}
+        elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Cancel
+            settings = context.preferences.addons['touchview'].preferences
+            settings.floating_position[0] = self.init_x
+            settings.floating_position[1] = self.init_y
+            return {'CANCELLED'}
+
+        return {'RUNNING_MODAL'}
+
+    def invoke(self, context, event):
+        settings = context.preferences.addons['touchview'].preferences
+        self.init_x = settings.floating_position[0]
+        self.init_y = settings.floating_position[1]
+        self.x = event.mouse_x
+        self.y = event.mouse_y
+        self.execute(context)
+
+        context.window_manager.modal_handler_add(self)
+        return {'RUNNING_MODAL'}
+
+    def dpi_factor(self) -> float:
+        systemPreferences = bpy.context.preferences.system
+        retinaFactor = getattr(systemPreferences, "pixel_size", 1)
+        return int(systemPreferences.dpi * retinaFactor) / 72
+

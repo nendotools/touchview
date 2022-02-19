@@ -1,8 +1,8 @@
 import bpy
 from . Overlay import Overlay
-from . Operators import TouchInput, NextPivotMode, FlipTools, ToggleNPanel
+from . Operators import TouchInput, MoveFloatMenu, NextPivotMode, FlipTools, ToggleNPanel, PIE_MT_Floating_Menu
 from . Panel import NendoViewport
-from . Gizmos import ViewportGizmoGroup, ViewportRecenter, ViewportLock, touch_gizmo_display
+from . Gizmos import FloatingGizmoGroup, ViewportGizmoGroup, ViewportRecenter, ViewportLock, touch_gizmo_display
 
 __classes__ = (
     TouchInput,
@@ -12,6 +12,9 @@ __classes__ = (
     NendoViewport,
     ViewportLock,
     ViewportRecenter,
+    MoveFloatMenu,
+    PIE_MT_Floating_Menu,
+    FloatingGizmoGroup,
     ViewportGizmoGroup
 )
 

@@ -1,6 +1,6 @@
 import bpy
 from bpy.types import Context
-from bpy.props import BoolProperty, EnumProperty, FloatProperty
+from bpy.props import BoolProperty, FloatVectorProperty, EnumProperty, FloatProperty, StringProperty
 from .lib.items import position_items, pivot_items
 
 class OverlaySettings(bpy.types.AddonPreferences):
@@ -97,6 +97,60 @@ class OverlaySettings(bpy.types.AddonPreferences):
         "POSE":{},
         "TEXTURE_PAINT":{}
     }
+    floating_position: FloatVectorProperty(
+        name= "Floating Offset",
+        default= (0.200,0.000),
+        size=2,
+        precision=2,
+        step=1,
+        soft_min=5,
+        soft_max=100
+    )
+
+    show_float_menu: BoolProperty(
+        name="Enable Floating Menu",
+        default=False
+    )
+
+    menu_slot_1: StringProperty(
+        name="Menu Item",
+        default= "mesh.primitive_cube_add"
+    )
+
+    menu_slot_2: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_3: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_4: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_5: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_6: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_7: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_8: StringProperty(
+        name="Menu Item",
+        default= "view3d.move_float_menu"
+    )
 
 # set up addon preferences UI
     def draw(self, context:Context):
@@ -110,6 +164,16 @@ class OverlaySettings(bpy.types.AddonPreferences):
         col = row.column()
         col.label(text="Viewport Options")
         col.prop_menu_enum(self, "gizmo_position")
+
+        col.separator()
+        col.prop(self, "show_float_menu")
+
+        box = col.box()
+        box.active = self.show_float_menu
+        col = box.column()
+        col.prop(self, "floating_position")
+        for i in range(7):
+            col.prop(self, "menu_slot_"+str(i+1))
 
     def getGizmoSet(self, mode:str):
         available = list(self.gizmo_sets["ALL"])
