@@ -99,7 +99,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
     }
     floating_position: FloatVectorProperty(
         name= "Floating Offset",
-        default= (0.200,0.000),
+        default= (95.00,5.00),
         size=2,
         precision=2,
         step=1,
@@ -114,7 +114,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
 
     menu_slot_1: StringProperty(
         name="Menu Item",
-        default= "mesh.primitive_cube_add"
+        default= "object.quadriflow_remesh"
     )
 
     menu_slot_2: StringProperty(

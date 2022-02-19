@@ -61,6 +61,7 @@ v0.9.2
 
 v0.9.3
 - added sculpt pivot mode gizmo
+- added customizable floating menu
 
 
 *many more features are planned for the final version.*
