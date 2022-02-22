@@ -216,7 +216,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     # determine if each gizmo should be visible based on what edit mode is being used and toggle states
     def __validateMode(self):
         settings = self.__getSettings()
-        mode = bpy.context.active_object.mode
+        mode = bpy.context.mode
         for name, gizmos, on_state, off_state, watch_var, source in self.gizmo_actions:
             if name not in settings.gizmo_sets[mode] and name not in settings.gizmo_sets["ALL"] or mode not in settings.gizmo_sets or not getattr(settings, "show_"+name):
                 for gizmo in gizmos:

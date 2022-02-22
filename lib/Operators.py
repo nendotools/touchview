@@ -75,7 +75,7 @@ class VIEW3D_OT_TouchInput(Operator):
         else:
             self.mode = "ORBIT"
         
-        if context.object.mode == "SCULPT":
+        if context.mode == "SCULPT":
             bpy.ops.sculpt.set_pivot_position(mode=settings.pivot_mode)
         self.execute(context)
         return {'FINISHED'}
