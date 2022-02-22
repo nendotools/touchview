@@ -1,6 +1,6 @@
 import bpy
 from mathutils import Matrix, Vector
-from bpy.types import Context, Gizmo, GizmoGroup, Operator, bpy_prop_collection
+from bpy.types import Context, Gizmo, GizmoGroup, bpy_prop_collection
 from .items import pivot_items, pivot_icon_items
 
 def dpi_factor() -> float:
@@ -25,7 +25,7 @@ def panel(type) -> tuple:
 ######
 ###     CREATE GIZMO GROUP FOR FLOATING ACTION SET
 ######
-class FloatingGizmoGroup(GizmoGroup):
+class GIZMO_GT_FloatingGizmoGroup(GizmoGroup):
     bl_idname = "GIZMO_GT_float_tool"
     bl_label = "Customizable floating viewport button"
     bl_space_type = 'VIEW_3D'
@@ -104,7 +104,7 @@ class FloatingGizmoGroup(GizmoGroup):
         return bpy.context.preferences.addons['touchview'].preferences
 
 
-class ViewportGizmoGroup(GizmoGroup):
+class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     bl_idname = "GIZMO_GT_touch_tools"
     bl_label = "Fast access tools for touch viewport"
     bl_space_type = 'VIEW_3D'
@@ -288,30 +288,3 @@ def touch_gizmo_display(panel, context:Context):
 
     for toggle in available_gizmos:
         col.prop(settings, 'show_'+toggle)
-
-class ViewportRecenter(Operator):
-    """ Recenter Viewport and Cursor on Selected Object """
-    bl_idname = "view3d.viewport_recenter"
-    bl_label = "Recenter Viewport and Cursor on Selected"
-
-    def execute(self, context: Context):
-        current = context.scene.tool_settings.transform_pivot_point
-        context.scene.tool_settings.transform_pivot_point = "ACTIVE_ELEMENT"
-        bpy.ops.view3d.snap_cursor_to_selected()
-        bpy.ops.view3d.view_center_cursor()
-        bpy.ops.view3d.view_selected()
-        context.scene.tool_settings.transform_pivot_point = current
-        return {'FINISHED'}
-
-class ViewportLock(Operator):
-    """ Toggle Viewport Rotation """
-    bl_idname = "view3d.viewport_lock"
-    bl_label = "Viewport rotation lock toggle"
-
-    def execute(self, context: Context):
-        if len(context.area.spaces.active.region_quadviews) == 0:
-            context.region.data.lock_rotation^=True
-            return {'FINISHED'}
-
-        context.region.data.lock_rotation=False
-        return {'FINISHED'}

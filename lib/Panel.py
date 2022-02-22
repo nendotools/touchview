@@ -1,12 +1,12 @@
 import bpy
-from bpy.types import Panel
+from bpy.types import Context, Panel, Menu
 
-class View3DPanel:
+class VIEW3D_PT_NendoPanel:
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "NENDO"
     
-class NendoViewport(View3DPanel, Panel):
+class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
     bl_idname = "VIEW3D_PT_view_ops"
     bl_label = "Viewport Settings"
 
@@ -31,3 +31,30 @@ class NendoViewport(View3DPanel, Panel):
             self.layout.prop(space, "lock_cursor", text="Lock to Cursor")
             self.layout.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
         context.area.tag_redraw()
+
+class PIE_MT_Floating_Menu(Menu):
+    bl_idname = "PIE_MT_Floating_Menu"
+    bl_label = "Floating Menu"
+
+    def draw(self, context:Context):
+        settings = context.preferences.addons['touchview'].preferences
+
+        layout = self.layout
+        pie = layout.menu_pie()
+        for i in range(8):
+            op = getattr(settings, "menu_slot_"+str(i+1))
+            if op == "":
+                continue
+            if self.__operator_exists(op):
+                pie.operator(op) 
+
+    def __operator_exists(self, idname):
+        try:
+            names = idname.split(".")
+            a = bpy.ops
+            for prop in names:
+                a = getattr(a, prop)
+            a.__repr__()
+        except:
+            return False
+        return True

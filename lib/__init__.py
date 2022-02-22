@@ -1,21 +1,21 @@
 import bpy
 from . Overlay import Overlay
-from . Operators import TouchInput, MoveFloatMenu, NextPivotMode, FlipTools, ToggleNPanel, PIE_MT_Floating_Menu
-from . Panel import NendoViewport
-from . Gizmos import FloatingGizmoGroup, ViewportGizmoGroup, ViewportRecenter, ViewportLock, touch_gizmo_display
+from . Operators import VIEW3D_OT_TouchInput, VIEW3D_OT_MoveFloatMenu, VIEW3D_OT_NextPivotMode, VIEW3D_OT_FlipTools, VIEW3D_OT_ToggleNPanel, VIEW3D_OT_ViewportRecenter, VIEW3D_OT_ViewportLock
+from . Panel import VIEW3D_PT_NendoViewport, PIE_MT_Floating_Menu
+from . Gizmos import GIZMO_GT_FloatingGizmoGroup, GIZMO_GT_ViewportGizmoGroup, touch_gizmo_display
 
 __classes__ = (
-    TouchInput,
-    FlipTools,
-    NextPivotMode,
-    ToggleNPanel,
-    NendoViewport,
-    ViewportLock,
-    ViewportRecenter,
-    MoveFloatMenu,
+    VIEW3D_OT_TouchInput,
+    VIEW3D_OT_FlipTools,
+    VIEW3D_OT_NextPivotMode,
+    VIEW3D_OT_ToggleNPanel,
+    VIEW3D_PT_NendoViewport,
+    VIEW3D_OT_ViewportLock,
+    VIEW3D_OT_ViewportRecenter,
+    VIEW3D_OT_MoveFloatMenu,
     PIE_MT_Floating_Menu,
-    FloatingGizmoGroup,
-    ViewportGizmoGroup
+    GIZMO_GT_FloatingGizmoGroup,
+    GIZMO_GT_ViewportGizmoGroup
 )
 
 ov = Overlay()

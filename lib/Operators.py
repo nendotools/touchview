@@ -1,5 +1,4 @@
 import bpy
-from bpy.ops import op_as_string
 
 import math
 from mathutils import Vector
@@ -7,11 +6,11 @@ import time
 
 from bpy import ops
 from bpy.props import EnumProperty
-from bpy.types import Context, Event, Menu, Operator
+from bpy.types import Context, Event, Operator
 
 from . items import input_mode_items, pivot_items
 
-class TouchInput(Operator):
+class VIEW3D_OT_TouchInput(Operator):
     """ Active Viewport control zones """
     bl_idname = "view3d.view_ops"
     bl_label = "Viewport Control Regions"
@@ -85,7 +84,7 @@ class TouchInput(Operator):
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
-class FlipTools(Operator):
+class VIEW3D_OT_FlipTools(Operator):
     """ Relocate Tools panel between left and right """
     bl_idname = "view3d.tools_region_flip"
     bl_label = "Tools Region Swap"
@@ -102,7 +101,7 @@ class FlipTools(Operator):
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
-class NextPivotMode(Operator):
+class VIEW3D_OT_NextPivotMode(Operator):
     """ Step through Pivot modes """
     bl_idname = "view3d.step_pivot_mode"
     bl_label = "Use next Pivot mode"
@@ -126,7 +125,7 @@ class NextPivotMode(Operator):
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
-class ToggleNPanel(Operator):
+class VIEW3D_OT_ToggleNPanel(Operator):
     """ Toggle Settings Panel """
     bl_idname = "view3d.toggle_n_panel"
     bl_label = "Display settings Panel"
@@ -139,34 +138,7 @@ class ToggleNPanel(Operator):
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
-class PIE_MT_Floating_Menu(Menu):
-    bl_idname = "PIE_MT_Floating_Menu"
-    bl_label = "Floating Menu"
-
-    def draw(self, context:Context):
-        settings = context.preferences.addons['touchview'].preferences
-
-        layout = self.layout
-        pie = layout.menu_pie()
-        for i in range(8):
-            op = getattr(settings, "menu_slot_"+str(i+1))
-            if op == "":
-                continue
-            if self.__operator_exists(op):
-                pie.operator(op) 
-
-    def __operator_exists(self, idname):
-        try:
-            names = idname.split(".")
-            a = bpy.ops
-            for prop in names:
-                a = getattr(a, prop)
-            a.__repr__()
-        except:
-            return False
-        return True
-
-class MoveFloatMenu(Operator):
+class VIEW3D_OT_MoveFloatMenu(Operator):
     bl_idname = "view3d.move_float_menu"
     bl_label = "Relocate Floating Gizmo"
 
@@ -208,3 +180,29 @@ class MoveFloatMenu(Operator):
         retinaFactor = getattr(systemPreferences, "pixel_size", 1)
         return int(systemPreferences.dpi * retinaFactor) / 72
 
+class VIEW3D_OT_ViewportRecenter(Operator):
+    """ Recenter Viewport and Cursor on Selected Object """
+    bl_idname = "view3d.viewport_recenter"
+    bl_label = "Recenter Viewport and Cursor on Selected"
+
+    def execute(self, context: Context):
+        current = context.scene.tool_settings.transform_pivot_point
+        context.scene.tool_settings.transform_pivot_point = "ACTIVE_ELEMENT"
+        bpy.ops.view3d.snap_cursor_to_selected()
+        bpy.ops.view3d.view_center_cursor()
+        bpy.ops.view3d.view_selected()
+        context.scene.tool_settings.transform_pivot_point = current
+        return {'FINISHED'}
+
+class VIEW3D_OT_ViewportLock(Operator):
+    """ Toggle Viewport Rotation """
+    bl_idname = "view3d.viewport_lock"
+    bl_label = "Viewport rotation lock toggle"
+
+    def execute(self, context: Context):
+        if len(context.area.spaces.active.region_quadviews) == 0:
+            context.region.data.lock_rotation^=True
+            return {'FINISHED'}
+
+        context.region.data.lock_rotation=False
+        return {'FINISHED'}
