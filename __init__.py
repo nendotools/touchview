@@ -20,7 +20,7 @@ bl_info = {
     "name": "Touch Viewport",
     "description": "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (0, 9, 3),
+    "version": (0, 9, 4),
     "blender": (2, 80, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -31,12 +31,14 @@ bl_info = {
 
 import bpy
 from . import lib
-from .Settings import OverlaySettings
+from .Settings import OverlaySettings, MenuModeGroup
 
 def register():
     lib.register()
+    bpy.utils.register_class(MenuModeGroup)
     bpy.utils.register_class(OverlaySettings)
 
 def unregister():
     lib.unregister()
+    bpy.utils.unregister_class(MenuModeGroup)
     bpy.utils.unregister_class(OverlaySettings)

@@ -20,4 +20,9 @@ pivot_icon_items = [("BORDER","PIVOT_BOUNDBOX"),
                     ("ACTIVE","PIVOT_ACTIVE"),
                     ("SURFACE","PIVOT_MEDIAN")]
 
-edit_modes = ("OBJECT","EDIT_MESH","SCULPT","PAINT_VERTEX","PAINT_WEIGHT","PAINT_TEXTURE")
+edit_modes       = [("OBJECT","Object Mode",""),
+                    ("EDIT_MESH","Edit Mode",""),
+                    ("SCULPT","Sculpt Mode",""),
+                    ("PAINT_VERTEX","Vertex Paint Mode",""),
+                    ("PAINT_WEIGHT","Weight Paint Mode",""),
+                    ("PAINT_TEXTURE","Texture Paint Mode","")]

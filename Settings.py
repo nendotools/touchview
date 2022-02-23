@@ -1,7 +1,50 @@
 import bpy
-from bpy.types import Context
-from bpy.props import BoolProperty, FloatVectorProperty, EnumProperty, FloatProperty, StringProperty
-from .lib.items import position_items, pivot_items
+from bpy.types import Context, PropertyGroup
+from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, StringProperty
+from .lib.items import position_items, pivot_items, edit_modes
+
+class MenuModeGroup(PropertyGroup):
+    mode: StringProperty(name="mode", default="OBJECT")
+    menu_slot_1: StringProperty(
+        name="Menu Item",
+        default= "object.quadriflow_remesh"
+    )
+
+    menu_slot_2: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_3: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_4: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_5: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_6: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_7: StringProperty(
+        name="Menu Item",
+        default= ""
+    )
+
+    menu_slot_8: StringProperty(
+        name="Menu Item",
+        default= "view3d.move_float_menu"
+    )
+
 
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__
@@ -93,9 +136,11 @@ class OverlaySettings(bpy.types.AddonPreferences):
             "voxel_remesh"
         },
         "OBJECT":{},
-        "EDIT":{},
+        "EDIT_MESH":{},
         "POSE":{},
-        "TEXTURE_PAINT":{}
+        "PAINT_TEXTURE":{},
+        "PAINT_VERTEX":{},
+        "PAINT_WEIGHT":{}
     }
     floating_position: FloatVectorProperty(
         name= "Floating Offset",
@@ -112,45 +157,8 @@ class OverlaySettings(bpy.types.AddonPreferences):
         default=False
     )
 
-    menu_slot_1: StringProperty(
-        name="Menu Item",
-        default= "object.quadriflow_remesh"
-    )
-
-    menu_slot_2: StringProperty(
-        name="Menu Item",
-        default= ""
-    )
-
-    menu_slot_3: StringProperty(
-        name="Menu Item",
-        default= ""
-    )
-
-    menu_slot_4: StringProperty(
-        name="Menu Item",
-        default= ""
-    )
-
-    menu_slot_5: StringProperty(
-        name="Menu Item",
-        default= ""
-    )
-
-    menu_slot_6: StringProperty(
-        name="Menu Item",
-        default= ""
-    )
-
-    menu_slot_7: StringProperty(
-        name="Menu Item",
-        default= ""
-    )
-
-    menu_slot_8: StringProperty(
-        name="Menu Item",
-        default= "view3d.move_float_menu"
-    )
+    active_menu: EnumProperty(name="Mode Settings", items=edit_modes)
+    menu_sets: CollectionProperty(type=MenuModeGroup)
 
 # set up addon preferences UI
     def draw(self, context:Context):
@@ -172,8 +180,20 @@ class OverlaySettings(bpy.types.AddonPreferences):
         box.active = self.show_float_menu
         col = box.column()
         col.prop(self, "floating_position")
+        col.prop(self, "active_menu")
+        mList = self.getMenuSettings(self.active_menu)
         for i in range(7):
-            col.prop(self, "menu_slot_"+str(i+1))
+            col.prop(mList, "menu_slot_"+str(i+1))
+
+    def getMenuSettings(self, mode:str):
+        m = None
+        for opts in self.menu_sets:
+            if opts.mode == mode:
+                m = opts
+        if m == None:
+            m = self.menu_sets.add()
+            m.mode = mode
+        return m
 
     def getGizmoSet(self, mode:str):
         available = list(self.gizmo_sets["ALL"])

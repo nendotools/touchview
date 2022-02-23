@@ -38,11 +38,12 @@ class PIE_MT_Floating_Menu(Menu):
 
     def draw(self, context:Context):
         settings = context.preferences.addons['touchview'].preferences
+        menu = settings.getMenuSettings(context.mode)
 
         layout = self.layout
         pie = layout.menu_pie()
         for i in range(8):
-            op = getattr(settings, "menu_slot_"+str(i+1))
+            op = getattr(menu, "menu_slot_"+str(i+1))
             if op == "":
                 continue
             elif "_MT_" in op:
