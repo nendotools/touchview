@@ -19,3 +19,5 @@ pivot_icon_items = [("BORDER","PIVOT_BOUNDBOX"),
                     ("UNMASKED","CLIPUV_HLT"),
                     ("ACTIVE","PIVOT_ACTIVE"),
                     ("SURFACE","PIVOT_MEDIAN")]
+
+edit_modes = ("OBJECT","EDIT_MESH","SCULPT","PAINT_VERTEX","PAINT_WEIGHT","PAINT_TEXTURE")

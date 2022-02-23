@@ -45,7 +45,10 @@ class PIE_MT_Floating_Menu(Menu):
             op = getattr(settings, "menu_slot_"+str(i+1))
             if op == "":
                 continue
-            if self.__operator_exists(op):
+            elif "_MT_" in op:
+                pie.menu(op)
+                continue
+            elif self.__operator_exists(op):
                 pie.operator(op) 
 
     def __operator_exists(self, idname):

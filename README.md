@@ -66,6 +66,7 @@ v0.9.3
 v0.9.4
 - changed dependence on active_object for mode detection
 - updated classes to follow Blender naming conventions
+- added support for menus in floating gizmo
 
 *many more features are planned for the final version.*
 
