@@ -38,6 +38,11 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 - `ADDED` : Tap for menu scroll
 
 </details>
+v0.9.4
+- changed dependence on active_object for mode detection
+- updated classes to follow Blender naming conventions
+- added support for menus in floating gizmo
+- added mode-specific options for floating gizmo with some default examples
 
 <details><summary><b>v0.9</b></summary><br>
 
