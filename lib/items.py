@@ -26,3 +26,12 @@ edit_modes       = [("OBJECT","Object Mode",""),
                     ("PAINT_VERTEX","Vertex Paint Mode",""),
                     ("PAINT_WEIGHT","Weight Paint Mode",""),
                     ("PAINT_TEXTURE","Texture Paint Mode","")]
+
+menu_defaults    = {
+                    "OBJECT": ("VIEW3D_MT_add","object.shade_smooth","","","",""),
+                    "EDIT_MESH": ("mesh.loop_multi_select","","","","",""),
+                    "SCULPT": ("object.quadriflow_remesh","","","","",""),
+                    "PAINT_VERTEX": ("","","","","",""),
+                    "PAINT_WEIGHT": ("","","","","",""),
+                    "PAINT_TEXTURE": ("","","","","","")
+                }

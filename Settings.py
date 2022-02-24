@@ -1,13 +1,13 @@
 import bpy
 from bpy.types import Context, PropertyGroup
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, StringProperty
-from .lib.items import position_items, pivot_items, edit_modes
+from .lib.items import position_items, pivot_items, edit_modes, menu_defaults 
 
 class MenuModeGroup(PropertyGroup):
     mode: StringProperty(name="mode", default="OBJECT")
     menu_slot_1: StringProperty(
         name="Menu Item",
-        default= "object.quadriflow_remesh"
+        default= ""
     )
 
     menu_slot_2: StringProperty(
@@ -40,10 +40,7 @@ class MenuModeGroup(PropertyGroup):
         default= ""
     )
 
-    menu_slot_8: StringProperty(
-        name="Menu Item",
-        default= "view3d.move_float_menu"
-    )
+    menu_slot_8 = "view3d.move_float_menu"
 
 
 class OverlaySettings(bpy.types.AddonPreferences):
@@ -157,6 +154,15 @@ class OverlaySettings(bpy.types.AddonPreferences):
         default=False
     )
 
+    menu_default = {
+        "": (),
+        "": (),
+        "": (),
+        "": (),
+        "": (),
+        "": (),
+        "": ()
+    }
     active_menu: EnumProperty(name="Mode Settings", items=edit_modes)
     menu_sets: CollectionProperty(type=MenuModeGroup)
 
@@ -193,6 +199,9 @@ class OverlaySettings(bpy.types.AddonPreferences):
         if m == None:
             m = self.menu_sets.add()
             m.mode = mode
+            ops = menu_defaults[mode]
+            for i, o in enumerate(ops):
+                setattr(m, "menu_slot_"+str(i+1), o)
         return m
 
     def getGizmoSet(self, mode:str):

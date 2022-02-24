@@ -74,6 +74,9 @@ v0.9.4
 
 ##### KNOWN ISSUES:
 
+- [low] quadview breaks space_data bindings for locking viewport
+- [high] need better coverage for edit modes in ops and gizmos
+
 Please [report any issues](https://github.com/nendotools/touchview/issues) you find and I'll do my best to address them.
 
 The add-on is free, but if it helps you, please consider [supporting me](https://nendo.gumroad.com/l/touchview).
