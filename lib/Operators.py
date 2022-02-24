@@ -51,6 +51,7 @@ class VIEW3D_OT_TouchInput(Operator):
         return False
 
     def invoke(self, context: Context, event: Event):
+        if event.type == "PEN": return {'FINISHED'}
         if self.handle_doubletap(event): return {'FINISHED'}
         if self.handle_swipe(event): return {'FINISHED'}
         if event.value != "PRESS": return {'FINISHED'}

@@ -35,3 +35,10 @@ menu_defaults    = {
                     "PAINT_WEIGHT": ("","","","","",""),
                     "PAINT_TEXTURE": ("","","","","","")
                 }
+
+mode_settings    = [("Object Mode","view3d.select","view3d.select"), 
+                    ("Mesh","view3d.select","view3d.select"),
+                    ("Sculpt","sculpt.brush_stroke","sculpt.brush_stroke"),
+                    ("Vertex Paint","paint.vertex_paint","paint.vertex_paint"),
+                    ("Weight Paint","paint.weight_paint","paint.weight_paint"),
+                    ("Texture Paint","paint.image_paint","paint.image_paint")]
