@@ -1,68 +1,45 @@
 ![touch view header](/docs/header.jpg?raw=true)
 
-###### _EXPECT BUGS_
+# Features
 
 Control the viewport with your finger in Sculpt Mode. Adds overlay regions for rotate, pan, and zoom.
 
 ![demo gif](/docs/demo.gif?raw=true)
 
-##### Features:
+# Changelogs
 
-v0.1
-- Camera dolly on left and right of viewport
-- Camera pan from center of viewport
-- Camera rotate in any other area of viewport
-- Toggleable overlay to simplify resizing controls
+<details open><summary><b>v0.9.4</b></summary><br>
 
-v0.2 (unpublished)
-- minor bug fixes and code cleanup
+- `ADDED` : Support for menus in floating gizmo
+- `ADDED` : Mode-specific options for floating gizmo
+- `UPDATED` : Dependence on active_object for mode detection
+- `UPDATED` : Classes to follow Blender naming conventions
+- `UPDATED` : Keymaps for touchview in all context
+- `UPDATED` : Keymaps for context action assigned to pen
 
-v0.3
-- Double-tap to toggle "focus" mode
-- Toggle Tools LEFT/RIGHT in UI
-- Fixed incorrect viewport calculation when N-panel is open
-- refactored screen/area management code (additional major refactor needed)
+</details>
 
-v0.5
-- fixed Quad-view overlay compatibility
-- added camera rotation lock in N-panel
-- replace rotation with panning when rotation is locked
-- fixed issue when locking view to Object or 3D Cursor
+<details><summary><b>v0.9.3</b></summary><br>
 
-v0.6 hotfix
-- addressed issues with determining locked state with quadviews
-- changed scale of viewport overlay settings for more precision
+- `ADDED` : Sculpt pivot mode gizmo
+- `ADDED` : Customizable floating menu
 
-v0.7
-- added Gizmos for key features
-- added hide/show Gizmo and layout options
-- locked viewport rotation for isometric viewports in quadview to address lock/unlock inconsistencies
-- Fullscreen Toggle no longer maximizes the window, only expands the View3D region
+</details>
 
-v0.8
-- relocated settings to addon preferences to save across projects and scenes
-- addressed a handful of bugs impacting user experience
-- added gizmo to toggle fullscreen mode
-- doubletap now selects/activates tapped object instead of triggering fullscreen
+<details><summary><b>v0.9.2</b></summary><br>
 
-v0.9
-- code restructure
-- added N Panel gizmo
-- fixed dragging over gizmo moves selected object
+- `FIXED` : Issue delaying overlay viewport binding
+- `FIXED` : Gizmo tools/panel overlap issue when "Region Overlap" enabled
+- `REMOVED` : Viewport manager class
+- `REMOVED` : Default keymap causing Move Operator to trigger when dragging over non-modal gizmos
 
-v0.9.1
-- added tap for menu scroll
+</details>
 
-v0.9.2
-- removed viewport manager class
-- fixed issue delaying overlay viewport binding
-- fixed gizmo tools/panel overlap issue when "Region Overlap" enabled
-- removed default keymap causing Move Operator to trigger when dragging over non-modal gizmos
+<details><summary><b>v0.9.1</b></summary><br>
 
-v0.9.3
-- added sculpt pivot mode gizmo
-- added customizable floating menu
+- `ADDED` : Tap for menu scroll
 
+</details>
 v0.9.4
 - changed dependence on active_object for mode detection
 - updated classes to follow Blender naming conventions
@@ -70,14 +47,82 @@ v0.9.4
 - added mode-specific options for floating gizmo with some default examples
 - update keymap to enable viewops in all view3d modes with pen input being assigned default context action
 
+<details><summary><b>v0.9</b></summary><br>
 
-*many more features are planned for the final version.*
+- `ADDED` : N-Panel gizmo
+- `UPDATED` : Code restructure
+- `FIXED` : Dragging over gizmo moves selected object
 
-##### KNOWN ISSUES:
+</details>
 
-- [low] quadview breaks space_data bindings for locking viewport
-- [high] need better coverage for edit modes in ops and gizmos
+<details><summary><b>v0.8</b></summary><br>
 
-Please [report any issues](https://github.com/nendotools/touchview/issues) you find and I'll do my best to address them.
+- `ADDED` : Gizmo to toggle fullscreen mode
+- `UPDATED` : Settings to addon preferences to save across projects and scenes
+- `FIXED` : Bugs impacting user experience
+- `FIXED` : Doubletap now selects/activates tapped object instead of triggering fullscreen
 
-The add-on is free, but if it helps you, please consider [supporting me](https://nendo.gumroad.com/l/touchview).
+</details>
+
+<details><summary><b>v0.7</b></summary><br>
+
+- `ADDED` : Gizmos for key features
+- `ADDED` : Hide/show Gizmo and layout options
+- `ADDED` : Locked viewport rotation for isometric viewports in quadview to address lock/unlock inconsistencies
+- `FIXED` : Fullscreen Toggle no longer maximizes the window, only expands the View3D region
+
+</details>
+
+<details><summary><b>v0.6</b></summary><br>
+
+- `UPDATED` : Scale of viewport overlay settings for more precision
+- `FIXED` : Issues with determining locked state with quadviews
+
+</details>
+
+<details><summary><b>v0.5</b></summary><br>
+
+- `ADDED` : Camera rotation lock in N-panel
+- `FIXED` : Quad-view overlay compatibility
+- `FIXED` : Rotation with panning when rotation is locked
+- `FIXED` : Issue when locking view to Object or 3D Cursor
+
+</details>
+
+<details><summary><b>v0.4</b></summary><br>
+
+- `ADDED` : Double-tap to toggle "focus" mode
+- `ADDED` : Toggle Tools LEFT/RIGHT in UI
+
+</details>
+
+<details><summary><b>v0.3</b></summary><br>
+
+- `FIXED` : Incorrect viewport calculation when N-panel is open
+- `FIXED` : Refactored screen/area management code (additional major refactor needed)
+
+</details>
+
+<details><summary><b>v0.2</b></summary><br/>
+
+- `FIXED` : Minor bug fixes and code cleanup
+
+</details>
+
+<details><summary><b>v0.1</b></summary><br>
+
+- `ADDED` : Camera dolly on left and right of viewport
+- `ADDED` : Camera pan from center of viewport
+- `ADDED` : Camera rotate in any other area of viewport
+- `ADDED` : Toggleable overlay to simplify resizing controls
+
+</details>
+
+# Issues
+
+- `LOW` : Quadview breaks space_data bindings for locking viewport
+- `HIGH` : Need better coverage for edit modes in ops and gizmos
+
+> Please [report any issues](https://github.com/nendotools/touchview/issues) you find and I'll do my best to address them.
+
+> The add-on is free, but if it helps you, please consider [supporting me](https://nendo.gumroad.com/l/touchview).
