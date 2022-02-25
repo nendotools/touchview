@@ -45,7 +45,7 @@ class VIEW3D_OT_TouchInput(Operator):
         return False
 
     def handle_doubletap(self, event: Event):
-        if event.value == "DOUBLE_CLICK" and event.type != "PEN":
+        if event.value == "DOUBLE_CLICK" and event.type != "PEN" and bpy.context.mode in {'SCULPT', 'EDIT_MESH', 'PAINT_TEXTURE', 'PAINT_VERTEX', 'PAINT_WEIGHT'}:
             bpy.ops.object.transfer_mode('INVOKE_DEFAULT')
             return True
         return False
