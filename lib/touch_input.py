@@ -1,30 +1,26 @@
 import bpy
-from .items import mode_settings
+import time
 
-modes = ("Object Mode", "Mesh", "Sculpt", "Vertex Paint", "Weight Paint", "Texture Paint")
+modes = ("Object Mode", "Mesh", "Sculpt", "Vertex Paint", "Weight Paint", "Image Paint")
 
 addon_keymaps = []
 addon_tweaks = []
 
-# two main goals: preserve action from MOUSE to PEN, add viewport control to MOUSE
+# added timer to ensure Blender keyconfig is fully populated before running
 def register_keymaps():
+    bpy.app.timers.register(assign_keymaps, first_interval=0.2)
+
+# two main goals: preserve action from MOUSE to PEN, add viewport control to MOUSE
+def assign_keymaps():
     wm = bpy.context.window_manager   
-    
-    km = wm.keyconfigs['Blender'].keymaps['3D View']
-    for kmap in km.keymap_items:
-        if kmap.type == "EVT_TWEAK_L":
-            kmap.active = False
 
 # add global default action
-    km = wm.keyconfigs.addon.keymaps.new(name="Object Mode", space_type='EMPTY')
+    km = wm.keyconfigs.addon.keymaps.new(name="", space_type='EMPTY')
     kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi)) 
 
     kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi))
-
-# walk through keymaps in Blender keyconfigs
-# change all LEFT MOUSE and TWEAK LEFT actions to PEN actions
 
 # add LEFT MOUSE ACTION for view3d.view_ops
     for kmap in wm.keyconfigs['Blender'].keymaps:
@@ -33,15 +29,15 @@ def register_keymaps():
             flipped = False
             commands = []
             for item in kmap.keymap_items:
-                if item.map_type in ("MOUSE","TWEAK") and item.type == "LEFTMOUSE" and not any((item.oskey, item.alt, item.shift)):
+                if item.map_type in ("MOUSE","TWEAK") and item.type in ("LEFTMOUSE", "EVT_TWEAK_L") and not any((item.oskey, item.ctrl, item.alt, item.shift)):
                     flipped = True
+                    addon_tweaks.append((item, item.active))
                     item.active = False
                     commands.append(item.idname)
-                    addon_tweaks.append((item))
 
             # if we flipped a mouse to pen action, add mouse control
-            if flipped:
-                km = wm.keyconfigs.addon.keymaps.new(name=kmap.name, space_type='EMPTY')
+            if flipped or kmap.name in modes:
+                km = wm.keyconfigs.addon.keymaps.new(name=kmap.name, space_type=kmap.space_type)
                 kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
                 addon_keymaps.append((km, kmi)) 
 
@@ -51,7 +47,10 @@ def register_keymaps():
                 kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'DOUBLE_CLICK')
                 addon_keymaps.append((km, kmi)) 
                 
-                print(kmap.name, commands)
+                # reassign default action to PEN
+                if len(commands) == 0:
+                    commands.append("view3d.select")
+                    continue
                 kmi = km.keymap_items.new(commands[0], 'PEN', 'PRESS')
                 addon_keymaps.append((km, kmi)) 
                 
@@ -67,4 +66,8 @@ def register_keymaps():
 def unregister_keymaps():
     for km, kmi in addon_keymaps:
         km.keymap_items.remove(kmi)
+
+    for kmi, state in addon_tweaks:
+        kmi.active = state
     addon_keymaps.clear()
+    addon_tweaks.clear()
