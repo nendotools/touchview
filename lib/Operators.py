@@ -218,10 +218,16 @@ class VIEW3D_OT_IncreaseMultires(Operator):
         if not len(context.active_object.modifiers): return {'CANCELLED'}
         for mod in context.active_object.modifiers:
             if mod.type == 'MULTIRES':
-                if mod.sculpt_levels == mod.total_levels:
-                    bpy.ops.object.multires_subdivide(modifier=mod.name)
+                if context.mode == "SCULPT":
+                    if mod.sculpt_levels == mod.total_levels:
+                        bpy.ops.object.multires_subdivide(modifier=mod.name)
+                    else:
+                        mod.sculpt_levels += 1
                 else:
-                    mod.sculpt_levels += 1
+                    if mod.levels == mod.total_levels:
+                        bpy.ops.object.multires_subdivide(modifier=mod.name)
+                    else:
+                        mod.levels += 1
                 return {'FINISHED'}
         return {'CANCELLED'}
 
@@ -235,13 +241,23 @@ class VIEW3D_OT_DecreaseMultires(Operator):
         if not len(context.active_object.modifiers): return {'CANCELLED'}
         for mod in context.active_object.modifiers:
             if mod.type == 'MULTIRES':
-                if mod.sculpt_levels == 0:
-                    try:
-                        bpy.ops.object.multires_unsubdivide(modifier=mod.name)
-                    except:
-                        #let it go
-                        pass
+                if context.mode == "SCULPT":
+                    if mod.sculpt_levels == 0:
+                        try:
+                            bpy.ops.object.multires_unsubdivide(modifier=mod.name)
+                        except:
+                            #let it go
+                            pass
+                    else:
+                        mod.sculpt_levels -= 1
                 else:
-                    mod.sculpt_levels -= 1
+                    if mod.levels == 0:
+                        try:
+                            bpy.ops.object.multires_unsubdivide(modifier=mod.name)
+                        except:
+                            #let it go
+                            pass
+                    else:
+                        mod.levels -= 1
                 return {'FINISHED'}
         return {'CANCELLED'}
