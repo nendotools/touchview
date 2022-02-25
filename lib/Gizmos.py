@@ -209,6 +209,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                 for gizmo in gizmos:
                     gizmo.hide = True
                     continue
+                continue
             else:
                 for gizmo in gizmos:
                     gizmo.hide = False
@@ -240,33 +241,41 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                         if icon[0] == data:
                             gizmo.hide = False
 
-            for on_flag, on_set, off_flag, off_set, target_prop, target_value in self.gizmo_bindings:
-                for g in on_set+off_set:
+        for on_flag, on_set, off_flag, off_set, target_prop, target_value in self.gizmo_bindings:
+            for g in on_set+off_set:
+                g.hide = True
+            state = False 
+            hide_all = False
+
+            
+            names = target_prop.split(".")
+            a = bpy.context
+            for i, prop in enumerate(names):
+                a = getattr(a, prop)
+                if a == None:
+                    hide_all = True
+                    break
+                if isinstance(a, bpy_prop_collection):
+                    for item in a:
+                        value = getattr(item, names[i+1])
+                        if value == target_value:
+                            state = True
+                    break
+
+            if hide_all:
+                continue
+
+            if not state:
+                state = a == target_value
+
+            for g in on_set:
+                g.hide ^= state
+                if not getattr(settings, "show_"+on_flag):
                     g.hide = True
-                state = False 
-
-                
-                names = target_prop.split(".")
-                a = bpy.context
-                for i, prop in enumerate(names):
-                    a = getattr(a, prop)
-                    if isinstance(a, bpy_prop_collection):
-                        for item in a:
-                            value = getattr(item, names[i+1])
-                            if value == target_value:
-                                state = True
-                        break
-                if not state:
-                    state = a == target_value
-
-                for g in on_set:
-                    g.hide ^= state
-                    if not getattr(settings, "show_"+on_flag):
-                        g.hide = True
-                for g in off_set:
-                    g.hide = state
-                    if not getattr(settings, "show_"+off_flag):
-                        g.hide = True
+            for g in off_set:
+                g.hide = state
+                if not getattr(settings, "show_"+off_flag):
+                    g.hide = True
 
     # build list of active gizmos to begin draw step
     def __getActive(self):

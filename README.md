@@ -8,6 +8,12 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 # Changelogs
 
+<details open><summary><b>v0.9.5</b></summary><br>
+
+- `ADDED` : multires modifier support to gizmo bar (shows retopology tools when no modifier is present)
+
+</details>
+
 <details open><summary><b>v0.9.4</b></summary><br>
 
 - `ADDED` : Support for menus in floating gizmo
