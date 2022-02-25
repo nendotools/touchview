@@ -72,23 +72,6 @@ class GIZMO_GT_FloatingGizmoGroup(GizmoGroup):
 
         position = (settings.floating_position[0]/100 * fence[1][0], settings.floating_position[1]/100 * fence[1][1],0)
 
-#        if settings.gizmo_position == 'TOP':
-#            position = (size.x / 2 - (gizmo_bar / 2 * dpi_factor()), size.y - (panel('HEADER')[1] + panel('TOOL_HEADER')[1]), 0)
-#
-#        elif settings.gizmo_position == 'RIGHT':
-#            if bpy.context.preferences.view.mini_axis_type == 'GIZMO':
-#                position = (size.x - (panel('UI')[0] + 22 * dpi_factor()), size.y - (171.2 + bpy.context.preferences.view.gizmo_size_navigate_v3d) * dpi_factor(), 0)
-#            elif bpy.context.preferences.view.mini_axis_type == 'MINIMAL':
-#                position = (size.x - (panel('UI')[0] + 22 * dpi_factor()), size.y - ((196.2 + bpy.context.preferences.view.mini_axis_size) + bpy.context.preferences.view.mini_axis_size) * dpi_factor(), 0)
-#            else:
-#                position = (size.x - (panel('UI')[0] + 22 * dpi_factor()), size.y - 168.2 * dpi_factor(), 0)
-#
-#        elif settings.gizmo_position == 'BOTTOM':
-#            position = (size.x / 2 - (gizmo_bar / 2 * dpi_factor()), 22 * dpi_factor(), 0)
-#
-#        elif settings.gizmo_position == 'LEFT':
-#            position = (22 * dpi_factor() + panel('TOOLS')[0], size.y / 2 + (gizmo_bar / 2 * dpi_factor()), 0)
-
         return (Vector(position), orientation)
     
     # fetch colors from config and assign to gizmo
@@ -112,11 +95,12 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     bl_options = {'PERSISTENT', 'SCALE'}
 
     gizmo_actions: list[tuple[str, list[Gizmo], str, str]]
+    gizmo_bindings: list[list[list[Gizmo], list[Gizmo], str, str]]
 
     # set up gizmo collection
     def setup(self, context: Context):
         self.gizmo_actions = []
-        self.floating_actions = []
+        self.gizmo_bindings = []
 
         self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  "screen")
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
@@ -124,9 +108,12 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         self.__buildEnumGizmo("pivot_mode", "view3d.step_pivot_mode", pivot_items, pivot_icon_items, "pivot_mode", context.preferences.addons["touchview"].preferences)
         self.__buildGizmo("n_panel", "view3d.toggle_n_panel", "EVENT_N")
         self.__buildGizmo("rotation_lock", "view3d.viewport_lock", "LOCKED", "UNLOCKED", "lock_rotation", context.region_data)
-        self.__buildGizmo("voxel_resize", "object.voxel_size_edit", "MESH_GRID")
-        self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
- 
+        rs = self.__buildGizmo("voxel_remesh", "object.voxel_size_edit", "MESH_GRID")
+        rm = self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
+        im = self.__buildGizmo("multires", "object.increment_multires", "TRIA_UP")
+        dm = self.__buildGizmo("multires", "object.decrement_multires", "TRIA_DOWN")
+        self.gizmo_bindings.append(([im,dm],[rs,rm], "active_object.modifiers.type", "MULTIRES"))
+
     # handle redraw call
     def draw_prepare(self, context:Context):
         region = context.region
@@ -224,7 +211,6 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                     continue
             else:
                 for gizmo in gizmos:
-                    gizmo.hide = True
                     gizmo.hide = False
 
             if watch_var != "" and source is not None:
@@ -253,6 +239,30 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                         icon = [icon for icon in off_state if icon[1] == gizmo.icon][0]
                         if icon[0] == data:
                             gizmo.hide = False
+
+            for on_set, off_set, target_prop, target_value in self.gizmo_bindings:
+                for g in on_set+off_set:
+                    g.hide = True
+                state = False 
+
+                
+                names = target_prop.split(".")
+                a = bpy.context
+                for i, prop in enumerate(names):
+                    a = getattr(a, prop)
+                    if isinstance(a, bpy_prop_collection):
+                        for item in a:
+                            value = getattr(item, names[i+1])
+                            if value == target_value:
+                                state = True
+                        break
+                if not state:
+                    state = a == target_value
+
+                for g in on_set:
+                    g.hide ^= state
+                for g in off_set:
+                    g.hide = state
 
     # build list of active gizmos to begin draw step
     def __getActive(self):

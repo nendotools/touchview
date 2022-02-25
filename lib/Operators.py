@@ -207,3 +207,41 @@ class VIEW3D_OT_ViewportLock(Operator):
 
         context.region.data.lock_rotation=False
         return {'FINISHED'}
+
+class VIEW3D_OT_IncreaseMultires(Operator):
+    """ Increment Multires by 1 or add subdivision """
+    bl_idname = "object.increment_multires"
+    bl_label = "Increment Multires modifier by 1 or add subdivision level"
+
+    def execute(self, context: Context):
+        if not context.active_object: return {'CANCELLED'}
+        if not len(context.active_object.modifiers): return {'CANCELLED'}
+        for mod in context.active_object.modifiers:
+            if mod.type == 'MULTIRES':
+                if mod.sculpt_levels == mod.total_levels:
+                    bpy.ops.object.multires_subdivide(modifier=mod.name)
+                else:
+                    mod.sculpt_levels += 1
+                return {'FINISHED'}
+        return {'CANCELLED'}
+
+class VIEW3D_OT_DecreaseMultires(Operator):
+    """ Decrement Multires by 1 """
+    bl_idname = "object.decrement_multires"
+    bl_label = "decrement Multires modifier by 1"
+
+    def execute(self, context: Context):
+        if not context.active_object: return {'CANCELLED'}
+        if not len(context.active_object.modifiers): return {'CANCELLED'}
+        for mod in context.active_object.modifiers:
+            if mod.type == 'MULTIRES':
+                if mod.sculpt_levels == 0:
+                    try:
+                        bpy.ops.object.multires_unsubdivide(modifier=mod.name)
+                    except:
+                        #let it go
+                        pass
+                else:
+                    mod.sculpt_levels -= 1
+                return {'FINISHED'}
+        return {'CANCELLED'}

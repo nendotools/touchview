@@ -105,8 +105,8 @@ class OverlaySettings(bpy.types.AddonPreferences):
         name="Rotation Lock", 
         default=True 
     )
-    show_voxel_resize: BoolProperty(
-        name="Voxel Resize", 
+    show_multires: BoolProperty(
+        name="Multires", 
         default=True 
     )
     show_voxel_remesh: BoolProperty(
@@ -129,10 +129,12 @@ class OverlaySettings(bpy.types.AddonPreferences):
         },
         "SCULPT": {
             "pivot_mode",
-            "voxel_resize",
-            "voxel_remesh"
+            "voxel_remesh",
+            "multires"
         },
-        "OBJECT":{},
+        "OBJECT":{
+            "multires"
+        },
         "EDIT_MESH":{},
         "POSE":{},
         "PAINT_TEXTURE":{},
