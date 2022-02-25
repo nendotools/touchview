@@ -95,7 +95,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     bl_options = {'PERSISTENT', 'SCALE'}
 
     gizmo_actions: list[tuple[str, list[Gizmo], str, str]]
-    gizmo_bindings: list[list[list[Gizmo], list[Gizmo], str, str]]
+    gizmo_bindings: list[list[str, list[Gizmo], str, list[Gizmo], str, str]]
 
     # set up gizmo collection
     def setup(self, context: Context):
@@ -112,7 +112,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         rm = self.__buildGizmo("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
         im = self.__buildGizmo("multires", "object.increment_multires", "TRIA_UP")
         dm = self.__buildGizmo("multires", "object.decrement_multires", "TRIA_DOWN")
-        self.gizmo_bindings.append(([im,dm],[rs,rm], "active_object.modifiers.type", "MULTIRES"))
+        self.gizmo_bindings.append(("multires",[im,dm],"voxel_remesh",[rs,rm], "active_object.modifiers.type", "MULTIRES"))
 
     # handle redraw call
     def draw_prepare(self, context:Context):
@@ -240,7 +240,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                         if icon[0] == data:
                             gizmo.hide = False
 
-            for on_set, off_set, target_prop, target_value in self.gizmo_bindings:
+            for on_flag, on_set, off_flag, off_set, target_prop, target_value in self.gizmo_bindings:
                 for g in on_set+off_set:
                     g.hide = True
                 state = False 
@@ -261,8 +261,12 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
 
                 for g in on_set:
                     g.hide ^= state
+                    if not getattr(settings, "show_"+on_flag):
+                        g.hide = True
                 for g in off_set:
                     g.hide = state
+                    if not getattr(settings, "show_"+off_flag):
+                        g.hide = True
 
     # build list of active gizmos to begin draw step
     def __getActive(self):
