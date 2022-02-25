@@ -270,11 +270,11 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
 
             for g in on_set:
                 g.hide ^= state
-                if not getattr(settings, "show_"+on_flag):
+                if not getattr(settings, "show_"+on_flag) or on_flag not in settings.gizmo_sets[mode] and on_flag not in settings.gizmo_sets["ALL"]:
                     g.hide = True
             for g in off_set:
                 g.hide = state
-                if not getattr(settings, "show_"+off_flag):
+                if not getattr(settings, "show_"+off_flag) or off_flag not in settings.gizmo_sets[mode] and off_flag not in settings.gizmo_sets["ALL"]:
                     g.hide = True
 
     # build list of active gizmos to begin draw step
