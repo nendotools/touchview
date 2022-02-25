@@ -14,6 +14,8 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 - `ADDED` : Mode-specific options for floating gizmo
 - `UPDATED` : Dependence on active_object for mode detection
 - `UPDATED` : Classes to follow Blender naming conventions
+- `UPDATED` : Keymaps for touchview in all context
+- `UPDATED` : Keymaps for context action assigned to pen
 
 </details>
 
