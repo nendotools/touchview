@@ -8,6 +8,7 @@ from gpu_extras.batch import batch_for_shader
 
 from ..Settings import OverlaySettings
 
+
 class Overlay():
     meshes: list[object]
 

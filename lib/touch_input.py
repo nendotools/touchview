@@ -1,5 +1,4 @@
 import bpy
-import time
 
 modes = ("Object Mode", "Mesh", "Sculpt", "Vertex Paint", "Weight Paint", "Image Paint")
 

@@ -1,11 +1,13 @@
 import bpy
 from bpy.types import Context, Panel, Menu
 
+
 class VIEW3D_PT_NendoPanel:
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
     bl_category = "NENDO"
-    
+
+
 class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
     bl_idname = "VIEW3D_PT_view_ops"
     bl_label = "Viewport Settings"
@@ -31,6 +33,7 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
             self.layout.prop(space, "lock_cursor", text="Lock to Cursor")
             self.layout.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
         context.area.tag_redraw()
+
 
 class PIE_MT_Floating_Menu(Menu):
     bl_idname = "PIE_MT_Floating_Menu"

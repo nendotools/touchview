@@ -22,9 +22,7 @@ def panel(type) -> tuple:
             height = region.height
     return (width, height)
 
-######
-###     CREATE GIZMO GROUP FOR FLOATING ACTION SET
-######
+
 class GIZMO_GT_FloatingGizmoGroup(GizmoGroup):
     bl_idname = "GIZMO_GT_float_tool"
     bl_label = "Customizable floating viewport button"
@@ -33,8 +31,6 @@ class GIZMO_GT_FloatingGizmoGroup(GizmoGroup):
     bl_options = {'PERSISTENT', 'SCALE'}
 
     def setup(self, context: Context):
-        settings = context.preferences.addons['touchview'].preferences
-
         self.__buildGizmo("wm.call_menu_pie","SETTINGS")
 
     def draw_prepare(self, context: Context):
@@ -296,6 +292,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         gizmo.color_highlight = settings.gizmo_colors["active"]["color_highlight"]
         gizmo.alpha = settings.gizmo_colors["active"]["alpha"]
         gizmo.alpha_highlight = settings.gizmo_colors["active"]["alpha_highlight"]
+
 
     # UI panel to append Gizmo menu
 def touch_gizmo_display(panel, context:Context):

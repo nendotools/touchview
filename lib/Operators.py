@@ -10,6 +10,7 @@ from bpy.types import Context, Event, Operator
 
 from . items import input_mode_items, pivot_items
 
+
 class VIEW3D_OT_TouchInput(Operator):
     """ Active Viewport control zones """
     bl_idname = "view3d.view_ops"
@@ -85,6 +86,7 @@ class VIEW3D_OT_TouchInput(Operator):
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
+
 class VIEW3D_OT_FlipTools(Operator):
     """ Relocate Tools panel between left and right """
     bl_idname = "view3d.tools_region_flip"
@@ -101,6 +103,7 @@ class VIEW3D_OT_FlipTools(Operator):
     @classmethod
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
 
 class VIEW3D_OT_NextPivotMode(Operator):
     """ Step through Pivot modes """
@@ -126,6 +129,7 @@ class VIEW3D_OT_NextPivotMode(Operator):
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
+
 class VIEW3D_OT_ToggleNPanel(Operator):
     """ Toggle Settings Panel """
     bl_idname = "view3d.toggle_n_panel"
@@ -138,6 +142,7 @@ class VIEW3D_OT_ToggleNPanel(Operator):
     @classmethod
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
 
 class VIEW3D_OT_MoveFloatMenu(Operator):
     bl_idname = "view3d.move_float_menu"
@@ -181,6 +186,7 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
         retinaFactor = getattr(systemPreferences, "pixel_size", 1)
         return int(systemPreferences.dpi * retinaFactor) / 72
 
+
 class VIEW3D_OT_ViewportRecenter(Operator):
     """ Recenter Viewport and Cursor on Selected Object """
     bl_idname = "view3d.viewport_recenter"
@@ -195,6 +201,7 @@ class VIEW3D_OT_ViewportRecenter(Operator):
         context.scene.tool_settings.transform_pivot_point = current
         return {'FINISHED'}
 
+
 class VIEW3D_OT_ViewportLock(Operator):
     """ Toggle Viewport Rotation """
     bl_idname = "view3d.viewport_lock"
@@ -207,6 +214,7 @@ class VIEW3D_OT_ViewportLock(Operator):
 
         context.region.data.lock_rotation=False
         return {'FINISHED'}
+
 
 class VIEW3D_OT_IncreaseMultires(Operator):
     """ Increment Multires by 1 or add subdivision """
@@ -230,6 +238,7 @@ class VIEW3D_OT_IncreaseMultires(Operator):
                         mod.levels += 1
                 return {'FINISHED'}
         return {'CANCELLED'}
+
 
 class VIEW3D_OT_DecreaseMultires(Operator):
     """ Decrement Multires by 1 """
