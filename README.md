@@ -10,6 +10,7 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 <details open><summary><b>v0.9.6</b></summary><br>
 
+- `ADDED` : undo/redo gizmo
 - `UPDATED` : code cleanup and additional structure tweaks
 
 </details>
@@ -129,7 +130,6 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 # Issues
 
 - `LOW` : Quadview breaks space_data bindings for locking viewport
-- `HIGH` : Need better coverage for edit modes in ops and gizmos
 
 > Please [report any issues](https://github.com/nendotools/touchview/issues) you find and I'll do my best to address them.
 

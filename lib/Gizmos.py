@@ -98,6 +98,8 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         self.gizmo_actions = []
         self.gizmo_bindings = []
 
+        self.__buildGizmo("undoredo", "ed.undo", "LOOP_BACK")
+        self.__buildGizmo("undoredo", "ed.redo", "LOOP_FORWARDS")
         self.__buildGizmo("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT", "FULLSCREEN_ENTER", "show_fullscreen",  "screen")
         self.__buildGizmo("quadview", "screen.region_quadview", "IMGDISPLAY", "MESH_PLANE", "region_quadviews", context.space_data)
         self.__buildGizmo("snap_view", "view3d.viewport_recenter", "CURSOR")

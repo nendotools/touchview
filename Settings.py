@@ -81,6 +81,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
                 "alpha_highlight": 0.5
         }
     }
+    show_undoredo: BoolProperty(
+        name="Undo/Redo",
+        default=True 
+    )
     show_fullscreen: BoolProperty(
         name="Fullscreen", 
         default=True 
@@ -121,6 +125,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
     gizmo_sets = {
         # ALL includes only the modes in this list
         "ALL": {
+            "undoredo",
             "fullscreen",
             "quadview",
             "snap_view",
@@ -156,15 +161,6 @@ class OverlaySettings(bpy.types.AddonPreferences):
         default=False
     )
 
-    menu_default = {
-        "": (),
-        "": (),
-        "": (),
-        "": (),
-        "": (),
-        "": (),
-        "": ()
-    }
     active_menu: EnumProperty(name="Mode Settings", items=edit_modes)
     menu_sets: CollectionProperty(type=MenuModeGroup)
 
