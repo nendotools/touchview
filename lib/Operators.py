@@ -207,12 +207,28 @@ class VIEW3D_OT_ViewportLock(Operator):
     bl_idname = "view3d.viewport_lock"
     bl_label = "Viewport rotation lock toggle"
 
+    region_ids = []
+
     def execute(self, context: Context):
         if len(context.area.spaces.active.region_quadviews) == 0:
-            context.region.data.lock_rotation^=True
+            context.region_data.lock_rotation^=True
             return {'FINISHED'}
 
-        context.region.data.lock_rotation=False
+        for region in context.area.spaces.active.region_quadviews:
+            self.region_ids.append((region.as_pointer(), region.lock_rotation))
+
+        start_change = False
+        regions = dict(self.region_ids)
+        for i in range(3, -1, -1):
+            region_data = context.area.spaces.active.region_quadviews[i]
+            if context.region_data.as_pointer() == region_data.as_pointer():
+                start_change = True
+                context.region_data.lock_rotation^=True
+                continue
+
+            if start_change:
+                region_data.lock_rotation = regions[region_data.as_pointer()]
+        self.region_ids = []
         return {'FINISHED'}
 
 
