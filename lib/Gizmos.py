@@ -64,9 +64,19 @@ class GIZMO_GT_FloatingGizmoGroup(GizmoGroup):
         settings = self.__getSettings()
         position = (0.0,0.0,0.0)
         orientation = (0.0,0.0,0.0)
-        fence = ((0,0), (size.x, size.y))
 
-        position = (settings.floating_position[0]/100 * fence[1][0], settings.floating_position[1]/100 * fence[1][1],0)
+        if bpy.context.preferences.view.mini_axis_type == 'GIZMO':
+            right = size.x - (panel('UI')[0] + 22 * dpi_factor())
+        elif bpy.context.preferences.view.mini_axis_type == 'MINIMAL':
+            right = size.x - (panel('UI')[0] + 22 * dpi_factor())
+        else:
+            right = size.x - (panel('UI')[0] + 22 * dpi_factor())
+
+        left = 22 * dpi_factor() + panel('TOOLS')[0]
+
+        fence = ((left ,22 * dpi_factor()), (right - left , size.y - (22*dpi_factor()) - (panel('HEADER')[1] + panel('TOOL_HEADER')[1])))
+
+        position = (left + settings.floating_position[0]/100 * fence[1][0], fence[0][1] + settings.floating_position[1]/100 * fence[1][1],0)
 
         return (Vector(position), orientation)
     

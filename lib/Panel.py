@@ -17,21 +17,32 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
         view = context.space_data
         space = context.area.spaces.active
 
-        self.layout.column()
-        self.layout.label(text="Control Zones")
-        self.layout.prop(settings, "width")
-        self.layout.prop(settings, "radius")
-        self.layout.prop(settings, "isVisible", text="Show Overlay")
+        col = self.layout.column()
+        col.label(text="Control Zones")
+        col.prop(settings, "width")
+        col.prop(settings, "radius")
+        col.prop(settings, "isVisible", text="Show Overlay")
+
+        col.separator()
         
-        self.layout.label(text="Viewport Options")
-        self.layout.prop_menu_enum(settings, "gizmo_position")
-        self.layout.operator("view3d.tools_region_flip", text="Flip Tools")
+        col.label(text="Viewport Options")
+        col.prop_menu_enum(settings, "gizmo_position")
+        col.operator("view3d.tools_region_flip", text="Flip Tools")
         if len(space.region_quadviews) > 0:
-            self.layout.operator("screen.region_quadview", text="Disable Quadview")
+            col.operator("screen.region_quadview", text="Disable Quadview")
         else:
-            self.layout.operator("screen.region_quadview", text="Enable Quadview")
-            self.layout.prop(space, "lock_cursor", text="Lock to Cursor")
-            self.layout.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
+            col.operator("screen.region_quadview", text="Enable Quadview")
+            col.prop(space, "lock_cursor", text="Lock to Cursor")
+            col.prop(view.region_3d, "lock_rotation", text="Lock Rotation")
+
+        col.separator()
+
+        col.label(text="Mode Settings")
+        col.prop(settings, "active_menu", text="")
+        box = col.box()
+        mList = settings.getMenuSettings(settings.active_menu)
+        for i in range(7):
+            box.prop(mList, "menu_slot_"+str(i+1), text="")
         context.area.tag_redraw()
 
 

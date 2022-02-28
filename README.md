@@ -11,7 +11,9 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 <details open><summary><b>v0.9.6</b></summary><br>
 
 - `ADDED` : undo/redo gizmo
+- `UPDATED` : N Panel now includes extra settings from addon menu
 - `UPDATED` : Lock Rotation now addresses quadview data replication bug
+- `UPDATED` : Limited floating gizmo to viewport area
 - `UPDATED` : code cleanup and additional structure tweaks
 
 </details>

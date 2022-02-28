@@ -8,6 +8,7 @@ from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
 
+from . Gizmos import dpi_factor, panel
 from . items import input_mode_items, pivot_items
 
 
@@ -150,15 +151,16 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
 
     def execute(self, context):
         settings = context.preferences.addons['touchview'].preferences
-        settings.floating_position[0] = self.x/context.region.width*100
-        settings.floating_position[1] = self.y/context.region.height*100
+        fence = self.__calcFence(Vector((context.region.width, context.region.height)))
+        settings.floating_position[0] = min(max((self.x-fence[0][0])/(fence[1][0]-fence[0][0])*100, 0), 100)
+        settings.floating_position[1] = min(max((self.y-fence[0][1])/(fence[1][1]-fence[0][1])*100, 0), 100)
         return {'FINISHED'}
 
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             context.region.tag_redraw()
             self.x = event.mouse_x
-            self.y = event.mouse_y-22*self.dpi_factor()
+            self.y = event.mouse_y-22*dpi_factor()
             self.execute(context)
         elif event.type == 'LEFTMOUSE':  # Confirm
             return {'FINISHED'}
@@ -181,11 +183,17 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
-    def dpi_factor(self) -> float:
-        systemPreferences = bpy.context.preferences.system
-        retinaFactor = getattr(systemPreferences, "pixel_size", 1)
-        return int(systemPreferences.dpi * retinaFactor) / 72
+    def __calcFence(self, size:Vector) -> tuple[tuple[int, int]]:
+        if bpy.context.preferences.view.mini_axis_type == 'GIZMO':
+            right = size.x - (panel('UI')[0] + 22 * dpi_factor())
+        elif bpy.context.preferences.view.mini_axis_type == 'MINIMAL':
+            right = size.x - (panel('UI')[0] + 22 * dpi_factor())
+        else:
+            right = size.x - (panel('UI')[0] + 22 * dpi_factor())
 
+        left = 22 * dpi_factor() + panel('TOOLS')[0]
+
+        return ((left ,22*dpi_factor()), (right , size.y - (panel('HEADER')[1] + panel('TOOL_HEADER')[1])))
 
 class VIEW3D_OT_ViewportRecenter(Operator):
     """ Recenter Viewport and Cursor on Selected Object """
