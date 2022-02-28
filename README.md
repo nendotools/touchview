@@ -15,6 +15,7 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 - `UPDATED` : Lock Rotation now addresses quadview data replication bug
 - `UPDATED` : Limited floating gizmo to viewport area
 - `UPDATED` : code cleanup and additional structure tweaks
+- `REMOVED` : Gizmo Tooltips
 
 </details>
 

@@ -37,7 +37,7 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
 
         col.separator()
 
-        col.label(text="Mode Settings")
+        col.label(text="Floating Menu Settings")
         col.prop(settings, "active_menu", text="")
         box = col.box()
         mList = settings.getMenuSettings(settings.active_menu)
@@ -47,8 +47,10 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
 
 
 class PIE_MT_Floating_Menu(Menu):
+    """ Open a custom menu """
     bl_idname = "PIE_MT_Floating_Menu"
     bl_label = "Floating Menu"
+    bl_description = "Customized Floating Menu"
 
     def draw(self, context:Context):
         settings = context.preferences.addons['touchview'].preferences

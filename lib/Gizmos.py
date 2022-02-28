@@ -53,6 +53,7 @@ class GIZMO_GT_FloatingGizmoGroup(GizmoGroup):
         props = gizmo.target_set_operator(operator_name)
         props.name = "PIE_MT_Floating_Menu"
         gizmo.icon = on_icon
+        gizmo.use_tooltip = False
         gizmo.use_event_handle_all = True
         gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
         self.__setColors(gizmo)
@@ -178,6 +179,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         gizmo = self.gizmos.new("GIZMO_GT_button_2d")
         gizmo.target_set_operator(operator_name)
         gizmo.icon = on_icon
+        gizmo.use_tooltip = False
         gizmo.use_event_handle_all = True
         gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
         self.__setColors(gizmo)
@@ -200,6 +202,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
             gizmo = self.gizmos.new("GIZMO_GT_button_2d")
             gizmo.target_set_operator(operator_name)
             gizmo.icon = icon[1]
+            gizmo.use_tooltip = False
             gizmo.use_event_handle_all = True
             gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
             self.__setColors(gizmo)
