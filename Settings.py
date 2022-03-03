@@ -46,6 +46,10 @@ class MenuModeGroup(PropertyGroup):
 class OverlaySettings(bpy.types.AddonPreferences):
     bl_idname = __package__
 
+    is_enabled: BoolProperty(
+        name="Enable Controls", 
+        default=True, 
+    )
     width: FloatProperty(
         name="Width", 
         default=40.0, 
@@ -66,6 +70,26 @@ class OverlaySettings(bpy.types.AddonPreferences):
             name="Sculpt Pivot Mode",
             items=pivot_items,
             default="SURFACE"
+    )
+    overlay_main_color: FloatVectorProperty(
+        name="Overlay Main Color",
+        default=(1.0, 1.0, 1.0, 0.01),
+        subtype='COLOR',
+        min=0.0,
+        max=1.0,
+        size=4,
+    )
+    use_multiple_colors: BoolProperty(
+        name="Multicolor Overlay", 
+        default=False, 
+    )
+    overlay_secondary_color: FloatVectorProperty(
+        name="Overlay Secondary Color",
+        default=(1.0, 1.0, 1.0, 0.01),
+        subtype='COLOR',
+        min=0.0,
+        max=1.0,
+        size=4,
     )
     gizmo_colors = {
             "disabled": {
@@ -169,9 +193,15 @@ class OverlaySettings(bpy.types.AddonPreferences):
         row = self.layout.row()
         col = row.column()
         col.label(text="Control Zones")
-        col.prop(self, "width")
-        col.prop(self, "radius")
-        col.prop(self, "isVisible", text="Show Overlay")
+        col.prop(self, "is_enabled", text="Enable")
+        if self.is_enabled:
+            col.prop(self, "isVisible", text="Show Overlay")
+            col.prop(self, "use_multiple_colors")
+            col.prop(self, "overlay_main_color", text="Main Color")
+            if self.use_multiple_colors:
+                col.prop(self, "overlay_secondary_color", text="Secondary Color")
+            col.prop(self, "width")
+            col.prop(self, "radius")
         
         col = row.column()
         col.label(text="Viewport Options")

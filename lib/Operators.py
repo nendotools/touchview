@@ -53,13 +53,14 @@ class VIEW3D_OT_TouchInput(Operator):
         return False
 
     def invoke(self, context: Context, event: Event):
+        settings = bpy.context.preferences.addons['touchview'].preferences
+        if not settings.is_enabled: return {'CANCELLED'}
         if event.type == "PEN": return {'FINISHED'}
         if self.handle_doubletap(event): return {'FINISHED'}
         if self.handle_swipe(event): return {'FINISHED'}
         if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
-        settings = bpy.context.preferences.addons['touchview'].preferences
         mid_point = Vector((context.region.width/2 , context.region.height/2))
 
         dolly_scale = settings.getWidth()
@@ -129,6 +130,17 @@ class VIEW3D_OT_NextPivotMode(Operator):
     @classmethod
     def poll(cls, context: Context):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
+
+class VIEW3D_OT_ToggleTouchControls(Operator):
+    """ Toggle Touch Controls """
+    bl_idname = "view3d.toggle_touch"
+    bl_label = "Toggle Touch Controls"
+
+    def execute(self, context: Context):
+        context.preferences.addons['touchview'].preferences.is_enabled ^= True
+        context.area.tag_redraw()
+        return {'FINISHED'}
 
 
 class VIEW3D_OT_ToggleNPanel(Operator):

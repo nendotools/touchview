@@ -14,6 +14,10 @@ def assign_keymaps():
     wm = bpy.context.window_manager   
 
 # add global default action
+    km = wm.keyconfigs.addon.keymaps.new(name="3D View", space_type='VIEW_3D')
+    kmi = km.keymap_items.new('view3d.toggle_touch', type='T', value='PRESS', alt=True)
+    addon_keymaps.append((km, kmi))
+
     km = wm.keyconfigs.addon.keymaps.new(name="", space_type='EMPTY')
     kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi)) 

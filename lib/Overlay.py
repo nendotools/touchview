@@ -29,30 +29,40 @@ class Overlay():
     def __getSize(self, view:Region, scalar: float = 1) -> Vector:
         return Vector((view.width * scalar, view.height * scalar))
 
+    def __getColors(self, type: str):
+        settings = self.__getSettings()
+        if not settings or not settings.is_enabled:
+            return (0.0, 0.0, 0.0, 0.0)
+        if type == 'main' or not settings.use_multiple_colors:
+            return settings.overlay_main_color
+        elif type == 'secondary':
+            return settings.overlay_secondary_color
+        else:
+            return (0.0, 0.0, 0.0, 0.0)
+
     def drawUI(self):
         _handle = SpaceView3D.draw_handler_add(
             self.__renderCircle, 
-            ([1,1,1,0.01], ), 
+            (),
             'WINDOW', 
             'POST_PIXEL'
         )
         self.meshes.append(_handle)
-
         _handle = SpaceView3D.draw_handler_add(
             self.__renderRailing, 
-            ([1,1,1,0.01], ), 
+            (),
             'WINDOW', 
             'POST_PIXEL'
         )
         self.meshes.append(_handle)
 
-    def __renderRailing(self, color: list[float, float, float, float]):
+    def __renderRailing(self):
         settings = self.__getSettings()
         view = bpy.context.area
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer():
-                self.__makeBox(region, color)
+                self.__makeBox(region, self.__getColors('main'))
 
     def __makeBox(self, view: Region, color: tuple[float, float, float, float]):
         settings = self.__getSettings()
@@ -86,13 +96,13 @@ class Overlay():
         glDisable(GL_BLEND)
 
 
-    def __renderCircle(self, color: list[float, float, float, float]):
+    def __renderCircle(self):
         settings = self.__getSettings()
         view = bpy.context.area
         if not settings.isVisible: return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer() and not region.data.lock_rotation:
-                self.__makeCircle(region, color)
+                self.__makeCircle(region, self.__getColors('secondary'))
 
     def __makeCircle(self, view: Region, color: tuple[float, float, float, float]):
         settings = self.__getSettings()

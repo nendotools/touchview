@@ -19,9 +19,15 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
 
         col = self.layout.column()
         col.label(text="Control Zones")
-        col.prop(settings, "width")
-        col.prop(settings, "radius")
-        col.prop(settings, "isVisible", text="Show Overlay")
+        col.prop(settings, "is_enabled", text="Enable")
+        if settings.is_enabled:
+            col.prop(settings, "isVisible", text="Show Overlay")
+            col.prop(settings, "use_multiple_colors")
+            col.prop(settings, "overlay_main_color", text="Main Color")
+            if settings.use_multiple_colors:
+                col.prop(settings, "overlay_secondary_color", text="Secondary Color")
+            col.prop(settings, "width")
+            col.prop(settings, "radius")
 
         col.separator()
         
