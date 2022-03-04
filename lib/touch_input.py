@@ -9,6 +9,18 @@ addon_tweaks = []
 def register_keymaps():
     bpy.app.timers.register(assign_keymaps, first_interval=0.2)
 
+# toggle active addon_keymaps and addon_tweaks
+def toggle_keymaps(state: bool = True):
+    for km, kmi in addon_keymaps:
+        if kmi.type == 'LEFTMOUSE':
+            kmi.active = state
+    for kmi, original in addon_tweaks:
+        if not state:
+            kmi.active = original
+        else:
+            kmi.active = False
+
+
 # two main goals: preserve action from MOUSE to PEN, add viewport control to MOUSE
 def assign_keymaps():
     wm = bpy.context.window_manager   

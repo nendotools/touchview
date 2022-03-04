@@ -10,6 +10,7 @@ from bpy.types import Context, Event, Operator
 
 from . Gizmos import dpi_factor, panel
 from . items import input_mode_items, pivot_items
+from . touch_input import toggle_keymaps
 
 
 class VIEW3D_OT_TouchInput(Operator):
@@ -145,6 +146,7 @@ class VIEW3D_OT_ToggleTouchControls(Operator):
 
     def execute(self, context: Context):
         context.preferences.addons['touchview'].preferences.is_enabled ^= True
+        toggle_keymaps(context.preferences.addons['touchview'].preferences.is_enabled)
         context.area.tag_redraw()
         return {'FINISHED'}
 
