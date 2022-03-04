@@ -197,8 +197,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
         row = self.layout.row()
         col = row.column()
         col.label(text="Control Zones")
-        col.prop(self, "is_enabled", text="Enable")
-        col.prop(self, "swap_panrotate")
+        if self.is_enabled:
+            col.operator("view3d.toggle_touch", text="Touch Enabled", depress=True)
+        else:
+            col.operator("view3d.toggle_touch", text="Touch Disabled")
         col.prop(self, "isVisible", text="Show Overlay")
         col.prop(self, "use_multiple_colors")
         col.prop(self, "overlay_main_color", text="Main Color")
