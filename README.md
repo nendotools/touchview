@@ -8,6 +8,13 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 # Changelogs
 
+<details open><summary><b>v1.0.0</b></summary><br>
+
+- `ADDED` : Toggle swap pan/rotate regions
+- `UPDATED` : Disabling touch controls no longer removes overlay (hot regions still work with custom keybinds and MIDDLEMOUSE)
+
+</details>
+
 <details open><summary><b>v0.9.6</b></summary><br>
 
 - `ADDED` : undo/redo gizmo
@@ -22,7 +29,7 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 </details>
 
-<details open><summary><b>v0.9.5</b></summary><br>
+<details><summary><b>v0.9.5</b></summary><br>
 
 - `ADDED` : multires modifier support to gizmo bar (shows retopology tools when no modifier is present)
 - `FIXED` : Gizmos now properly follow mode visibility rules

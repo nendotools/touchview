@@ -78,6 +78,12 @@ class VIEW3D_OT_TouchInput(Operator):
             self.mode = "PAN"
         else:
             self.mode = "ORBIT"
+
+        if settings.swap_panrotate:
+            if self.mode == "PAN":
+                self.mode = "ORBIT"
+            elif self.mode == "ORBIT":
+                self.mode = "PAN"
         
         if context.mode == "SCULPT":
             bpy.ops.sculpt.set_pivot_position(mode=settings.pivot_mode)

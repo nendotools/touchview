@@ -50,6 +50,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
         name="Enable Controls", 
         default=True, 
     )
+    swap_panrotate: BoolProperty(
+        name="Swap Pan/Rotate",
+        default=False, 
+    )
     width: FloatProperty(
         name="Width", 
         default=40.0, 
@@ -194,14 +198,14 @@ class OverlaySettings(bpy.types.AddonPreferences):
         col = row.column()
         col.label(text="Control Zones")
         col.prop(self, "is_enabled", text="Enable")
-        if self.is_enabled:
-            col.prop(self, "isVisible", text="Show Overlay")
-            col.prop(self, "use_multiple_colors")
-            col.prop(self, "overlay_main_color", text="Main Color")
-            if self.use_multiple_colors:
-                col.prop(self, "overlay_secondary_color", text="Secondary Color")
-            col.prop(self, "width")
-            col.prop(self, "radius")
+        col.prop(self, "swap_panrotate")
+        col.prop(self, "isVisible", text="Show Overlay")
+        col.prop(self, "use_multiple_colors")
+        col.prop(self, "overlay_main_color", text="Main Color")
+        if self.use_multiple_colors:
+            col.prop(self, "overlay_secondary_color", text="Secondary Color")
+        col.prop(self, "width")
+        col.prop(self, "radius")
         
         col = row.column()
         col.label(text="Viewport Options")
