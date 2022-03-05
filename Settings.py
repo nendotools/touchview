@@ -213,18 +213,20 @@ class OverlaySettings(bpy.types.AddonPreferences):
         col = row.column()
         col.label(text="Viewport Options")
         col.prop_menu_enum(self, "gizmo_position")
-
         col.separator()
-        col.prop(self, "show_float_menu")
 
-        box = col.box()
-        box.active = self.show_float_menu
-        col = box.column()
-        col.prop(self, "floating_position")
-        col.prop(self, "active_menu")
-        mList = self.getMenuSettings(self.active_menu)
-        for i in range(7):
-            col.prop(mList, "menu_slot_"+str(i+1))
+        if not self.show_float_menu:
+            col.operator("view3d.toggle_floating_menu", text="Show Floating Menu")
+        else:
+            col.operator("view3d.toggle_floating_menu", text="Hide Floating Menu", depress=True)
+            box = col.box()
+            box.active = self.show_float_menu
+            col = box.column()
+            col.prop(self, "floating_position")
+            col.prop(self, "active_menu")
+            mList = self.getMenuSettings(self.active_menu)
+            for i in range(7):
+                col.prop(mList, "menu_slot_"+str(i+1))
 
     def getMenuSettings(self, mode:str):
         m = None

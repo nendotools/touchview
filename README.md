@@ -11,6 +11,7 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 <details open><summary><b>v1.0.0</b></summary><br>
 
 - `ADDED` : Toggle swap pan/rotate regions
+- `ADDED` : Toggle floating menu button to N Panel
 - `UPDATED` : Disabling touch controls no longer removes overlay (hot regions still work with custom keybinds and MIDDLEMOUSE)
 - `UPDATED` : Disabling touch controls restores default LEFTMOUSE functionality
 

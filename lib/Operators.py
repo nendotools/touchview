@@ -165,6 +165,20 @@ class VIEW3D_OT_ToggleNPanel(Operator):
         return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
 
+class VIEW3D_OT_ToggleFloatingMenu(Operator):
+    """ Toggle Floating Menu """
+    bl_idname = "view3d.toggle_floating_menu"
+    bl_label = "Toggle Floating Menu"
+
+    def execute(self, context: Context):
+        context.preferences.addons['touchview'].preferences.show_float_menu ^= True
+        return {'FINISHED'}
+        
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
+
+
 class VIEW3D_OT_MoveFloatMenu(Operator):
     bl_idname = "view3d.move_float_menu"
     bl_label = "Relocate Floating Gizmo"

@@ -46,12 +46,16 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
 
         col.separator()
 
-        col.label(text="Floating Menu Settings")
-        col.prop(settings, "active_menu", text="")
-        box = col.box()
-        mList = settings.getMenuSettings(settings.active_menu)
-        for i in range(7):
-            box.prop(mList, "menu_slot_"+str(i+1), text="")
+        if not settings.show_float_menu:
+            col.operator("view3d.toggle_floating_menu", text="Show Floating Menu")
+        else:
+            col.operator("view3d.toggle_floating_menu", text="Hide Floating Menu", depress=True)
+            col.label(text="Floating Menu Settings")
+            col.prop(settings, "active_menu", text="")
+            box = col.box()
+            mList = settings.getMenuSettings(settings.active_menu)
+            for i in range(7):
+                box.prop(mList, "menu_slot_"+str(i+1), text="")
         context.area.tag_redraw()
 
 
