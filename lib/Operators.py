@@ -173,10 +173,6 @@ class VIEW3D_OT_ToggleFloatingMenu(Operator):
     def execute(self, context: Context):
         context.preferences.addons['touchview'].preferences.show_float_menu ^= True
         return {'FINISHED'}
-        
-    @classmethod
-    def poll(cls, context: Context):
-        return context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
 
 
 class VIEW3D_OT_MoveFloatMenu(Operator):
