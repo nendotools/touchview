@@ -95,7 +95,6 @@ class Overlay():
         batch.draw(shader)
         glDisable(GL_BLEND)
 
-
     def __renderCircle(self):
         settings = self.__getSettings()
         view = bpy.context.area
@@ -111,7 +110,7 @@ class Overlay():
         self.__drawCircle(mid, radius, color)
 
     def __drawCircle(self, mid: Vector, radius:float, color: tuple):
-        segments = 40
+        segments = 100
         vertices = [mid]
         indices = []
         p = 0
