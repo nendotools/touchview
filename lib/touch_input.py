@@ -14,6 +14,8 @@ def toggle_keymaps(state: bool = True):
     for km, kmi in addon_keymaps:
         if kmi.type == 'LEFTMOUSE':
             kmi.active = state
+        elif kmi.type == 'MIDDLEMOUSE' and bpy.context.preferences.addons['touchview'].preferences.include_mmb:
+            kmi.active = state
     for kmi, original in addon_tweaks:
         if not state:
             kmi.active = original

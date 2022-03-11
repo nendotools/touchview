@@ -50,6 +50,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
         name="Enable Controls", 
         default=True, 
     )
+    include_mmb: BoolProperty(
+        name="Include MIDDLEMOUSE",
+        default=False,
+    )
     swap_panrotate: BoolProperty(
         name="Swap Pan/Rotate",
         default=False, 
@@ -201,6 +205,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
             col.operator("view3d.toggle_touch", text="Touch Enabled", depress=True)
         else:
             col.operator("view3d.toggle_touch", text="Touch Disabled")
+        col.prop(self, "include_mmb")
         col.prop(self, "swap_panrotate")
         col.prop(self, "isVisible", text="Show Overlay")
         col.prop(self, "use_multiple_colors")
