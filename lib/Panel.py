@@ -36,6 +36,8 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
         
         col.label(text="Viewport Options")
         col.prop_menu_enum(settings, "gizmo_position")
+        col.prop(settings, "subdivision_limit")
+
         col.operator("view3d.tools_region_flip", text="Flip Tools")
         if len(space.region_quadviews) > 0:
             col.operator("screen.region_quadview", text="Disable Quadview")

@@ -120,7 +120,7 @@ class VIEW3D_OT_NextPivotMode(Operator):
     bl_label = "Use next Pivot mode"
 
     def execute(self, context: Context):
-        settings = context.preferences.addons["touchview"].preferences
+        settings = context.preferences.addons['touchview'].preferences
         count = 0
         for enum, name, desc in pivot_items:
             if enum == settings.pivot_mode:
@@ -276,18 +276,21 @@ class VIEW3D_OT_IncreaseMultires(Operator):
     bl_label = "Increment Multires modifier by 1 or add subdivision level"
 
     def execute(self, context: Context):
+        settings = context.preferences.addons['touchview'].preferences
         if not context.active_object: return {'CANCELLED'}
         if not len(context.active_object.modifiers): return {'CANCELLED'}
         for mod in context.active_object.modifiers:
             if mod.type == 'MULTIRES':
                 if context.mode == "SCULPT":
                     if mod.sculpt_levels == mod.total_levels:
-                        bpy.ops.object.multires_subdivide(modifier=mod.name)
+                        if mod.sculpt_levels < settings.subdivision_limit:
+                            bpy.ops.object.multires_subdivide(modifier=mod.name)
                     else:
                         mod.sculpt_levels += 1
                 else:
                     if mod.levels == mod.total_levels:
-                        bpy.ops.object.multires_subdivide(modifier=mod.name)
+                        if mod.levels < settings.subdivision_limit:
+                            bpy.ops.object.multires_subdivide(modifier=mod.name)
                     else:
                         mod.levels += 1
                 return {'FINISHED'}

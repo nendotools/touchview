@@ -1,6 +1,6 @@
 import bpy
 from bpy.types import Context, PropertyGroup
-from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, StringProperty
+from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
 from .lib.items import position_items, pivot_items, edit_modes, menu_defaults 
 
 class MenuModeGroup(PropertyGroup):
@@ -111,6 +111,18 @@ class OverlaySettings(bpy.types.AddonPreferences):
                 "alpha": 0.5,
                 "color_highlight": [0.5,0.5,0.5],
                 "alpha_highlight": 0.5
+        },
+            "error": {
+                "color": [0.3,0.0,0.0],
+                "alpha": 0.15,
+                "color_highlight": [1.0,0.2,0.2],
+                "alpha_highlight": 0.5
+        },
+            "warn": {
+                "color": [0.35,0.3,0.14],
+                "alpha": 0.15,
+                "color_highlight": [0.8,0.7,0.3],
+                "alpha_highlight": 0.3
         }
     }
     show_undoredo: BoolProperty(
@@ -153,6 +165,12 @@ class OverlaySettings(bpy.types.AddonPreferences):
         items=position_items,
         name="Gizmo Position",
         default="RIGHT"
+    )
+    subdivision_limit: IntProperty(
+        name="Subdivision Limit",
+        default=4,
+        min=1,
+        max=7
     )
     gizmo_sets = {
         # ALL includes only the modes in this list
@@ -218,6 +236,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
         col = row.column()
         col.label(text="Viewport Options")
         col.prop_menu_enum(self, "gizmo_position")
+        col.prop(self, "subdivision_limit")
         col.separator()
 
         if not self.show_float_menu:

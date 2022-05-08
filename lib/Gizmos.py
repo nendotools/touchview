@@ -138,6 +138,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
             offset += gizmo.scale_basis * 2 + gap
             if not context.space_data.show_gizmo_navigate:
                 gizmo.hide = True
+            self.__updateColor(gizmo)
 
     # determine viewport position and spacing
     def __getGizmoOrientation(self, size:Vector) -> tuple[Vector, tuple[int, int]]:
@@ -308,8 +309,33 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         gizmo.alpha = settings.gizmo_colors["active"]["alpha"]
         gizmo.alpha_highlight = settings.gizmo_colors["active"]["alpha_highlight"]
 
+    def __updateColor(self, gizmo):
+        obj = bpy.context.active_object
+        mode = "sculpt_levels" if bpy.context.mode == 'SCULPT' else "levels"
+        if gizmo.icon == "TRIA_UP" and obj.modifiers.active.type == "MULTIRES":
+            for mod in obj.modifiers:
+                if mod.type == 'MULTIRES':
+                    if getattr(mod, mode) == mod.total_levels:
+                        if getattr(mod, mode) >= self.__getSettings().subdivision_limit:
+                            gizmo.color = self.__getSettings().gizmo_colors["error"]["color"]
+                            gizmo.color_highlight = self.__getSettings().gizmo_colors["error"]["color_highlight"]
+                        else:
+                            gizmo.color = self.__getSettings().gizmo_colors["warn"]["color"]
+                            gizmo.color_highlight = self.__getSettings().gizmo_colors["warn"]["color_highlight"]
+                    else:
+                        gizmo.color = self.__getSettings().gizmo_colors["active"]["color"]
+                        gizmo.color_highlight = self.__getSettings().gizmo_colors["active"]["color_highlight"]
+        if gizmo.icon == "TRIA_DOWN" and obj.modifiers.active.type == "MULTIRES":
+            for mod in obj.modifiers:
+                if mod.type == 'MULTIRES':
+                    if getattr(mod, mode) == 0:
+                        gizmo.color = self.__getSettings().gizmo_colors["warn"]["color"]
+                        gizmo.color_highlight = self.__getSettings().gizmo_colors["warn"]["color_highlight"]
+                    else:
+                        gizmo.color = self.__getSettings().gizmo_colors["active"]["color"]
+                        gizmo.color_highlight = self.__getSettings().gizmo_colors["active"]["color_highlight"]
 
-    # UI panel to append Gizmo menu
+# UI panel to append Gizmo menu
 def touch_gizmo_display(panel, context:Context):
     layout = panel.layout
 

@@ -8,6 +8,12 @@ Control the viewport with your finger in Sculpt Mode. Adds overlay regions for r
 
 # Changelogs
 
+<details open><summary><b>v1.1.0</b></summary><br>
+
+- `ADDED` : Multi-resolution level limiter and gizmo status color
+
+</details>
+
 <details open><summary><b>v1.0.1</b></summary><br>
 
 - `ADDED` : Optional include for MIDDLEMOUSE when disabling/enabling touch controls
