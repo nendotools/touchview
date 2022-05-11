@@ -39,9 +39,9 @@ def unregister():
     from bpy.utils import unregister_class
     from . touch_input import unregister_keymaps
 
+    unregister_keymaps()
+
     ov.clear_overlays()
     bpy.types.VIEW3D_PT_gizmo_display.remove(touch_gizmo_display)
-    for cls in __classes__:
+    for cls in reversed(__classes__):
         unregister_class(cls)
-
-    unregister_keymaps()

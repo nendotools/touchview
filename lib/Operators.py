@@ -281,7 +281,7 @@ class VIEW3D_OT_IncreaseMultires(Operator):
         if not len(context.active_object.modifiers): return {'CANCELLED'}
         for mod in context.active_object.modifiers:
             if mod.type == 'MULTIRES':
-                if context.mode == "SCULPT":
+                if context.mode == 'SCULPT':
                     if mod.sculpt_levels == mod.total_levels:
                         if mod.sculpt_levels < settings.subdivision_limit:
                             bpy.ops.object.multires_subdivide(modifier=mod.name)
@@ -307,7 +307,7 @@ class VIEW3D_OT_DecreaseMultires(Operator):
         if not len(context.active_object.modifiers): return {'CANCELLED'}
         for mod in context.active_object.modifiers:
             if mod.type == 'MULTIRES':
-                if context.mode == "SCULPT":
+                if context.mode == 'SCULPT':
                     if mod.sculpt_levels == 0:
                         try:
                             bpy.ops.object.multires_unsubdivide(modifier=mod.name)

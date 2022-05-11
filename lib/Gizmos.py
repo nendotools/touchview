@@ -312,7 +312,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     def __updateColor(self, gizmo):
         obj = bpy.context.active_object
         mode = "sculpt_levels" if bpy.context.mode == 'SCULPT' else "levels"
-        if gizmo.icon == "TRIA_UP" and obj.modifiers.active.type == "MULTIRES":
+        if gizmo.icon == 'TRIA_UP' and obj.modifiers.active.type == 'MULTIRES':
             for mod in obj.modifiers:
                 if mod.type == 'MULTIRES':
                     if getattr(mod, mode) == mod.total_levels:
@@ -325,7 +325,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                     else:
                         gizmo.color = self.__getSettings().gizmo_colors["active"]["color"]
                         gizmo.color_highlight = self.__getSettings().gizmo_colors["active"]["color_highlight"]
-        if gizmo.icon == "TRIA_DOWN" and obj.modifiers.active.type == "MULTIRES":
+        if gizmo.icon == 'TRIA_DOWN' and obj.modifiers.active.type == 'MULTIRES':
             for mod in obj.modifiers:
                 if mod.type == 'MULTIRES':
                     if getattr(mod, mode) == 0:
