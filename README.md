@@ -1,7 +1,6 @@
 ![touch view header](/docs/header.jpg?raw=true)
 
 # Features
----
 
 Improve the Blender UI for keyboard-less users.
 
@@ -15,20 +14,25 @@ Improve the Blender UI for keyboard-less users.
 - customizable floating menu
   - assign up to 7 commands for each edit mode
 
+If you have a suggestion for more features, please check if it's on the upgrade list below before submitting a request on Github.
 
 ![demo gif](/docs/demo.gif?raw=true)
 
 # Planned Upgrades
----
 
-- customizable double-tap action
-- viewport camera toggle Gizmo for non-pen users
-- scaleable Gizmos
-- auto-retopology levels
-- brush size/falloff UI
+I'm continuing to look at features which could improve the experience of Blender without adding too much clutter to the UI.
+
+Currently, I'm planning to add the following features:
+
+> - customizable double-tap action
+> - viewport camera toggle Gizmo for non-pen users
+> - scaleable Gizmos
+> - auto-retopology levels
+> - brush size/falloff UI
+
+This list will change as I explore options and get more user feedback.
 
 # Changelogs
----
 
 <details open><summary><b>v1.1.0</b></summary><br>
 
