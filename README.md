@@ -1,12 +1,34 @@
 ![touch view header](/docs/header.jpg?raw=true)
 
 # Features
+---
 
-Control the viewport with your finger in Sculpt Mode. Adds overlay regions for rotate, pan, and zoom.
+Improve the Blender UI for keyboard-less users.
+
+- viewport touch regions for camera control
+- double-tap focus selection
+- on-screen buttons for quick access to important features
+- viewport rotation lock
+- context-aware topology options
+  - easily access retopology tools in sculpt mode
+  - when multi-resolution modifier is active, quickly switch resolutions or subdivide/unsubdivide mesh
+- customizable floating menu
+  - assign up to 7 commands for each edit mode
+
 
 ![demo gif](/docs/demo.gif?raw=true)
 
+# Planned Upgrades
+---
+
+- customizable double-tap action
+- viewport camera toggle Gizmo for non-pen users
+- scaleable Gizmos
+- auto-retopology levels
+- brush size/falloff UI
+
 # Changelogs
+---
 
 <details open><summary><b>v1.1.0</b></summary><br>
 
