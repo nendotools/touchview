@@ -13,6 +13,7 @@ Improve the Blender UI for keyboard-less users.
   - when multi-resolution modifier is active, quickly switch resolutions or subdivide/unsubdivide mesh
 - customizable floating menu
   - assign up to 7 commands for each edit mode
+- customizable Double-tap action
 
 If you have a suggestion for more features, please check if it's on the upgrade list below before submitting a request on Github.
 
@@ -24,7 +25,6 @@ I'm continuing to look at features which could improve the experience of Blender
 
 Currently, I'm planning to add the following features:
 
-> - customizable double-tap action
 > - viewport camera toggle Gizmo for non-pen users
 > - scaleable Gizmos
 > - auto-retopology levels
@@ -36,6 +36,8 @@ This list will change as I explore options and get more user feedback.
 
 <details open><summary><b>v1.1.0</b></summary><br>
 
+- `ADDED` : Independent toggle for entire gizmo bar
+- `ADDED` : Customizable double-tap actions
 - `ADDED` : Multi-resolution level limiter and gizmo status color
 
 </details>

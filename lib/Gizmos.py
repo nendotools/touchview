@@ -130,13 +130,14 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         self.__validateMode()
         active_gizmos = self.__getActive()
 
+        settings = self.__getSettings()
         position = self.__getGizmoOrientation(size)
         offset = 0
         gap = 2.2
         for gizmo in active_gizmos:
             gizmo.matrix_basis = Matrix.Translation(position[0] + Vector(position[1]) * offset)
             offset += gizmo.scale_basis * 2 + gap
-            if not context.space_data.show_gizmo_navigate:
+            if not settings.show_gizmo_bar:
                 gizmo.hide = True
             self.__updateColor(gizmo)
 
@@ -347,5 +348,8 @@ def touch_gizmo_display(panel, context:Context):
     settings = bpy.context.preferences.addons['touchview'].preferences
     available_gizmos = settings.getGizmoSet(context.object.mode)
 
+    col.prop(settings, "show_gizmo_bar")
+    col = layout.column()
+    col.active = settings.show_gizmo_bar
     for toggle in available_gizmos:
         col.prop(settings, 'show_'+toggle)

@@ -125,6 +125,10 @@ class OverlaySettings(bpy.types.AddonPreferences):
                 "alpha_highlight": 0.3
         }
     }
+    show_gizmo_bar: BoolProperty(
+        name="Show Gizmo Bar",
+        default=True 
+    )
     show_undoredo: BoolProperty(
         name="Undo/Redo",
         default=True 
