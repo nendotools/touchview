@@ -1,7 +1,7 @@
 import bpy
 from bpy.types import Context, PropertyGroup
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
-from .lib.items import position_items, pivot_items, edit_modes, menu_defaults 
+from .lib.items import position_items, pivot_items, edit_modes, menu_defaults, double_click_items 
 
 class MenuModeGroup(PropertyGroup):
     mode: StringProperty(name="mode", default="OBJECT")
@@ -211,6 +211,12 @@ class OverlaySettings(bpy.types.AddonPreferences):
         default=False
     )
 
+    double_click_mode: EnumProperty(
+        items=double_click_items,
+        name="Double Click Mode",
+        default="object.transfer_mode"
+    )
+
     active_menu: EnumProperty(name="Mode Settings", items=edit_modes)
     menu_sets: CollectionProperty(type=MenuModeGroup)
 
@@ -236,6 +242,7 @@ class OverlaySettings(bpy.types.AddonPreferences):
         col = row.column()
         col.label(text="Viewport Options")
         col.prop_menu_enum(self, "gizmo_position")
+        col.prop_menu_enum(self, "double_click_mode")
         col.prop(self, "subdivision_limit")
         col.separator()
 

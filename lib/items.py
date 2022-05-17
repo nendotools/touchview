@@ -35,3 +35,8 @@ menu_defaults    = {
                     "PAINT_WEIGHT": ("","","","","",""),
                     "PAINT_TEXTURE": ("","","","","","")
                 }
+
+double_click_items = [("object.transfer_mode","Transfer Mode",""),
+                      ("view3d.toggle_touch","Toggle Touch View",""),
+                      ("","",""),
+                      ("","","")]

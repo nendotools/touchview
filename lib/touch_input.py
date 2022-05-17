@@ -12,7 +12,7 @@ def register_keymaps():
 # toggle active addon_keymaps and addon_tweaks
 def toggle_keymaps(state: bool = True):
     for km, kmi in addon_keymaps:
-        if kmi.type == 'LEFTMOUSE':
+        if kmi.type == 'LEFTMOUSE' and kmi.value != 'DOUBLE_CLICK':
             kmi.active = state
         elif kmi.type == 'MIDDLEMOUSE' and bpy.context.preferences.addons['touchview'].preferences.include_mmb:
             kmi.active = state
@@ -33,7 +33,7 @@ def assign_keymaps():
     addon_keymaps.append((km, kmi))
 
     km = wm.keyconfigs.addon.keymaps.new(name="", space_type='EMPTY')
-    kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
+    kmi = km.keymap_items.new('view3d.dt_action', 'MIDDLEMOUSE', 'PRESS')
     addon_keymaps.append((km, kmi)) 
 
     kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
@@ -61,7 +61,7 @@ def assign_keymaps():
                 kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
                 addon_keymaps.append((km, kmi))
                 
-                kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'DOUBLE_CLICK')
+                kmi = km.keymap_items.new('view3d.dt_action', 'LEFTMOUSE', 'DOUBLE_CLICK')
                 addon_keymaps.append((km, kmi)) 
                 
                 # reassign default action to PEN

@@ -12,6 +12,26 @@ from . Gizmos import dpi_factor, panel
 from . items import input_mode_items, pivot_items
 from . touch_input import toggle_keymaps
 
+class VIEW3D_OT_Doubletap_Action(Operator):
+    """ Viewport double-tap shortcut """
+    bl_idname = "view3d.dt_action"
+    bl_label = "Viewport double-tap shortcut"
+
+    def execute(self, context: Context):
+        settings = bpy.context.preferences.addons['touchview'].preferences
+        if context.mode in {'OBJECT', 'SCULPT', 'EDIT_MESH', 'PAINT_TEXTURE', 'PAINT_VERTEX', 'PAINT_WEIGHT'}:
+            op = settings.double_click_mode.split('.')
+            opgrp = getattr(bpy.ops, op[0])
+            getattr(opgrp, op[1])('INVOKE_DEFAULT')
+        return {'FINISHED'}
+
+    def invoke(self, context: Context, event: Event):
+        if event.type != "LEFTMOUSE":
+            return {'CANCELLED'}
+        if event.value != "DOUBLE_CLICK":
+            return {'CANCELLED'}
+        self.execute(context)
+        return {'FINISHED'}
 
 class VIEW3D_OT_TouchInput(Operator):
     """ Active Viewport control zones """
@@ -35,7 +55,7 @@ class VIEW3D_OT_TouchInput(Operator):
             ops.view3d.zoom('INVOKE_DEFAULT')
         elif self.mode == "ORBIT":
             ops.view3d.rotate('INVOKE_DEFAULT')
-        else:
+        elif self.mode == "PAN":
             bpy.ops.view3d.move('INVOKE_DEFAULT')
         return {'FINISHED'}
 
@@ -47,17 +67,10 @@ class VIEW3D_OT_TouchInput(Operator):
             pass
         return False
 
-    def handle_doubletap(self, event: Event):
-        if event.value == "DOUBLE_CLICK" and event.type != "PEN" and bpy.context.mode in {'SCULPT', 'EDIT_MESH', 'PAINT_TEXTURE', 'PAINT_VERTEX', 'PAINT_WEIGHT'}:
-            bpy.ops.object.transfer_mode('INVOKE_DEFAULT')
-            return True
-        return False
-
     def invoke(self, context: Context, event: Event):
         settings = bpy.context.preferences.addons['touchview'].preferences
-        if not settings.is_enabled and event.type == "LEFTMOUSE": return {'CANCELLED'}
+        if not settings.is_enabled and event.type == "LEFTMOUSE": return {'FINISHED'}
         if event.type == "PEN": return {'FINISHED'}
-        if self.handle_doubletap(event): return {'FINISHED'}
         if self.handle_swipe(event): return {'FINISHED'}
         if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
