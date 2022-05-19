@@ -26,7 +26,10 @@ class VIEW3D_OT_Doubletap_Action(Operator):
         return {'FINISHED'}
 
     def invoke(self, context: Context, event: Event):
-        if event.type != "LEFTMOUSE":
+        print(event.type, event.value, event.pressure)
+        if event.type not in ['PEN', 'LEFTMOUSE']:
+            return {'CANCELLED'}
+        if event.pressure != 1.0:
             return {'CANCELLED'}
         if event.value != "DOUBLE_CLICK":
             return {'CANCELLED'}
