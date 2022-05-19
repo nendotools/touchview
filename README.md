@@ -2,24 +2,87 @@
 
 # Features
 
-Improve the Blender UI for keyboard-less users.
+This add-on is designed to improve the user experience of Blender for users without immediate access to a keyboard or mouse. It provides many customizable UI improvements to cater to your workflow needs.
 
-- viewport touch regions for camera control
-- double-tap focus selection
-- on-screen buttons for quick access to important features
-- viewport rotation lock
-- context-aware topology options
-  - easily access retopology tools in sculpt mode
-  - when multi-resolution modifier is active, quickly switch resolutions or subdivide/unsubdivide mesh
-- customizable floating menu
-  - assign up to 7 commands for each edit mode
-- customizable Double-tap action
+### Viewport Touch Control
 
-If you have a suggestion for more features, please check if it's on the upgrade list below before submitting a request on Github.
+Pan, Rotate, and Zoom the viewport with your finger.
 
-![demo gif](/docs/demo.gif?raw=true)
+<img src="/docs/demo.gif" width="50%">
 
-# Planned Upgrades
+The viewport has be updated to use 3 interactive "hot regions" to control the camera position.
+
+If you are a pen tablet user; the pen will still draw, while your finger can be used to control the camera.
+
+If your tablet doesn't support touch; you can set the middle mouse button to activate the control regions in the add-on settings.
+
+- Pan by dragging for the middle of the viewport
+- Zoom by dragging along the left or right edge of the viewport
+- Rotate by dragging the remaining space in the viewport
+
+#### Addtional Details
+
+Touch Controls come with a toggleable overlay which can be assigned colors.
+
+It is recommended to disable the overlay once you are comfortable with the size of each touch region, or set the transparency very low. (note: the overlay will not be shown in the render output)
+
+You may chose to switch the Pan and Rotate regions. If you lock the viewport rotation, Panning can be done anywhere between the Zoom control regions.
+
+### customizable Double-tap action
+
+Double-tap to trigger one of the following actions:
+
+- "Transfer Mode" to change the active object
+- Toggle Touch Control
+- Toggle Local View
+- Toggle Full-screen Viewport
+
+###### *note:* this feature only works by tapping your finger or clicking to prevent the pen from accidentally triggering it while drawing
+
+### Custom On-screen Buttons
+
+Important features have been made available directly in the viewport. Each button can be toggled on/off from the overlay menu.
+
+The following on-screen buttons are currently available:
+
+- Undo/Redo
+- Toggle Fullscreen Viewport
+- Toggle Quad-view
+- Recenter Viewport
+- Change Rotation Center Point
+- Toggle N-panel
+- Toggle Viewport Rotation Lock
+- Topology Control
+
+#### Additional Details
+
+##### Toggle Quad-view
+
+Quad-view may sometimes replace the perspective viewport with an orthographic viewport when toggled off and on. This may cause the main viewport rotation to be automatically locked. Simply unlock it with the on-screen button.
+
+##### Recent Veiwport
+
+This attempts to bring the active object back into view. If the origin is misaligned, it may not work perfectly.
+
+##### Viewport Rotation Lock
+
+Locking the viewport rotation replaces viewport rotation with panning control.
+
+*NOTE:* Quad-view will default to rotation locking for isometric viewports (top, front, and side views)
+
+##### Topology Control
+
+This feature provides quick access to Retopology control in Sculpt mode and is not shown in any other mode.
+
+If the selected object has a Multi-resolution modifier; the retopology controls change to subdivision level controls. Quickly jump through subdivision levels, subdivide and unsubdivide right from the viewport. You may also set the maximum subdivision levels available for the on-screen buttons to limit accidental subdivision.
+
+### Fully Customizable Floating Menu
+
+This button allows you to assign up to 7 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the settings menu.
+
+# Feature Roadmap
+
+If you have a suggestion for more features, please check if it's on this list before submitting a request on Github.
 
 I'm continuing to look at features which could improve the experience of Blender without adding too much clutter to the UI.
 
