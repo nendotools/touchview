@@ -104,7 +104,7 @@ A red icon means you have reached your subdivision limit and it will not try to 
 
 ## Fully Customizable Floating Menu
 
-![floating menu](/docs/floating_menu.png)
+<img src="/docs/sample_menu.png" width="50%">
 
 This button allows you to assign up to 7 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the settings menu.
 
