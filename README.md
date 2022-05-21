@@ -4,7 +4,9 @@
 
 This add-on is designed to improve the user experience of Blender for users without immediate access to a keyboard or mouse. It provides many customizable UI improvements to cater to your workflow needs.
 
-### Viewport Touch Control
+
+
+## Viewport Touch Control
 
 Pan, Rotate, and Zoom the viewport with your finger.
 
@@ -20,7 +22,7 @@ If your tablet doesn't support touch; you can set the middle mouse button to act
 - Zoom by dragging along the left or right edge of the viewport
 - Rotate by dragging the remaining space in the viewport
 
-#### Addtional Details
+### Addtional Details
 
 Touch Controls come with a toggleable overlay which can be assigned colors.
 
@@ -28,7 +30,7 @@ It is recommended to disable the overlay once you are comfortable with the size 
 
 You may chose to switch the Pan and Rotate regions. If you lock the viewport rotation, Panning can be done anywhere between the Zoom control regions.
 
-### customizable Double-tap action
+## customizable Double-tap action
 
 Double-tap to trigger one of the following actions:
 
@@ -39,7 +41,11 @@ Double-tap to trigger one of the following actions:
 
 ###### *note:* this feature only works by tapping your finger or clicking to prevent the pen from accidentally triggering it while drawing
 
-### Custom On-screen Buttons
+
+
+## Custom On-screen Buttons
+
+![gizmo bar](/docs/gizmo_bar.png)
 
 Important features have been made available directly in the viewport. Each button can be toggled on/off from the overlay menu.
 
@@ -54,31 +60,55 @@ The following on-screen buttons are currently available:
 - Toggle Viewport Rotation Lock
 - Topology Control
 
-#### Additional Details
 
-##### Toggle Quad-view
+### Additional Details
+
+#### Toggle Quad-view
 
 Quad-view may sometimes replace the perspective viewport with an orthographic viewport when toggled off and on. This may cause the main viewport rotation to be automatically locked. Simply unlock it with the on-screen button.
 
-##### Recent Veiwport
+
+#### Recent Veiwport
 
 This attempts to bring the active object back into view. If the origin is misaligned, it may not work perfectly.
 
-##### Viewport Rotation Lock
+
+#### Viewport Rotation Lock
 
 Locking the viewport rotation replaces viewport rotation with panning control.
 
-*NOTE:* Quad-view will default to rotation locking for isometric viewports (top, front, and side views)
+###### *NOTE:* Quad-view will default to rotation locking for isometric viewports (top, front, and side views)
 
-##### Topology Control
+
+#### Topology Control
 
 This feature provides quick access to Retopology control in Sculpt mode and is not shown in any other mode.
 
-If the selected object has a Multi-resolution modifier; the retopology controls change to subdivision level controls. Quickly jump through subdivision levels, subdivide and unsubdivide right from the viewport. You may also set the maximum subdivision levels available for the on-screen buttons to limit accidental subdivision.
+If the selected object has a Multi-resolution modifier; the retopology controls change to subdivision level controls.
 
-### Fully Customizable Floating Menu
+![subdivision level control](/docs/sub-div_level.png)
+
+Quickly jump through subdivision levels, subdivide and unsubdivide right from the viewport.
+
+![subdivision available](/docs/subdiv_available.png)
+
+A yellow icon means the next subdivision step needs to be calculated. It will automatically try to subdivide/unsubdivide when clicked.
+
+![subdivision limit](/docs/subdiv_limit.png)
+
+A red icon means you have reached your subdivision limit and it will not try to subdivide further. You may change the maximum subdivision levels available for the on-screen buttons to limit accidental subdivision.
+
+###### *note:* the subdivision limit only applies to increasing subdivision levels. You may unsubdivide as much as Blender is able.
+
+
+
+## Fully Customizable Floating Menu
+
+![floating menu](/docs/floating_menu.png)
 
 This button allows you to assign up to 7 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the settings menu.
+
+
 
 # Feature Roadmap
 
@@ -94,6 +124,8 @@ Currently, I'm planning to add the following features:
 > - brush size/falloff UI
 
 This list will change as I explore options and get more user feedback.
+
+
 
 # Changelogs
 
@@ -246,6 +278,8 @@ This list will change as I explore options and get more user feedback.
 - `ADDED` : Toggleable overlay to simplify resizing controls
 
 </details>
+
+
 
 # Issues
 
