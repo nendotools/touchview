@@ -10,7 +10,7 @@ This add-on is designed to improve the user experience of Blender for users with
 
 Pan, Rotate, and Zoom the viewport with your finger.
 
-<img src="/docs/demo.gif" width="50%">
+<img src="/docs/simple_demo.gif" width="50%">
 
 The viewport has be updated to use 3 interactive "hot regions" to control the camera position.
 
@@ -22,7 +22,7 @@ If your tablet doesn't support touch; you can set the middle mouse button to act
 - Zoom by dragging along the left or right edge of the viewport
 - Rotate by dragging the remaining space in the viewport
 
-### Addtional Details
+### Additional Details
 
 Touch Controls come with a toggleable overlay which can be assigned colors.
 
@@ -30,7 +30,7 @@ It is recommended to disable the overlay once you are comfortable with the size 
 
 You may chose to switch the Pan and Rotate regions. If you lock the viewport rotation, Panning can be done anywhere between the Zoom control regions.
 
-## customizable Double-tap action
+## Customizable Double-tap Action
 
 Double-tap to trigger one of the following actions:
 
@@ -68,7 +68,7 @@ The following on-screen buttons are currently available:
 Quad-view may sometimes replace the perspective viewport with an orthographic viewport when toggled off and on. This may cause the main viewport rotation to be automatically locked. Simply unlock it with the on-screen button.
 
 
-#### Recent Veiwport
+#### Recent Viewport
 
 This attempts to bring the active object back into view. If the origin is misaligned, it may not work perfectly.
 
