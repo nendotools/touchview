@@ -72,7 +72,7 @@ class VIEW3D_OT_TouchInput(Operator):
     def invoke(self, context: Context, event: Event):
         settings = bpy.context.preferences.addons['touchview'].preferences
         if not settings.is_enabled and event.type == "LEFTMOUSE": return {'FINISHED'}
-        if event.type == "PEN": return {'FINISHED'}
+        if event.type == "PEN" or event.pressure != 1.0: return {'FINISHED'}
         if self.handle_swipe(event): return {'FINISHED'}
         if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
