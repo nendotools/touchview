@@ -174,7 +174,7 @@ Select it and click `Install Add-on`.
 
 ###### *note:* You do not need to extract it, first. Simply install the ZIP, directly
 
-# Changelogs
+# Changelog
 
 <details open><summary><b>v1.1.2</b></summary><br>
 
