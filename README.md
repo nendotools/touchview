@@ -129,6 +129,18 @@ This list will change as I explore options and get more user feedback.
 
 # Changelogs
 
+<details open><summary><b>v1.1.2</b></summary><br>
+
+- `ADDED` : Support for Node Editor
+
+</details>
+
+<details open><summary><b>v1.1.1</b></summary><br>
+
+- `ADDED` : minor fix to pen detection
+
+</details>
+
 <details open><summary><b>v1.1.0</b></summary><br>
 
 - `ADDED` : Independent toggle for entire gizmo bar

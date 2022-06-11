@@ -2,7 +2,6 @@ import bpy
 
 import math
 from mathutils import Vector
-import time
 
 from bpy import ops
 from bpy.props import EnumProperty
@@ -35,12 +34,63 @@ class VIEW3D_OT_Doubletap_Action(Operator):
         self.execute(context)
         return {'FINISHED'}
 
+
+class VIEW2D_OT_TouchInput(Operator):
+    """ Active Viewport control zones """
+    bl_idname = "view2d.view_ops"
+    bl_label = "2D Viewport Control Regions"
+
+    delta: tuple[float, float]
+
+    mode: EnumProperty(
+        name="Mode", 
+        description="Sets the viewport control type",
+        items=input_mode_items,
+        default='PAN',
+        options={"HIDDEN"}
+    )
+
+    def execute(self, context: Context):
+        if self.mode == "DOLLY":
+            ops.view2d.zoom('INVOKE_DEFAULT')
+        elif self.mode == "PAN":
+            bpy.ops.view2d.pan('INVOKE_DEFAULT')
+        return {'FINISHED'}
+
+    def invoke(self, context: Context, event: Event):
+        settings = bpy.context.preferences.addons['touchview'].preferences
+        if not settings.is_enabled and event.type == "LEFTMOUSE": return {'FINISHED'}
+        if event.type == "PEN" or event.pressure != 1.0: return {'FINISHED'}
+        if event.value != "PRESS": return {'FINISHED'}
+        self.delta = (event.mouse_region_x, event.mouse_region_y)
+
+        mid_point = Vector((context.region.width/2 , context.region.height/2))
+
+        dolly_scale = settings.getWidth()
+        dolly_wid = mid_point.x * dolly_scale
+        
+        if dolly_wid > self.delta[0] or self.delta[0] > context.region.width-dolly_wid:
+            self.mode = "DOLLY"
+        else:
+            self.mode = "PAN"
+
+        if settings.swap_panrotate:
+            if self.mode == "PAN":
+                self.mode = "ORBIT"
+            elif self.mode == "ORBIT":
+                self.mode = "PAN"
+
+        self.execute(context)
+        return {'FINISHED'}
+        
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type in ['NODE_EDITOR', 'VIEW_2D'] and context.region.type == 'WINDOW'
+
 class VIEW3D_OT_TouchInput(Operator):
     """ Active Viewport control zones """
     bl_idname = "view3d.view_ops"
     bl_label = "Viewport Control Regions"
-
-    start_time: float = time.time()
 
     delta: tuple[float, float]
 
@@ -61,19 +111,10 @@ class VIEW3D_OT_TouchInput(Operator):
             bpy.ops.view3d.move('INVOKE_DEFAULT')
         return {'FINISHED'}
 
-# consider adding gestures. requires handling moving manually rather than relying on built-in operators.
-    def handle_swipe(self, event: Event):
-        if event.value == "PRESS" and event.type == "LEFTMOUSE":
-            self.start_time = time.time()
-        if event.value == "RELEASE" and event.type == "LEFTMOUSE" and self.start_time:
-            pass
-        return False
-
     def invoke(self, context: Context, event: Event):
         settings = bpy.context.preferences.addons['touchview'].preferences
         if not settings.is_enabled and event.type == "LEFTMOUSE": return {'FINISHED'}
         if event.type == "PEN" or event.pressure != 1.0: return {'FINISHED'}
-        if self.handle_swipe(event): return {'FINISHED'}
         if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 

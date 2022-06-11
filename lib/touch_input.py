@@ -42,11 +42,14 @@ def assign_keymaps():
 # add LEFT MOUSE ACTION for view3d.view_ops
     for kmap in wm.keyconfigs['Blender'].keymaps:
         # isolate modes where we can use pen and mouse for different actions
-        if "3D View" in kmap.name or kmap.name in modes:
+        if "Node" in kmap.name or "3D View" in kmap.name or kmap.name in modes:
             flipped = False
             commands = []
             for item in kmap.keymap_items:
                 if item.map_type in ("MOUSE","TWEAK") and item.type in ("LEFTMOUSE", "EVT_TWEAK_L") and not any((item.oskey, item.ctrl, item.alt, item.shift)):
+                    if("Node" in kmap.name):
+                        if(item.map_type == "TWEAK"):
+                            continue
                     flipped = True
                     addon_tweaks.append((item, item.active))
                     item.active = False
@@ -54,25 +57,22 @@ def assign_keymaps():
 
             # if we flipped a mouse to pen action, add mouse control
             if flipped or kmap.name in modes:
+                main_action = "view2d.view_ops" if "Node" in kmap.name else "view3d.view_ops"
                 km = wm.keyconfigs.addon.keymaps.new(name=kmap.name, space_type=kmap.space_type)
-                kmi = km.keymap_items.new('view3d.view_ops', 'MIDDLEMOUSE', 'PRESS')
+                kmi = km.keymap_items.new(main_action, 'MIDDLEMOUSE', 'PRESS')
                 addon_keymaps.append((km, kmi)) 
 
-                kmi = km.keymap_items.new('view3d.view_ops', 'LEFTMOUSE', 'PRESS')
+                kmi = km.keymap_items.new(main_action, 'LEFTMOUSE', 'PRESS')
                 addon_keymaps.append((km, kmi))
                 
                 kmi = km.keymap_items.new('view3d.dt_action', 'LEFTMOUSE', 'DOUBLE_CLICK')
                 addon_keymaps.append((km, kmi)) 
                 
                 # reassign default action to PEN
-                if len(commands) == 0:
-                    commands.append("view3d.select")
-                    continue
-                kmi = km.keymap_items.new(commands[0], 'PEN', 'PRESS')
-                addon_keymaps.append((km, kmi)) 
-                
-                kmi = km.keymap_items.new(commands[0], 'ERASER', 'PRESS')
-                addon_keymaps.append((km, kmi)) 
+                if len(commands) != 0:
+                    for command in commands:
+                        kmi = km.keymap_items.new(command, 'PEN', 'PRESS')
+                        addon_keymaps.append((km, kmi)) 
 
     # make menus draggable
     km = wm.keyconfigs.addon.keymaps.new(name='View2D Buttons List', space_type='EMPTY')
