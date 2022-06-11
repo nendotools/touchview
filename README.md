@@ -1,5 +1,12 @@
 ![touch view header](/docs/header.jpg?raw=true)
 
+### Index
+
+- [Features](https://github.com/nendotools/touchview#features)
+- [Building from Github](https://github.com/nendotools/touchview#building-from-github)
+- [Installation](https://github.com/nendotools/touchview#installation)
+- [Changelog](https://github.com/nendotools/touchview#changelog)
+
 # Features
 
 This add-on is designed to improve the user experience of Blender for users without immediate access to a keyboard or mouse. It provides many customizable UI improvements to cater to your workflow needs.
@@ -126,6 +133,46 @@ Currently, I'm planning to add the following features:
 This list will change as I explore options and get more user feedback.
 
 
+# Building from Github
+
+Building the addon zip can be done by using the included `bundle.sh` script. Simply run:
+```
+./bundle.sh
+```
+
+It will output the files to include and generate a new ZIP file:
+```
+$ ./bundle.sh
+  adding: touchview/ (stored 0%)
+  adding: touchview/lib/ (stored 0%)
+  adding: touchview/lib/Gizmos.py (deflated 77%)
+  adding: touchview/lib/items.py (deflated 68%)
+  adding: touchview/lib/Operators.py (deflated 80%)
+  adding: touchview/lib/Overlay.py (deflated 73%)
+  adding: touchview/lib/Panel.py (deflated 69%)
+  adding: touchview/lib/touch_input.py (deflated 69%)
+  adding: touchview/lib/__init__.py (deflated 70%)
+  adding: touchview/Settings.py (deflated 76%)
+  adding: touchview/__init__.py (deflated 51%)
+```
+
+The final ZIP can be found in:
+
+```
+./bin/touchview.zip
+```
+
+# Installation
+
+In Blender, open `Edit` > `Preferences...`.
+
+Navigate to the `Add-ons` tab.
+
+Click `Install...` and navigate to the `touchview.zip` file.
+
+Select it and click `Install Add-on`.
+
+###### *note:* You do not need to extract it, first. Simply install the ZIP, directly
 
 # Changelogs
 
