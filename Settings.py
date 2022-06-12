@@ -198,7 +198,8 @@ class OverlaySettings(bpy.types.AddonPreferences):
         "POSE":{},
         "PAINT_TEXTURE":{},
         "PAINT_VERTEX":{},
-        "PAINT_WEIGHT":{}
+        "PAINT_WEIGHT":{},
+        "PAINT_GPENCIL":{}
     }
     floating_position: FloatVectorProperty(
         name= "Floating Offset",

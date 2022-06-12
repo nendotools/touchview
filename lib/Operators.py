@@ -117,6 +117,7 @@ class VIEW3D_OT_TouchInput(Operator):
         if event.type == "PEN" or event.pressure != 1.0: return {'FINISHED'}
         if event.value != "PRESS": return {'FINISHED'}
         self.delta = (event.mouse_region_x, event.mouse_region_y)
+        is_paint_mode = context.mode == 'PAINT_GPENCIL'
 
         mid_point = Vector((context.region.width/2 , context.region.height/2))
 
@@ -127,8 +128,8 @@ class VIEW3D_OT_TouchInput(Operator):
         pan_diameter = math.dist((0,0), mid_point) * (pan_scale * 0.5)
 
         is_quadview_orthographic = context.region.data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
-        is_locked = context.region.data.lock_rotation | is_quadview_orthographic
-        
+        is_locked = context.region.data.lock_rotation or is_quadview_orthographic or is_paint_mode
+
         if dolly_wid > self.delta[0] or self.delta[0] > context.region.width-dolly_wid:
             self.mode = "DOLLY"
         elif math.dist(self.delta, mid_point) < pan_diameter or is_locked:

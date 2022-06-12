@@ -25,7 +25,8 @@ edit_modes       = [("OBJECT","Object Mode",""),
                     ("SCULPT","Sculpt Mode",""),
                     ("PAINT_VERTEX","Vertex Paint Mode",""),
                     ("PAINT_WEIGHT","Weight Paint Mode",""),
-                    ("PAINT_TEXTURE","Texture Paint Mode","")]
+                    ("PAINT_TEXTURE","Texture Paint Mode",""),
+                    ("PAINT_GPENCIL","2D Paint Mode","")]
 
 menu_defaults    = {
                     "OBJECT": ("VIEW3D_MT_add","object.shade_smooth","","","",""),
