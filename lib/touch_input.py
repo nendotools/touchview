@@ -8,7 +8,8 @@ LMOUSE = 'LEFTMOUSE'
 PRESS = 'PRESS'
 DCLICK = 'DOUBLE_CLICK'
 
-top_level_names = ( "Node Editor", "3D View", "View2D", "Grease Pencil" )
+flat_modes = [ "Node Editor", "Image", "Image Paint", "UV Editor", "View2D" ]
+top_level_names = ( "Node Editor", "UV Editor", "Image Editor", "Image Paint", "3D View", "Image", "View2D", "Grease Pencil" )
 modes = ( "Object Mode", "Mesh", "Sculpt", "Vertex Paint", "Weight Paint", "Image Paint" )
 g_modes = (
   'Grease Pencil Stroke Paint (Draw brush)', 'Grease Pencil Stroke Paint (Fill)', 'Grease Pencil Stroke Paint (Erase)',
@@ -56,8 +57,8 @@ def assign_keymaps():
   for kmap in wm.keyconfigs[ 'Blender' ].keymaps:
     km = wm.keyconfigs.addon.keymaps.new( name=kmap.name, space_type=kmap.space_type, region_type=kmap.region_type )
     if kmap.name in top_level_names:
-      main_action = "view2d.view_ops" if "Node" in kmap.name or "2D View" in kmap.name else "view3d.view_ops"
-      kmi = km.keymap_items.new( 'view3d.dt_action', MMOUSE, PRESS )
+      main_action = "view2d.view_ops" if kmap.name in flat_modes else "view3d.view_ops"
+      kmi = km.keymap_items.new( main_action, MMOUSE, PRESS )
       modified_keymaps.append( ( km, kmi ) )
 
       kmi = km.keymap_items.new( main_action, LMOUSE, PRESS )
@@ -65,25 +66,6 @@ def assign_keymaps():
 
       kmi = km.keymap_items.new( 'view3d.dt_action', LMOUSE, DCLICK )
       modified_keymaps.append( ( km, kmi ) )
-
-    # isolate modes where we can use pen and mouse for different actions
-    if "Node" in kmap.name or "3D View" in kmap.name or "2D View" in kmap.name or kmap.name in modes or kmap.name in g_modes:
-      for item in kmap.keymap_items:
-        if item.map_type in ( MOUSE, TWEAK ) and item.type in ( LMOUSE, "EVT_TWEAK_L" ) and not any(
-          ( item.oskey, item.ctrl, item.alt, item.shift ) ):
-          if kmap.name == 'Node Editor' and item.map_type == TWEAK:
-            continue
-          default_keymaps.append( ( item, item.active ) )
-          itm = km.keymap_items.new( item.idname, PEN, PRESS )
-
-          for prop in item.properties.keys():
-            if prop == 'wait_for_input':
-              itm.properties[ prop ] = False
-              continue
-            itm.properties[ prop ] = item.properties[ prop ]
-
-          modified_keymaps.append( ( km, itm ) )
-          item.active = False
 
 
 # unset MOUSE viewport control, reset PEN to MOUSE input

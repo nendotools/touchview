@@ -27,11 +27,17 @@ class VIEW3D_OT_Doubletap_Action( Operator ):
     if event.type not in [ 'PEN', 'LEFTMOUSE' ]:
       return { 'CANCELLED' }
     if event.pressure != 1.0:
-      return { 'CANCELLED' }
+      return { 'PASS_THROUGH' }
     if event.value != "DOUBLE_CLICK":
       return { 'CANCELLED' }
     self.execute( context )
     return { 'FINISHED' }
+
+  @classmethod
+  def poll( cls, context: Context ):
+    return context.area.type in [
+      'NODE_EDITOR', 'VIEW_2D', 'VIEW_3D', 'IMAGE_EDITOR'
+    ] and context.region.type == 'WINDOW'
 
 
 class VIEW2D_OT_TouchInput( Operator ):
@@ -49,11 +55,20 @@ class VIEW2D_OT_TouchInput( Operator ):
     options={ "HIDDEN" }
   )
 
-  def execute( self, _: Context ):
+  def execute( self, context: Context ):
+    if context.area.type == 'IMAGE_EDITOR':
+      return self.exec_image_editor( context )
     if self.mode == "DOLLY":
-      ops.view2d.zoom( 'INVOKE_DEFAULT' )
+      bpy.ops.view2d.zoom( 'INVOKE_DEFAULT' )
     elif self.mode == "PAN":
       bpy.ops.view2d.pan( 'INVOKE_DEFAULT' )
+    return { 'FINISHED' }
+
+  def exec_image_editor( self, _: Context ):
+    if self.mode == "PAN":
+      bpy.ops.image.view_pan( 'INVOKE_DEFAULT' )
+    elif self.mode == "DOLLY":
+      bpy.ops.image.view_zoom( 'INVOKE_DEFAULT' )
     return { 'FINISHED' }
 
   def invoke( self, context: Context, event: Event ):
@@ -84,7 +99,7 @@ class VIEW2D_OT_TouchInput( Operator ):
 
   @classmethod
   def poll( cls, context: Context ):
-    return context.area.type in [ 'NODE_EDITOR', 'VIEW_2D' ] and context.region.type == 'WINDOW'
+    return context.area.type in [ 'NODE_EDITOR', 'VIEW_2D', 'IMAGE_EDITOR' ] and context.region.type == 'WINDOW'
 
 
 class VIEW3D_OT_TouchInput( Operator ):
