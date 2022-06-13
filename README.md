@@ -176,6 +176,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v1.1.4</b></summary><br>
+
+- `UPDATED` : Improved Pen detection and simplified key configs
+
+</details>
+
 <details open><summary><b>v1.1.3</b></summary><br>
 
 - `ADDED` : Support for Draw Mode
