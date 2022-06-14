@@ -9,11 +9,8 @@ PRESS = 'PRESS'
 DCLICK = 'DOUBLE_CLICK'
 
 flat_modes = [ "Node Editor", "Image", "Image Paint", "UV Editor", "View2D" ]
-top_level_names = ( "Node Editor", "UV Editor", "Image Editor", "Image Paint", "3D View", "Image", "View2D", "Grease Pencil" )
-modes = ( "Object Mode", "Mesh", "Sculpt", "Vertex Paint", "Weight Paint", "Image Paint" )
-g_modes = (
-  'Grease Pencil Stroke Paint (Draw brush)', 'Grease Pencil Stroke Paint (Fill)', 'Grease Pencil Stroke Paint (Erase)',
-  'Grease Pencil Stroke Paint (Tint)'
+top_level_names = (
+  "Node Editor", "UV Editor", "Image Editor", "Image Paint", "3D View", "Image", "View2D", "Grease Pencil"
 )
 
 default_keymaps = []
@@ -23,20 +20,6 @@ modified_keymaps = []
 # added timer to ensure Blender keyconfig is fully populated before running
 def register_keymaps():
   bpy.app.timers.register( assign_keymaps, first_interval=0.2 )
-
-
-# toggle active addon_keymaps and addon_tweaks
-def toggle_keymaps( state: bool = True ):
-  for _, kmi in modified_keymaps:
-    if kmi.type == LMOUSE and kmi.value != DCLICK:
-      kmi.active = state
-    elif kmi.type == MMOUSE and bpy.context.preferences.addons[ 'touchview' ].preferences.include_mmb:
-      kmi.active = state
-  for kmi, original in default_keymaps:
-    if not state:
-      kmi.active = original
-    else:
-      kmi.active = False
 
 
 # two main goals: preserve action from MOUSE to PEN, add viewport control to MOUSE

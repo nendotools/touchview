@@ -7,7 +7,6 @@ from bpy.types import Context, Event, Operator
 
 from .Gizmos import dpi_factor, panel
 from .items import input_mode_items, pivot_items
-from .touch_input import toggle_keymaps
 
 
 class VIEW3D_OT_Doubletap_Action( Operator ):
@@ -17,19 +16,19 @@ class VIEW3D_OT_Doubletap_Action( Operator ):
 
   def execute( self, context: Context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
-    if context.mode in { 'OBJECT', 'SCULPT', 'EDIT_MESH', 'PAINT_TEXTURE', 'PAINT_VERTEX', 'PAINT_WEIGHT' }:
-      op = settings.double_click_mode.split( '.' )
-      opgrp = getattr( bpy.ops, op[ 0 ] )
-      getattr( opgrp, op[ 1 ] )( 'INVOKE_DEFAULT' )
+    op = settings.double_click_mode.split( '.' )
+    opgrp = getattr( bpy.ops, op[ 0 ] )
+    getattr( opgrp, op[ 1 ] )( 'INVOKE_DEFAULT' )
+    print(opgrp, op[1])
     return { 'FINISHED' }
 
   def invoke( self, context: Context, event: Event ):
     if event.type not in [ 'PEN', 'LEFTMOUSE' ]:
-      return { 'CANCELLED' }
+      return { 'PASS_THROUGH' }
     if event.pressure != 1.0:
       return { 'PASS_THROUGH' }
     if event.value != "DOUBLE_CLICK":
-      return { 'CANCELLED' }
+      return { 'PASS_THROUGH' }
     self.execute( context )
     return { 'FINISHED' }
 
@@ -218,7 +217,6 @@ class VIEW3D_OT_ToggleTouchControls( Operator ):
 
   def execute( self, context: Context ):
     context.preferences.addons[ 'touchview' ].preferences.is_enabled ^= True
-    toggle_keymaps( context.preferences.addons[ 'touchview' ].preferences.is_enabled )
     context.area.tag_redraw()
     return { 'FINISHED' }
 

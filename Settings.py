@@ -131,7 +131,9 @@ class OverlaySettings( bpy.types.AddonPreferences ):
 
   show_float_menu: BoolProperty( name="Enable Floating Menu", default=False )
 
-  double_click_mode: EnumProperty( items=double_click_items, name="Double Click Mode", default="object.transfer_mode" )
+  double_click_mode: EnumProperty(
+    items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
+  )
 
   active_menu: EnumProperty( name="Mode Settings", items=edit_modes )
   menu_sets: CollectionProperty( type=MenuModeGroup )
