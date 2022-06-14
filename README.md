@@ -176,15 +176,11 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
-<details open><summary><b>v1.1.4</b></summary><br>
+<details open><summary><b>v1.2.0</b></summary><br>
 
+- `BREAKING`: This version requires previous version to be disabled before install
 - `UPDATED` : Improved Pen detection and simplified key configs
-
-</details>
-
-<details open><summary><b>v1.1.3</b></summary><br>
-
-- `ADDED` : Support for Draw Mode
+- `ADDED` : Support for various 2D and 2D-like views (Image Editor, UV Editor, 2D Animation, Compositing, etc)
 
 </details>
 
