@@ -30,10 +30,6 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     name="Enable Controls",
     default=True,
   )
-  include_mmb: BoolProperty(
-    name="Include MIDDLEMOUSE",
-    default=False,
-  )
   swap_panrotate: BoolProperty(
     name="Swap Pan/Rotate",
     default=False,

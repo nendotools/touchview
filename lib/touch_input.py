@@ -41,9 +41,6 @@ def assign_keymaps():
     km = wm.keyconfigs.addon.keymaps.new( name=kmap.name, space_type=kmap.space_type, region_type=kmap.region_type )
     if kmap.name in top_level_names:
       main_action = "view2d.view_ops" if kmap.name in flat_modes else "view3d.view_ops"
-      kmi = km.keymap_items.new( main_action, MMOUSE, PRESS )
-      modified_keymaps.append( ( km, kmi ) )
-
       kmi = km.keymap_items.new( main_action, LMOUSE, PRESS )
       modified_keymaps.append( ( km, kmi ) )
 
