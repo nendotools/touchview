@@ -176,6 +176,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v1.2.1</b></summary><br>
+
+- `REMOVED` : Middle Mouse keybind
+- `REMOVED` : viewport rotation lock when using the Grease Pencil
+
+</details>
+
 <details open><summary><b>v1.2.0</b></summary><br>
 
 - `BREAKING`: This version requires previous version to be disabled before install
@@ -190,13 +197,13 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v1.1.1</b></summary><br>
+<details><summary><b>v1.1.1</b></summary><br>
 
 - `ADDED` : minor fix to pen detection
 
 </details>
 
-<details open><summary><b>v1.1.0</b></summary><br>
+<details><summary><b>v1.1.0</b></summary><br>
 
 - `ADDED` : Independent toggle for entire gizmo bar
 - `ADDED` : Customizable double-tap actions
@@ -204,14 +211,14 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v1.0.1</b></summary><br>
+<details><summary><b>v1.0.1</b></summary><br>
 
 - `ADDED` : Optional include for MIDDLEMOUSE when disabling/enabling touch controls
 - `FIXED` : Preferences bug preventing toggle of floating Gizmo
 
 </details>
 
-<details open><summary><b>v1.0.0</b></summary><br>
+<details><summary><b>v1.0.0</b></summary><br>
 
 - `ADDED` : Toggle swap pan/rotate regions
 - `ADDED` : Toggle floating menu button to N Panel
