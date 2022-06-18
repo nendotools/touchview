@@ -7,19 +7,12 @@ from .lib.items import position_items, pivot_items, edit_modes, menu_defaults, d
 class MenuModeGroup( PropertyGroup ):
   mode: StringProperty( name="mode", default="OBJECT" )
   menu_slot_1: StringProperty( name="Menu Item", default="" )
-
   menu_slot_2: StringProperty( name="Menu Item", default="" )
-
   menu_slot_3: StringProperty( name="Menu Item", default="" )
-
   menu_slot_4: StringProperty( name="Menu Item", default="" )
-
   menu_slot_5: StringProperty( name="Menu Item", default="" )
-
   menu_slot_6: StringProperty( name="Menu Item", default="" )
-
   menu_slot_7: StringProperty( name="Menu Item", default="" )
-
   menu_slot_8 = "view3d.move_float_menu"
 
 

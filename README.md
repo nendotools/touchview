@@ -176,6 +176,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v1.2.2</b></summary><br>
+
+- `UPDATED` : Gizmo panel layout split
+
+</details>
+
 <details open><summary><b>v1.2.1</b></summary><br>
 
 - `REMOVED` : Middle Mouse keybind
