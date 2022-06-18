@@ -343,6 +343,26 @@ class VIEW3D_OT_ViewportLock( Operator ):
     return { 'FINISHED' }
 
 
+class VIEW3D_OT_RadialResize( Operator ):
+    """ Radial Resize """
+    bl_idname = "view3d.radial_resize"
+    bl_label = "Radial Resize"
+
+    # activate radial_control to change sculpt brush size
+    def execute( self, context: Context ):
+        bpy.ops.wm.radial_control(
+                data_path_primary = "tool_settings.sculpt.brush.size",
+                data_path_secondary = "tool_settings.unified_paint_settings.size",
+                use_secondary = "tool_settings.unified_paint_settings.use_unified_size",
+                rotation_path = "tool_settings.sculpt.brush.texture_slot.angle",
+                color_path = "tool_settings.sculpt.brush.cursor_color_add",
+                image_id = "tool_settings.sculpt.brush",
+            )
+
+        return { 'FINISHED' }
+
+
+
 class VIEW3D_OT_IncreaseMultires( Operator ):
   """ Increment Multires by 1 or add subdivision """
   bl_idname = "object.increment_multires"
