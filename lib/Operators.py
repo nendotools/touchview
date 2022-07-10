@@ -73,7 +73,7 @@ class VIEW2D_OT_TouchInput( Operator ):
     if event.type == "PEN" or event.pressure != 1.0: return { 'PASS_THROUGH' }
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
     if not settings.is_enabled and event.type == "LEFTMOUSE": return { 'PASS_THROUGH' }
-    if event.value != "PRESS": return { 'FINISHED' }
+    if event.value != "PRESS": return { 'PASS_THROUGH' }
     self.delta = ( event.mouse_region_x, event.mouse_region_y )
 
     mid_point = Vector( ( context.region.width / 2, context.region.height / 2 ) )
@@ -128,7 +128,7 @@ class VIEW3D_OT_TouchInput( Operator ):
     if event.type == "PEN" or event.pressure != 1.0: return { 'PASS_THROUGH' }
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
     if not settings.is_enabled and event.type == "LEFTMOUSE": return { 'PASS_THROUGH' }
-    if event.value != "PRESS": return { 'FINISHED' }
+    if event.value != "PRESS": return { 'PASS_THROUGH' }
     self.delta = ( event.mouse_region_x, event.mouse_region_y )
 
     mid_point = Vector( ( context.region.width / 2, context.region.height / 2 ) )
