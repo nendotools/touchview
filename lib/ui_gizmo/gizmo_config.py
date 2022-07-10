@@ -10,10 +10,41 @@ from items import pivot_items, pivot_icon_items
 ###
 
 # Simple 2D Gizmo
-undoConfig     = ("undoredo", "ed.undo", "LOOP_BACK")
-redoConfig     = ("undoredo", "ed.redo", "LOOP_FORWARDS")
-snapViewConfig = ("snap_view", "view3d.viewport_recenter", "CURSOR")
-nPanelConfig   = ("n_panel", "view3d.toggle_n_panel", "EVENT_N")
+undoConfig = {
+  "binding": {
+    "location": "prefs",
+    "name": "undoredo"
+  },
+  "command": "ed.undo",
+  "icon": "LOOP_BACK"
+}
+
+redoConfig = {
+  "binding": {
+    "location": "prefs",
+    "name": "undoredo"
+  },
+  "command": "ed.redo",
+  "icon": "LOOP_FORWARDS"
+}
+
+snapViewConfig = {
+  "binding": {
+    "location": "prefs",
+    "name": "snap_view"
+  },
+  "command": "view3d.viewport_recenter",
+  "icon": "CURSOR"
+}
+
+nPanelConfig = {
+  "binding": {
+    "location": "prefs",
+    "name": "n_panel"
+  },
+  "command": "view3d.toggle_n_panel",
+  "icon": "EVENT_N"
+}
 
 
 # Boolean 2D Gizmo
@@ -53,3 +84,13 @@ bindingToggle = [
   ("active_object.modifiers.type", "MULTIRES"), # watch-property, target-value
   ("voxel_remesh", "multires")                  # groups to toggle
 ]
+
+
+#  Boolean/parameter binding handled the same way.
+#  Single config per button, paired after with binding config
+# 
+# - Generate Gizmos
+# - set on state, off state
+# 
+# Enums need a different solution: list binding
+# - I'm not sure yet... 
