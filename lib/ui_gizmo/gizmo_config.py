@@ -48,21 +48,34 @@ nPanelConfig = {
 
 
 # Boolean 2D Gizmo
-fullscreenToggleConfig = [
-  ("screen", "show_fullscreen"), # property location, watch-boolean
-  ("fullscreen", "screen.screen_full_area", "FULLSCREEN_EXIT"), # on-state
-  ("fullscreen", "screen.screen_full_area", "FULLSCREEN_ENTER") # off-state
-]
-quadviewToggleConfig = [
-  ("space_data", "region_quadviews"),
-  ("quadview", "screen.region_quadview", "IMGDISPLAY"),
-  ("quadview", "screen.region_quadview", "MESH_PLANE")
-]
-rotLocToggleConfig = [
-  ("region_data", "lock_rotation"),
-  ("rotation_lock", "view3d.viewport_lock", "LOCKED"),
-  ("rotation_lock", "view3d.viewport_lock", "UNLOCKED")
-]
+fullscreenToggleConfig = {
+  "binding": {
+    "location": "screen",
+    "name": "show_fullscreen"
+  }, # property location, watch-boolean
+  "command": "screen.screen_full_area",
+  "onIcon": "FULLSCREEN_EXIT", # on-state
+  "offIcon": "FULLSCREEN_ENTER" # off-state
+}
+quadviewToggleConfig = {
+  "binding": {
+    "location": "space_data",
+    "name": "region_quadviews"
+  },
+  "command": "screen.region_quadview",
+  "onIcon": "IMGDISPLAY",
+  "offIcon": "MESH_PLANE"
+}
+
+rotLocToggleConfig = {
+  "binding": {
+    "location": "region_data",
+    "name": "lock_rotation"
+  },
+  "command": "view3d.viewport_lock",
+  "onIcon": "LOCKED",
+  "offIcon": "UNLOCKED"
+}
 
 # Enum 2D Gizmo
 pivotModeConfig = [
