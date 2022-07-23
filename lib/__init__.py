@@ -1,4 +1,3 @@
-import bpy
 from .Overlay import Overlay
 from .Operators import VIEW3D_OT_Doubletap_Action, VIEW3D_OT_BrushResize, VIEW3D_OT_BrushStrength, VIEW3D_OT_DecreaseMultires, VIEW3D_OT_IncreaseMultires, VIEW3D_OT_ToggleTouchControls, VIEW3D_OT_TouchInput, VIEW2D_OT_TouchInput, VIEW3D_OT_ToggleFloatingMenu, VIEW3D_OT_MoveFloatMenu, VIEW3D_OT_NextPivotMode, VIEW3D_OT_FlipTools, VIEW3D_OT_ToggleNPanel, VIEW3D_OT_ViewportRecenter, VIEW3D_OT_ViewportLock
 from .Panel import VIEW3D_PT_NendoViewport, PIE_MT_Floating_Menu
