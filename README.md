@@ -66,6 +66,7 @@ The following on-screen buttons are currently available:
 - Toggle N-panel
 - Toggle Viewport Rotation Lock
 - Topology Control
+- Sculpt Brush Dynamics
 
 
 ### Additional Details
@@ -206,7 +207,7 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v1.1.2</b></summary><br>
+<details><summary><b>v1.1.2</b></summary><br>
 
 - `ADDED` : Support for Node Editor
 

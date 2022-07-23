@@ -119,7 +119,6 @@ class VIEW3D_OT_TouchInput( Operator ):
     if self.mode == "DOLLY":
       ops.view3d.zoom( 'INVOKE_DEFAULT' )
     elif self.mode == "ORBIT":
-      print(context.mode)
       if context.mode == "SCULPT":
         ops.sculpt.set_pivot_position(mode="SURFACE", mouse_x=self.delta[0], mouse_y=self.delta[1])
       ops.view3d.rotate( 'INVOKE_DEFAULT' )
