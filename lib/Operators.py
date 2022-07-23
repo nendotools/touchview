@@ -352,8 +352,12 @@ class VIEW3D_OT_BrushResize( Operator ):
     bl_label = "Brush Size Adjust"
 
     # activate radial_control to change sculpt brush size
-    def execute( self, context: Context ):
-        context.window.cursor_warp(math.floor(context.region.width/2), math.floor(context.region.height/2))
+    def execute( self, context: Context):
+        settings = context.preferences.addons[ 'touchview' ].preferences
+        if settings.gizmo_position in ["LEFT", "RIGHT"]:
+            context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
+        else:
+            context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
                 data_path_primary = "tool_settings.sculpt.brush.size",
@@ -366,6 +370,12 @@ class VIEW3D_OT_BrushResize( Operator ):
 
         return { 'FINISHED' }
 
+    def invoke(self, context: Context, event:Event):
+      self.mousex = event.mouse_region_x
+      self.mousey = event.mouse_region_y
+      self.execute(context)
+      return { 'FINISHED' }
+
 
 class VIEW3D_OT_BrushStrength( Operator ):
     """ Brush Strength """
@@ -374,7 +384,11 @@ class VIEW3D_OT_BrushStrength( Operator ):
 
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context ):
-        context.window.cursor_warp(math.floor(context.region.width/2), math.floor(context.region.height/2))
+        settings = context.preferences.addons[ 'touchview' ].preferences
+        if settings.gizmo_position in ["LEFT", "RIGHT"]:
+            context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
+        else:
+            context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
                 data_path_primary = "tool_settings.sculpt.brush.strength",
@@ -386,6 +400,12 @@ class VIEW3D_OT_BrushStrength( Operator ):
             )
 
         return { 'FINISHED' }
+
+    def invoke(self, context: Context, event:Event):
+      self.mousex = event.mouse_region_x
+      self.mousey = event.mouse_region_y
+      self.execute(context)
+      return { 'FINISHED' }
 
 
 class VIEW3D_OT_IncreaseMultires( Operator ):
