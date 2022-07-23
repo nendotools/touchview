@@ -131,7 +131,6 @@ Currently, I'm planning to add the following features:
 > - viewport camera toggle Gizmo for non-pen users
 > - scaleable Gizmos
 > - auto-retopology levels
-> - brush size/falloff UI
 
 This list will change as I explore options and get more user feedback.
 

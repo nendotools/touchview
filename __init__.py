@@ -21,7 +21,7 @@ bl_info = {
   "description":
   "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
   "author": "NENDO",
-  "version": ( 1, 2, 1 ),
+  "version": ( 1, 2, 3 ),
   "blender": ( 2, 80, 0 ),
   "location": "View3D > Tools > NENDO",
   "warning": "",
