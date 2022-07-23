@@ -353,6 +353,7 @@ class VIEW3D_OT_BrushResize( Operator ):
 
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context ):
+        context.window.cursor_warp(math.floor(context.region.width/2), math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
                 data_path_primary = "tool_settings.sculpt.brush.size",
@@ -373,6 +374,7 @@ class VIEW3D_OT_BrushStrength( Operator ):
 
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context ):
+        context.window.cursor_warp(math.floor(context.region.width/2), math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
                 data_path_primary = "tool_settings.sculpt.brush.strength",
