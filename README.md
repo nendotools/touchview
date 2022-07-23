@@ -107,6 +107,9 @@ A red icon means you have reached your subdivision limit and it will not try to 
 
 ###### *note:* the subdivision limit only applies to increasing subdivision levels. You may unsubdivide as much as Blender is able.
 
+#### Sculpt Brush Dynamics
+
+This feature allows you to quickly access the UI for brush resizing and strength control in sculpt mode.
 
 
 ## Fully Customizable Floating Menu
@@ -175,6 +178,13 @@ Select it and click `Install Add-on`.
 ###### *note:* You do not need to extract it, first. Simply install the ZIP, directly
 
 # Changelog
+
+<details open><summary><b>v1.2.3</b></summary><br>
+
+- `ADDED` : Sculpt Brush Dynamics
+- `UPDATED` : Viewport rotation in sculpt mode automatically sets pivot to mesh under touch point
+
+</details>
 
 <details open><summary><b>v1.2.2</b></summary><br>
 
