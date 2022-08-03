@@ -66,6 +66,7 @@ The following on-screen buttons are currently available:
 - Toggle N-panel
 - Toggle Viewport Rotation Lock
 - Topology Control
+- Sculpt Brush Dynamics
 
 
 ### Additional Details
@@ -107,6 +108,9 @@ A red icon means you have reached your subdivision limit and it will not try to 
 
 ###### *note:* the subdivision limit only applies to increasing subdivision levels. You may unsubdivide as much as Blender is able.
 
+#### Sculpt Brush Dynamics
+
+This feature allows you to quickly access the UI for brush resizing and strength control in sculpt mode.
 
 
 ## Fully Customizable Floating Menu
@@ -128,7 +132,6 @@ Currently, I'm planning to add the following features:
 > - viewport camera toggle Gizmo for non-pen users
 > - scaleable Gizmos
 > - auto-retopology levels
-> - brush size/falloff UI
 
 This list will change as I explore options and get more user feedback.
 
@@ -176,6 +179,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v1.2.3</b></summary><br>
+
+- `ADDED` : Sculpt Brush Dynamics
+- `UPDATED` : Viewport rotation in sculpt mode automatically sets pivot to mesh under touch point
+
+</details>
+
 <details open><summary><b>v1.2.2</b></summary><br>
 
 - `UPDATED` : Gizmo panel layout split
@@ -197,7 +207,7 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v1.1.2</b></summary><br>
+<details><summary><b>v1.1.2</b></summary><br>
 
 - `ADDED` : Support for Node Editor
 

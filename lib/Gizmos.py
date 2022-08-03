@@ -140,6 +140,8 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
     self.gizmo_bindings.append(
       ( "multires", [ im, dm ], "voxel_remesh", [ rs, rm ], "active_object.modifiers.type", "MULTIRES" )
     )
+    self.__buildGizmo("brush_dynamics", "view3d.brush_resize", "ANTIALIASED")
+    self.__buildGizmo("brush_dynamics", "view3d.brush_strength", "SMOOTHCURVE")
 
   # handle redraw call
   def draw_prepare( self, context: Context ):

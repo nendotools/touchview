@@ -100,12 +100,13 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   show_rotation_lock: BoolProperty( name="Rotation Lock", default=True )
   show_multires: BoolProperty( name="Multires", default=True )
   show_voxel_remesh: BoolProperty( name="Voxel Remesh", default=True )
+  show_brush_dynamics: BoolProperty( name="Brush Dynamics", default=True )
   gizmo_position: EnumProperty( items=position_items, name="Gizmo Position", default="RIGHT" )
   subdivision_limit: IntProperty( name="Subdivision Limit", default=4, min=1, max=7 )
   gizmo_sets = {
     # ALL includes only the modes in this list
     "ALL": { "undoredo", "fullscreen", "quadview", "snap_view", "n_panel", "rotation_lock" },
-    "SCULPT": { "pivot_mode", "voxel_remesh", "multires" },
+    "SCULPT": { "pivot_mode", "voxel_remesh", "multires", "brush_dynamics" },
     "OBJECT": { "multires" },
     "EDIT_MESH": {},
     "POSE": {},

@@ -115,10 +115,12 @@ class VIEW3D_OT_TouchInput( Operator ):
     options={ "HIDDEN" }
   )
 
-  def execute( self, _: Context ):
+  def execute( self, context: Context ):
     if self.mode == "DOLLY":
       ops.view3d.zoom( 'INVOKE_DEFAULT' )
     elif self.mode == "ORBIT":
+      if context.mode == "SCULPT":
+        ops.sculpt.set_pivot_position(mode="SURFACE", mouse_x=self.delta[0], mouse_y=self.delta[1])
       ops.view3d.rotate( 'INVOKE_DEFAULT' )
     elif self.mode == "PAN":
       bpy.ops.view3d.move( 'INVOKE_DEFAULT' )
@@ -343,14 +345,20 @@ class VIEW3D_OT_ViewportLock( Operator ):
     return { 'FINISHED' }
 
 
-class VIEW3D_OT_RadialResize( Operator ):
-    """ Radial Resize """
-    bl_idname = "view3d.radial_resize"
-    bl_label = "Radial Resize"
+class VIEW3D_OT_BrushResize( Operator ):
+    """ Brush Resize """
+    bl_idname = "view3d.brush_resize"
+    bl_label = "Brush Size Adjust"
 
     # activate radial_control to change sculpt brush size
-    def execute( self, context: Context ):
+    def execute( self, context: Context):
+        settings = context.preferences.addons[ 'touchview' ].preferences
+        if settings.gizmo_position in ["LEFT", "RIGHT"]:
+            context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
+        else:
+            context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
+                "INVOKE_DEFAULT",
                 data_path_primary = "tool_settings.sculpt.brush.size",
                 data_path_secondary = "tool_settings.unified_paint_settings.size",
                 use_secondary = "tool_settings.unified_paint_settings.use_unified_size",
@@ -361,6 +369,42 @@ class VIEW3D_OT_RadialResize( Operator ):
 
         return { 'FINISHED' }
 
+    def invoke(self, context: Context, event:Event):
+      self.mousex = event.mouse_region_x
+      self.mousey = event.mouse_region_y
+      self.execute(context)
+      return { 'FINISHED' }
+
+
+class VIEW3D_OT_BrushStrength( Operator ):
+    """ Brush Strength """
+    bl_idname = "view3d.brush_strength"
+    bl_label = "Brush Strength Adjust"
+
+    # activate radial_control to change sculpt brush size
+    def execute( self, context: Context ):
+        settings = context.preferences.addons[ 'touchview' ].preferences
+        if settings.gizmo_position in ["LEFT", "RIGHT"]:
+            context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
+        else:
+            context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
+        bpy.ops.wm.radial_control(
+                "INVOKE_DEFAULT",
+                data_path_primary = "tool_settings.sculpt.brush.strength",
+                data_path_secondary = "tool_settings.unified_paint_settings.strength",
+                use_secondary = "tool_settings.unified_paint_settings.use_unified_strength",
+                rotation_path = "tool_settings.sculpt.brush.texture_slot.angle",
+                color_path = "tool_settings.sculpt.brush.cursor_color_add",
+                image_id = "tool_settings.sculpt.brush",
+            )
+
+        return { 'FINISHED' }
+
+    def invoke(self, context: Context, event:Event):
+      self.mousex = event.mouse_region_x
+      self.mousey = event.mouse_region_y
+      self.execute(context)
+      return { 'FINISHED' }
 
 
 class VIEW3D_OT_IncreaseMultires( Operator ):
