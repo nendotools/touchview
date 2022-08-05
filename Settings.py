@@ -115,6 +115,11 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     "PAINT_WEIGHT": {},
     "PAINT_GPENCIL": {}
   }
+
+  menu_spacing: FloatProperty(
+    name="Menu Size", default=20.0, precision=2, step=1, min=20.0, max=100.0
+  )
+
   floating_position: FloatVectorProperty(
     name="Floating Offset", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
   )
@@ -149,6 +154,7 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     col = row.column()
     col.label( text="Viewport Options" )
     col.prop_menu_enum( self, "gizmo_position" )
+    col.prop( self, "menu_spacing" )
     col.prop_menu_enum( self, "double_click_mode" )
     col.prop( self, "subdivision_limit" )
     col.separator()

@@ -1,5 +1,5 @@
 import bpy
-from items import pivot_items, pivot_icon_items
+from ..items import pivot_items, pivot_icon_items
 ###
 #  Config Standard
 #  ( NAME  COMMAND  ICON )
@@ -11,6 +11,7 @@ from items import pivot_items, pivot_icon_items
 
 # Simple 2D Gizmo
 undoConfig = {
+  "type": "default",
   "binding": {
     "location": "prefs",
     "name": "undoredo"
@@ -20,6 +21,7 @@ undoConfig = {
 }
 
 redoConfig = {
+  "type": "default",
   "binding": {
     "location": "prefs",
     "name": "undoredo"
@@ -29,6 +31,7 @@ redoConfig = {
 }
 
 snapViewConfig = {
+  "type": "default",
   "binding": {
     "location": "prefs",
     "name": "snap_view"
@@ -38,12 +41,53 @@ snapViewConfig = {
 }
 
 nPanelConfig = {
+  "type": "default",
   "binding": {
     "location": "prefs",
     "name": "n_panel"
   },
   "command": "view3d.toggle_n_panel",
   "icon": "EVENT_N"
+}
+
+voxelSizeConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "voxel_remesh",
+  },
+  "command": "object.voxel_size_edit",
+  "icon": "MESH_GRID"
+}
+
+voxelRemeshConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "voxel_remesh",
+  },
+  "command": "object.voxel_remesh",
+  "icon": "MOD_UVPROJECT"
+}
+
+subdivConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "multires"
+  },
+  "command": "object.increment_multires",
+  "icon": "TRIA_UP"
+}
+
+unsubdivConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "multires"
+  },
+  "command": "object.decrement_multires",
+  "icon": "TRIA_DOWN"
 }
 
 
@@ -84,14 +128,6 @@ pivotModeConfig = [
 ]
 
 
-
-# binding used to group for hide-show, but these gizmos are primitives
-# binding toggles between the set depending on a modifier being present
-voxelSizeConfig   = ("voxel_remesh", "object.voxel_size_edit", "MESH_GRID")
-voxelRemeshConfig = ("voxel_remesh", "object.voxel_remesh", "MOD_UVPROJECT")
-
-subdivConfig   = ("multires", "object.increment_multires", "TRIA_UP")
-ubsubdivConfig = ("multires", "object.decrement_multires", "TRIA_DOWN")
 
 bindingToggle = [
   ("active_object.modifiers.type", "MULTIRES"), # watch-property, target-value
