@@ -2,11 +2,11 @@ import bpy
 from ..items import pivot_items, pivot_icon_items
 ###
 #  Config Standard
-#  ( NAME  COMMAND  ICON )
-#  @NAME    - used to group icons for hide/show UI Toggle
+#  ( TYPE  BINDING  COMMAND  ICON )
+#  @TYPE    - button type to instance (enum, bool, simple/default)
+#  @BINDING - used to determine context and visibility 
 #  @COMMAND - operator to call when activated
 #  @ICON    - icon to show on Gizmo
-#  @PROPS   - used to call menu when using wm.call_pie_menu
 ###
 
 # Simple 2D Gizmo

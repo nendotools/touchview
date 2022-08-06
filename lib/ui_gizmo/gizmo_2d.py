@@ -58,8 +58,11 @@ class GizmoSet:
     self.primary.hide = not self.visible
 
   def __visibilityLock(self) -> bool:
-    return self.hidden and self.__getSettings().menu_style != 'fixed.bar'
+    if self.__getSettings().menu_style == 'fixed.bar':
+      return True
+    return not self.hidden
 
+  # if an attribute being assigned to active_object should hide/show Gizmo 
   def __checkAttributeBind(self):
     if not self.has_attribute_bind:
       return False
