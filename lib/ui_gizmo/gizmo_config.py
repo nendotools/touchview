@@ -10,12 +10,23 @@ from ..items import pivot_items, pivot_icon_items
 ###
 
 # Simple 2D Gizmo
+controllerConfig = {
+  "type": "default",
+  "binding": {
+    "location": "",
+    "name": "menu_controller"
+  },
+  "command": "view3d.controller",
+  "icon": "PROP_ON"
+}
+
 undoConfig = {
   "type": "default",
   "binding": {
     "location": "prefs",
     "name": "undoredo"
   },
+  "has_dependent": True,
   "command": "ed.undo",
   "icon": "LOOP_BACK"
 }
@@ -76,6 +87,7 @@ subdivConfig = {
     "location": "prefs",
     "name": "multires"
   },
+  "has_dependent": True,
   "command": "object.increment_multires",
   "icon": "TRIA_UP"
 }

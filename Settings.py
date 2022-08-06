@@ -1,7 +1,7 @@
 import bpy
 from bpy.types import Context, PropertyGroup
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
-from .lib.items import position_items, pivot_items, edit_modes, menu_defaults, double_click_items
+from .lib.items import position_items, pivot_items, edit_modes, menu_defaults, menu_style_items, double_click_items, menu_orientation_items
 
 
 class MenuModeGroup( PropertyGroup ):
@@ -116,8 +116,20 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     "PAINT_GPENCIL": {}
   }
 
+  show_menu: BoolProperty(
+    name="Toggle Menu Display", default=True
+  )
   menu_spacing: FloatProperty(
     name="Menu Size", default=20.0, precision=2, step=1, min=20.0, max=100.0
+  )
+  menu_style: EnumProperty(
+    name="Menu Style", default="float.radial", items=menu_style_items
+  )
+  menu_orientation: EnumProperty(
+    name="Menu Orientation", default="HORIZONTAL", items=menu_orientation_items
+  )
+  menu_position: FloatVectorProperty(
+    name="Menu Position", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
   )
 
   floating_position: FloatVectorProperty(
@@ -153,8 +165,12 @@ class OverlaySettings( bpy.types.AddonPreferences ):
 
     col = row.column()
     col.label( text="Viewport Options" )
-    col.prop_menu_enum( self, "gizmo_position" )
+    col.prop_menu_enum(self, "menu_style")
     col.prop( self, "menu_spacing" )
+    if self.menu_style == 'fixed.bar':
+      col.prop_menu_enum( self, "gizmo_position" )
+
+    col.separator()
     col.prop_menu_enum( self, "double_click_mode" )
     col.prop( self, "subdivision_limit" )
     col.separator()
