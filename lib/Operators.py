@@ -353,9 +353,10 @@ class VIEW3D_OT_BrushResize( Operator ):
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context):
         settings = context.preferences.addons[ 'touchview' ].preferences
-        if settings.gizmo_position in ["LEFT", "RIGHT"]:
+        if settings.menu_style in ['fixed.bar']:
+          if settings.gizmo_position in ["LEFT", "RIGHT"]:
             context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
-        else:
+          else:
             context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
@@ -384,9 +385,10 @@ class VIEW3D_OT_BrushStrength( Operator ):
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context ):
         settings = context.preferences.addons[ 'touchview' ].preferences
-        if settings.gizmo_position in ["LEFT", "RIGHT"]:
+        if settings.menu_style in ['fixed.bar']:
+          if settings.gizmo_position in ["LEFT", "RIGHT"]:
             context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
-        else:
+          else:
             context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
@@ -485,11 +487,11 @@ class VIEW3D_OT_MenuController( Operator ):
     settings = context.preferences.addons['touchview'].preferences
     if event.type == 'MOUSEMOVE':  # Apply
       context.region.tag_redraw()
-      self.x = event.mouse_x
-      self.y = event.mouse_y - 22 * dpi_factor()
+      self.x = event.mouse_region_x
+      self.y = event.mouse_region_y - 22 * dpi_factor()
       self.execute( context )
     elif event.value == 'RELEASE':  # Confirm
-      if event.mouse_x == self.x and event.mouse_y == self.y:
+      if event.mouse_region_x == self.x and event.mouse_region_y == self.y:
         settings.menu_position[0] = self.init_x
         settings.menu_position[1] = self.init_y
         settings.show_menu = not settings.show_menu
@@ -501,8 +503,8 @@ class VIEW3D_OT_MenuController( Operator ):
     settings = context.preferences.addons[ 'touchview' ].preferences
     self.init_x = settings.menu_position[ 0 ]
     self.init_y = settings.menu_position[ 1 ]
-    self.x = event.mouse_x
-    self.y = event.mouse_y
+    self.x = event.mouse_region_x
+    self.y = event.mouse_region_y
     self.execute( context )
 
     context.window_manager.modal_handler_add( self )

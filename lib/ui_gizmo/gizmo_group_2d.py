@@ -2,7 +2,7 @@ import bpy
 from math import pi, radians, sin, cos
 from mathutils import Vector
 from bpy.types import Context, GizmoGroup
-from .gizmo_2d import GizmoSet 
+from .gizmo_2d import GizmoSet, GizmoSetBoolean 
 from .gizmo_config import *
 
 def dpi_factor() -> float:
@@ -30,11 +30,16 @@ configs = [
   undoConfig,
   redoConfig,
   snapViewConfig,
+  fullscreenToggleConfig,
+  quadviewToggleConfig,
+  rotLocToggleConfig,
   nPanelConfig,
   voxelSizeConfig,
   voxelRemeshConfig,
   subdivConfig,
-  unsubdivConfig
+  unsubdivConfig,
+  brushResizeConfig,
+  brushStrengthConfig
 ]
 
 ###
@@ -73,10 +78,13 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
     settings = self.__getSettings()
     self.spacing = settings.menu_spacing
     for conf in configs:
-      if conf['type'] == "default":
+      if conf['type'] == "boolean":
+        gizmo = GizmoSetBoolean()
+        gizmo.setup(self, conf)
+      else: #assume Type = Default
         gizmo = GizmoSet()
         gizmo.setup(self, conf)
-        self.gizmo_2d_sets.append(gizmo)
+      self.gizmo_2d_sets.append(gizmo)
 
   def __buildController(self, context:Context):
     self.controller = GizmoSet()

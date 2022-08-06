@@ -66,6 +66,11 @@ voxelSizeConfig = {
   "binding": {
     "location": "prefs",
     "name": "voxel_remesh",
+    "attribute": {
+      "path":"active_object.modifiers.type",
+      "value": "MULTIRES",
+      "state":False 
+    }
   },
   "command": "object.voxel_size_edit",
   "icon": "MESH_GRID"
@@ -76,6 +81,11 @@ voxelRemeshConfig = {
   "binding": {
     "location": "prefs",
     "name": "voxel_remesh",
+    "attribute": {
+      "path":"active_object.modifiers.type",
+      "value": "MULTIRES",
+      "state":False 
+    }
   },
   "command": "object.voxel_remesh",
   "icon": "MOD_UVPROJECT"
@@ -85,7 +95,12 @@ subdivConfig = {
   "type": "default",
   "binding": {
     "location": "prefs",
-    "name": "multires"
+    "name": "multires",
+    "attribute": {
+      "path":"active_object.modifiers.type",
+      "value": "MULTIRES",
+      "state": True
+    }
   },
   "has_dependent": True,
   "command": "object.increment_multires",
@@ -96,15 +111,40 @@ unsubdivConfig = {
   "type": "default",
   "binding": {
     "location": "prefs",
-    "name": "multires"
+    "name": "multires",
+    "attribute": {
+      "path":"active_object.modifiers.type",
+      "value": "MULTIRES",
+      "state": True
+    }
   },
   "command": "object.decrement_multires",
   "icon": "TRIA_DOWN"
 }
 
+brushResizeConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "brush_dynamics"
+  },
+  "command": "view3d.brush_resize",
+  "icon": "ANTIALIASED"
+}
+
+brushStrengthConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "brush_dynamics"
+  },
+  "command": "view3d.brush_strength",
+  "icon": "SMOOTHCURVE"
+}
 
 # Boolean 2D Gizmo
 fullscreenToggleConfig = {
+  "type": "boolean",
   "binding": {
     "location": "screen",
     "name": "show_fullscreen"
@@ -113,7 +153,9 @@ fullscreenToggleConfig = {
   "onIcon": "FULLSCREEN_EXIT", # on-state
   "offIcon": "FULLSCREEN_ENTER" # off-state
 }
+
 quadviewToggleConfig = {
+  "type": "boolean",
   "binding": {
     "location": "space_data",
     "name": "region_quadviews"
@@ -124,6 +166,7 @@ quadviewToggleConfig = {
 }
 
 rotLocToggleConfig = {
+  "type": "boolean",
   "binding": {
     "location": "region_data",
     "name": "lock_rotation"
@@ -137,13 +180,6 @@ rotLocToggleConfig = {
 pivotModeConfig = [
   (bpy.context.preferences.addons["touchview"].preferences, "pivot_mode"), # property location, watch-enum
   ("view3d.step_pivot_mode", pivot_items, pivot_icon_items)                # enum stepper, enum mode, enum icon
-]
-
-
-
-bindingToggle = [
-  ("active_object.modifiers.type", "MULTIRES"), # watch-property, target-value
-  ("voxel_remesh", "multires")                  # groups to toggle
 ]
 
 

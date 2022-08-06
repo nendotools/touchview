@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Gizmo, GizmoGroup
+from bpy.types import Gizmo, GizmoGroup, bpy_prop_collection
 from mathutils import Matrix, Vector
 
 def dpi_factor() -> float:
@@ -24,19 +24,13 @@ def dpi_factor() -> float:
 class GizmoSet:
   group: GizmoGroup;
   visible: bool = True;
-  alpha: float = 0.4;
-  alpha_highlight: float = 0.8;
-  color: list[float] = [1,1,1];
-  color_highlight: list[float] = [1,1,1];
-  group: GizmoGroup
-  primary: Gizmo
-  binding: tuple[str]
   
   def setup(self, group:GizmoGroup, config: dict ):
     self.has_dependent = 'has_dependent' in config or False
     self.group = group
     self.scale =  config['scale'] if ('scale' in config) else 14
     self.binding = config['binding']
+    self.has_attribute_bind = self.binding['attribute'] if 'attribute' in self.binding else False
     self.primary = self.__buildGizmo( config['command'], config['icon'] )
 
   def __getSettings( self ):
@@ -59,10 +53,37 @@ class GizmoSet:
   def __updatevisible(self):
     if(self.binding['location'] == "prefs"):
       self.visible = getattr(bpy.context.preferences.addons["touchview"].preferences, 'show_'+self.binding['name']);
-    self.primary.hide = not self.visible or self.__visibilityLock()
+    if self.visible:
+      self.visible = self.__visibilityLock() and not self.__checkAttributeBind()
+    self.primary.hide = not self.visible
 
   def __visibilityLock(self) -> bool:
     return self.hidden and self.__getSettings().menu_style != 'fixed.bar'
+
+  def __checkAttributeBind(self):
+    if not self.has_attribute_bind:
+      return False
+    bind = self.binding['attribute']
+    state = self.__findAttribute(bind['path'], bind['value']) == bind['state']
+    return not state
+
+  # search for attribute, value through context.
+  # will traverse bpy_prop_collection entries by next attr to value comparison
+  def __findAttribute(self, path: str, value: any):
+    names = path.split( "." )
+    current = bpy.context
+    for i, prop in enumerate( names ):
+        current = getattr( current, prop )
+        if current == None:
+            return False 
+
+        if isinstance( current, bpy_prop_collection ):
+            item = ''
+            for item in current:
+                if getattr(item, names[i+1]) == value:
+                    return True
+            return False
+    return getattr(current, value) 
 
   # initialize each gizmo, add them to named list with icon name(s)
   def __buildGizmo( self, command: str, icon: str ) -> Gizmo:
@@ -85,20 +106,35 @@ class GizmoSet:
 
 
 class GizmoSetBoolean( GizmoSet ):
-  secondary: Gizmo
-
-  def setup(self, group:GizmoGroup, config: tuple[tuple]):
+  def setup(self, group:GizmoGroup, config: dict ):
+    self.has_dependent = 'has_dependent' in config or False
     self.group = group
-    bindingConfig = config[0]
-    primaryConfig = config[1]
-    secondaryConfig = config[2]
-    self.primary = self.__buildGizmo( primaryConfig[0], primaryConfig[1] )
-    self.secondary = self.__buildGizmo( secondaryConfig[0]. secondaryConfig[1] )
-    
-    # handle binding setup
-    self.__setBinding(bindingConfig, self.primary, self.secondary)
+    self.scale =  config['scale'] if ('scale' in config) else 14
+    self.binding = config['binding']
+    self.has_attribute_bind = self.binding['attribute'] if 'attribute' in self.binding else False
+    self.onGizmo = self._GizmoSet__buildGizmo( config['command'], config['onIcon'] )
+    self.offGizmo = self._GizmoSet__buildGizmo( config['command'], config['offIcon'] )
+    self.__setActiveGizmo(True)
 
-    self.secondary.hidden = True
+  def __setActiveGizmo(self, state: bool):
+    self.onGizmo.hide = True
+    self.offGizmo.hide = True
+    self.primary = self.onGizmo if state else self.offGizmo
+
+  def draw_prepare(self):
+    settings = self._GizmoSet__getSettings()
+    self.hidden = not settings.show_menu
+    self.skip_draw = False
+    self.__updatevisible()
+
+  def __updatevisible(self):
+    self.visible = getattr(bpy.context.preferences.addons["touchview"].preferences, 'show_'+self.binding['name']);
+    if self.visible:
+      self.visible = self._GizmoSet__visibilityLock() and not self._GizmoSet__checkAttributeBind()
+
+    bind = self.binding
+    self.__setActiveGizmo(self._GizmoSet__findAttribute(bind['location'], bind['name']))
+    self.primary.hide = not self.visible
 
 
 class GizmoSetEnum( GizmoSet ):
