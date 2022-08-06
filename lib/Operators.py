@@ -5,6 +5,8 @@ from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
 
+from .utils import buildSafeArea
+
 from .Gizmos import dpi_factor, panel
 from .items import input_mode_items, pivot_items
 
@@ -280,8 +282,8 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
     settings = context.preferences.addons[ 'touchview' ].preferences
     self.init_x = settings.floating_position[ 0 ]
     self.init_y = settings.floating_position[ 1 ]
-    self.x = event.mouse_x
-    self.y = event.mouse_y
+    self.x = event.mouse_region_x
+    self.y = event.mouse_region_y
     self.execute( context )
 
     context.window_manager.modal_handler_add( self )
@@ -474,24 +476,32 @@ class VIEW3D_OT_MenuController( Operator ):
 
   def execute( self, context ):
     settings = context.preferences.addons[ 'touchview' ].preferences
-    fence = Vector( ( context.region.width, context.region.height ) )
+    fence = buildSafeArea() 
+    span = Vector((
+        fence[1].x - fence[0].x,
+        fence[1].y - fence[0].y
+    ))
+
     settings.menu_position[ 0 ] = min(
-      max( ( self.x - 0 ) / ( fence.x ) * 100.0, 0.0 ), 100.0
+      max( ( self.x - fence[0].x + self.offset.x ) / ( span.x) * 100.0, 0.0 ),
+      100.0
     )
     settings.menu_position[ 1 ] = min(
-      max( ( self.y - 0 ) / ( fence.y ) * 100.0, 0.0 ), 100.0
+      max( ( self.y - fence[0].y + self.offset.y ) / ( span.y) * 100.0, 0.0 ),
+      100.0
     )
     return { 'FINISHED' }
 
   def modal( self, context, event ):
     settings = context.preferences.addons['touchview'].preferences
-    if event.type == 'MOUSEMOVE':  # Apply
+    if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
+      self.has_moved = True
       context.region.tag_redraw()
       self.x = event.mouse_region_x
-      self.y = event.mouse_region_y - 22 * dpi_factor()
+      self.y = event.mouse_region_y
       self.execute( context )
     elif event.value == 'RELEASE':  # Confirm
-      if event.mouse_region_x == self.x and event.mouse_region_y == self.y:
+      if not self.has_moved:
         settings.menu_position[0] = self.init_x
         settings.menu_position[1] = self.init_y
         settings.show_menu = not settings.show_menu
@@ -500,11 +510,21 @@ class VIEW3D_OT_MenuController( Operator ):
     return { 'RUNNING_MODAL' }
 
   def invoke( self, context, event ):
+    self.has_moved = False
     settings = context.preferences.addons[ 'touchview' ].preferences
+    fence = buildSafeArea() 
+    span = Vector((
+        fence[1].x - fence[0].x,
+        fence[1].y - fence[0].y
+    ))
     self.init_x = settings.menu_position[ 0 ]
     self.init_y = settings.menu_position[ 1 ]
     self.x = event.mouse_region_x
     self.y = event.mouse_region_y
+    self.offset = Vector(( 
+      (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
+      (span.y * self.init_y * 0.01 + fence[0].y) - self.y
+    ))
     self.execute( context )
 
     context.window_manager.modal_handler_add( self )

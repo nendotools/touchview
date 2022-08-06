@@ -2,6 +2,8 @@ import bpy
 from math import pi, radians, sin, cos
 from mathutils import Vector
 from bpy.types import Context, GizmoGroup
+
+from ..utils import buildSafeArea
 from .gizmo_2d import GizmoSet, GizmoSetBoolean 
 from .gizmo_config import *
 
@@ -115,7 +117,7 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
     origin = self.origin
     count = len(visible_gizmos)
     if not floating:
-      safe_area = self.__buildFence()
+      safe_area = buildSafeArea()
       origin = Vector((
         (safe_area[0].x + safe_area[1].x) /2,
         (safe_area[0].y + safe_area[1].y) /2,
@@ -185,7 +187,7 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
     self.__move_gizmo(gizmo, self.origin + offset*spacing)
 
   def __updateOrigin(self):
-    safe_area = self.__buildFence()
+    safe_area = buildSafeArea()
     settings = self.__getSettings()
 
     # distance across viewport between menus
@@ -200,31 +202,6 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
         safe_area[0].y + span.y * settings.menu_position[1] * 0.01,
         0.0
     ))
-
-  def __buildFence(self) -> tuple[Vector, Vector]:
-    min = Vector((0.0,0.0))
-    max = Vector((self.context.region.width, self.context.region.height))
-
-    if (panel( 'TOOLS' )[2] == 'LEFT'):
-      min.x += 22.0 * dpi_factor() + panel('TOOLS')[0]
-    if (panel( 'TOOLS' )[2] == 'RIGHT'):
-      max.x -= 22.0 * dpi_factor() + panel('TOOLS')[0]
-
-    if (panel( 'UI' )[2] == 'LEFT'):
-      min.x += 22.0 * dpi_factor() + panel('UI')[0]
-    if (panel( 'UI' )[2] == 'RIGHT'):
-      max.x -= 22.0 * dpi_factor() + panel('UI')[0]
-
-    if (panel( 'HEADER' )[2] == 'BOTTOM'):
-      min.y = 22.0 * dpi_factor() + panel('HEADER')[1]
-    if (panel( 'HEADER' )[2] == 'TOP'):
-      max.y -= 22.0 * dpi_factor() + panel('HEADER')[1]
-
-    if (panel( 'TOOL_HEADER' )[2] == 'BOTTOM'):
-      min.y = 22.0 * dpi_factor() + panel('TOOL_HEADER')[1]
-    if (panel( 'TOOL_HEADER' )[2] == 'TOP'):
-      max.y -= 22.0 * dpi_factor() + panel('TOOL_HEADER')[1]
-    return (min, max)
 
   def __move_gizmo(self, gizmo: GizmoSet, position: Vector):
     gizmo.move(position)
