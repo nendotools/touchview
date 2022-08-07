@@ -100,6 +100,7 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
     self.__updateOrigin()
     self.__updateActionOrigin()
     self.controller.draw_prepare()
+    self.action_menu.draw_prepare()
     self.__move_gizmo(self.controller, self.origin)
     self.__move_gizmo(self.action_menu, self.action_origin)
  
@@ -141,7 +142,7 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
 
     if ((settings.gizmo_position in ['TOP','BOTTOM'] and settings.menu_style == 'fixed.bar') or
       (settings.menu_orientation == 'HORIZONTAL' and settings.menu_style == 'float.bar')):
-      start = origin.x - (count * (settings.menu_spacing/20) * padding) / 2
+      start = origin.x - ((count-1) * (settings.menu_spacing/20) * padding) / 2
       if settings.menu_style == 'float.bar':
         origin.y = origin.y + padding + settings.menu_spacing / 2
       for i, gizmo in enumerate(visible_gizmos):

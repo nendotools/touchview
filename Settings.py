@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Context, PropertyGroup
+from bpy.types import Context, PropertyGroup, UILayout
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
 
 from .lib.ui_gizmo.gizmo_group_2d import gizmo_sets
@@ -102,10 +102,17 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   # UI Panel Controls 
   ##
   active_menu: EnumProperty( name="Mode Settings", items=edit_modes )
+  gizmo_tabs: EnumProperty ( name="Gizmo Tabs", items=[
+    ("MENU","Gizmo Menu","",0),
+    ("ACTIONS","Action Menu","",1)
+  ], default="MENU")
 
   # set up addon preferences UI
   def draw( self, context: Context ):
-    row = self.layout.row()
+    row = self.layout.split(factor=0.4)
+    ##
+    # Viewport Settings
+    ##
     col = row.column()
     col.label( text="Control Zones" )
     if self.is_enabled:
@@ -118,33 +125,44 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     col.prop( self, "overlay_main_color", text="Main Color" )
     if self.use_multiple_colors:
       col.prop( self, "overlay_secondary_color", text="Secondary Color" )
-    col.prop( self, "width" )
-    col.prop( self, "radius" )
+    col.prop( self, "width", slider=True )
+    col.prop( self, "radius", slider=True )
 
+    ##
+    # Gizmo Settings
+    ##
     col = row.column()
-    col.label( text="Viewport Options" )
-    col.prop_menu_enum(self, "menu_style")
-    col.prop( self, "menu_spacing" )
-    if self.menu_style == 'fixed.bar':
-      col.prop_menu_enum( self, "gizmo_position" )
+    col.label( text="Gizmo Options" )
+    tabs = col.column_flow(columns=3, align=True)
+    tabs.prop_tabs_enum(self, "gizmo_tabs")
 
-    col.separator()
-    col.prop_menu_enum( self, "double_click_mode" )
-    col.prop( self, "subdivision_limit" )
-    col.separator()
+    wrapper = col.box()
+    if self.gizmo_tabs == 'MENU':
+        wrapper.label(text="Gizmo Menu Style")
+        tabs = wrapper.column_flow(columns=3, align=True)
+        tabs.prop_tabs_enum(self, "menu_style")
 
-    if not self.show_float_menu:
-      col.operator( "view3d.toggle_floating_menu", text="Show Floating Menu" )
-    else:
-      col.operator( "view3d.toggle_floating_menu", text="Hide Floating Menu", depress=True )
-      box = col.box()
-      box.active = self.show_float_menu
-      col = box.column()
-      col.prop( self, "floating_position" )
-      col.prop( self, "active_menu" )
-      mList = self.getMenuSettings( self.active_menu )
-      for i in range( 7 ):
-        col.prop( mList, "menu_slot_" + str( i + 1 ) )
+        if self.menu_style == 'fixed.bar':
+            wrapper.prop_menu_enum( self, "gizmo_position" )
+        wrapper.prop( self, "menu_spacing", slider=True )
+
+        wrapper.separator()
+        wrapper.label( text="Tool Settings" )
+        wrapper.prop_menu_enum( self, "double_click_mode" )
+        wrapper.prop( self, "subdivision_limit", slider=True )
+
+    if self.gizmo_tabs == 'ACTIONS':
+        if not self.show_float_menu:
+            wrapper.operator( "view3d.toggle_floating_menu", text="Show Floating Menu" )
+        else:
+            wrapper.operator( "view3d.toggle_floating_menu", text="Hide Floating Menu", depress=True )
+            box = wrapper.box()
+            box.active = self.show_float_menu
+            wrapper = box.column()
+            wrapper.prop( self, "active_menu" )
+            mList = self.getMenuSettings( self.active_menu )
+            for i in range( 7 ):
+                wrapper.prop( mList, "menu_slot_" + str( i + 1 ) )
 
   ##
   # Data Accessors

@@ -179,9 +179,20 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.0.0</b></summary><br>
+
+- `UPDATED` : Gizmos-related code simplified and reorganized for easier management
+- `ADDED`   : floating gizmo bar and floating gizmo radial menu modes 
+- `ADDED`   : gizmo menu spacing
+- `UPDATED` : viewport safe area calculation
+- `UPDATED` : floating action menu to use same move/access functionality as floating radial menu
+- `ADDED`   : 8th custom action for floating action menu
+
+</details>
+
 <details open><summary><b>v1.2.3</b></summary><br>
 
-- `ADDED` : Sculpt Brush Dynamics
+- `ADDED`   : Sculpt Brush Dynamics
 - `UPDATED` : Viewport rotation in sculpt mode automatically sets pivot to mesh under touch point
 
 </details>
@@ -203,7 +214,7 @@ Select it and click `Install Add-on`.
 
 - `BREAKING`: This version requires previous version to be disabled before install
 - `UPDATED` : Improved Pen detection and simplified key configs
-- `ADDED` : Support for various 2D and 2D-like views (Image Editor, UV Editor, 2D Animation, Compositing, etc)
+- `ADDED`   : Support for various 2D and 2D-like views (Image Editor, UV Editor, 2D Animation, Compositing, etc)
 
 </details>
 

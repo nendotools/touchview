@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Context, Panel, Menu, VIEW3D_PT_gizmo_display
+from bpy.types import Context, Panel, Menu, UILayout, VIEW3D_PT_gizmo_display
 
 
 class VIEW3D_PT_NendoPanel:
@@ -35,11 +35,15 @@ class VIEW3D_PT_NendoViewport( VIEW3D_PT_NendoPanel, Panel ):
     col.separator()
 
     col.label( text="Viewport Options" )
-    col.prop_menu_enum( settings, "gizmo_position" )
-    col.prop_menu_enum( settings, "double_click_mode" )
-    col.prop( settings, "subdivision_limit" )
+    col.label(text="Gizmo Menu Style")
+    tabs = col.grid_flow()
+    tabs.props_enum(settings, "menu_style")
 
+    if settings.menu_style == 'fixed.bar':
+        col.prop_menu_enum( settings, "gizmo_position" )
+    col.prop( settings, "menu_spacing", slider=True )
     col.operator( "view3d.tools_region_flip", text="Flip Tools" )
+
     if len( space.region_quadviews ) > 0:
       col.operator( "screen.region_quadview", text="Disable Quadview" )
     else:
@@ -47,6 +51,9 @@ class VIEW3D_PT_NendoViewport( VIEW3D_PT_NendoPanel, Panel ):
       col.prop( space, "lock_cursor", text="Lock to Cursor" )
       col.prop( view.region_3d, "lock_rotation", text="Lock Rotation" )
 
+    col.separator()
+    col.prop( settings, "subdivision_limit" )
+    col.prop_menu_enum( settings, "double_click_mode" )
     col.separator()
 
     if not settings.show_float_menu:

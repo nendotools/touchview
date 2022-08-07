@@ -11,7 +11,6 @@ def dpi_factor() -> float:
 
 ##
 # GizmoSet
-# - multi-state object
 #   - single-state
 #     - one icon
 #     - one action
@@ -45,8 +44,9 @@ class GizmoSet:
     self.skip_draw = False
     self.__updatevisible()
 
-    if self.binding['name'] == 'menu_controller':
+    if self.binding['name'] in ['menu_controller']:
       self.primary.hide = 'float' not in settings.menu_style
+    if self.binding['name'] in ['menu_controller', 'float_menu']:
       gui_scale = 22 * dpi_factor()
       self.primary.scale_basis = max( settings.menu_spacing - gui_scale/1.5, gui_scale/2)
 
@@ -111,7 +111,6 @@ class GizmoSet:
     return gizmo
 
   def __setColors(self, gizmo: Gizmo):
-    settings = self.__getSettings()
     gizmo.color = gizmo_colors[ "active" ][ "color" ]
     gizmo.color_highlight = gizmo_colors[ "active" ][ "color_highlight" ]
     gizmo.alpha = gizmo_colors[ "active" ][ "alpha" ]
