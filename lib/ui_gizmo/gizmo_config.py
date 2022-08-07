@@ -17,7 +17,19 @@ controllerConfig = {
     "name": "menu_controller"
   },
   "command": "view3d.controller",
-  "icon": "PROP_ON"
+  "icon": "BLANK1",
+  "use_grab_cursor": True
+}
+
+floatingConfig = {
+  "type": "default",
+  "binding": {
+    "location": "",
+    "name": "float_menu"
+  },
+  "command": "view3d.move_float_menu",
+  "icon": "SETTINGS",
+  "use_grab_cursor": True
 }
 
 undoConfig = {

@@ -247,61 +247,6 @@ class VIEW3D_OT_ToggleFloatingMenu( Operator ):
     return { 'FINISHED' }
 
 
-class VIEW3D_OT_MoveFloatMenu( Operator ):
-  bl_idname = "view3d.move_float_menu"
-  bl_label = "Relocate Floating Gizmo"
-
-  def execute( self, context ):
-    settings = context.preferences.addons[ 'touchview' ].preferences
-    fence = self.__calcFence( Vector( ( context.region.width, context.region.height ) ) )
-    settings.floating_position[ 0 ] = min(
-      max( ( self.x - fence[ 0 ][ 0 ] ) / ( fence[ 1 ][ 0 ] - fence[ 0 ][ 0 ] ) * 100, 0 ), 100
-    )
-    settings.floating_position[ 1 ] = min(
-      max( ( self.y - fence[ 0 ][ 1 ] ) / ( fence[ 1 ][ 1 ] - fence[ 0 ][ 1 ] ) * 100, 0 ), 100
-    )
-    return { 'FINISHED' }
-
-  def modal( self, context, event ):
-    if event.type == 'MOUSEMOVE':  # Apply
-      context.region.tag_redraw()
-      self.x = event.mouse_x
-      self.y = event.mouse_y - 22 * dpi_factor()
-      self.execute( context )
-    elif event.type == 'LEFTMOUSE':  # Confirm
-      return { 'FINISHED' }
-    elif event.type in { 'RIGHTMOUSE', 'ESC' }:  # Cancel
-      settings = context.preferences.addons[ 'touchview' ].preferences
-      settings.floating_position[ 0 ] = self.init_x
-      settings.floating_position[ 1 ] = self.init_y
-      return { 'CANCELLED' }
-
-    return { 'RUNNING_MODAL' }
-
-  def invoke( self, context, event ):
-    settings = context.preferences.addons[ 'touchview' ].preferences
-    self.init_x = settings.floating_position[ 0 ]
-    self.init_y = settings.floating_position[ 1 ]
-    self.x = event.mouse_region_x
-    self.y = event.mouse_region_y
-    self.execute( context )
-
-    context.window_manager.modal_handler_add( self )
-    return { 'RUNNING_MODAL' }
-
-  def __calcFence( self, size: Vector ) -> tuple[ tuple[ int, int ] ]:
-    if bpy.context.preferences.view.mini_axis_type == 'GIZMO':
-      right = size.x - ( panel( 'UI' )[ 0 ] + 22 * dpi_factor() )
-    elif bpy.context.preferences.view.mini_axis_type == 'MINIMAL':
-      right = size.x - ( panel( 'UI' )[ 0 ] + 22 * dpi_factor() )
-    else:
-      right = size.x - ( panel( 'UI' )[ 0 ] + 22 * dpi_factor() )
-
-    left = 22 * dpi_factor() + panel( 'TOOLS' )[ 0 ]
-
-    return ( ( left, 22 * dpi_factor() ), ( right, size.y - ( panel( 'HEADER' )[ 1 ] + panel( 'TOOL_HEADER' )[ 1 ] ) ) )
-
-
 class VIEW3D_OT_ViewportRecenter( Operator ):
   """ Recenter Viewport and Cursor on Selected Object """
   bl_idname = "view3d.viewport_recenter"
@@ -470,7 +415,7 @@ class VIEW3D_OT_DecreaseMultires( Operator ):
     return { 'CANCELLED' }
 
 
-class VIEW3D_OT_MenuController( Operator ):
+class VIEW3D_OT_MoveFloatMenu( Operator ):
   bl_idname = "view3d.controller"
   bl_label = "Relocate Gizmo Menu"
 
@@ -495,19 +440,27 @@ class VIEW3D_OT_MenuController( Operator ):
   def modal( self, context, event ):
     settings = context.preferences.addons['touchview'].preferences
     if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
-      self.has_moved = True
       context.region.tag_redraw()
       self.x = event.mouse_region_x
       self.y = event.mouse_region_y
       self.execute( context )
     elif event.value == 'RELEASE':  # Confirm
-      if not self.has_moved:
+      if not self.__hasMoved():
         settings.menu_position[0] = self.init_x
         settings.menu_position[1] = self.init_y
         settings.show_menu = not settings.show_menu
       return { 'FINISHED' }
 
     return { 'RUNNING_MODAL' }
+
+  def __hasMoved(self) -> bool:
+    settings = bpy.context.preferences.addons['touchview'].preferences
+    init = Vector((self.mouse_init_x, self.mouse_init_y))
+    final = Vector((self.x, self.y))
+    if (final - init).length > settings.menu_spacing / 2:
+      return True
+    return False
+
 
   def invoke( self, context, event ):
     self.has_moved = False
@@ -519,8 +472,76 @@ class VIEW3D_OT_MenuController( Operator ):
     ))
     self.init_x = settings.menu_position[ 0 ]
     self.init_y = settings.menu_position[ 1 ]
-    self.x = event.mouse_region_x
-    self.y = event.mouse_region_y
+    self.mouse_init_x = self.x = event.mouse_region_x
+    self.mouse_init_y = self.y = event.mouse_region_y
+    self.offset = Vector(( 
+      (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
+      (span.y * self.init_y * 0.01 + fence[0].y) - self.y
+    ))
+    self.execute( context )
+
+    context.window_manager.modal_handler_add( self )
+    return { 'RUNNING_MODAL' }
+
+
+class VIEW3D_OT_MenuController( Operator ):
+  bl_idname = "view3d.move_float_menu"
+  bl_label = "Relocate Action Menu"
+
+  def execute( self, context ):
+    settings = context.preferences.addons[ 'touchview' ].preferences
+    fence = buildSafeArea() 
+    span = Vector((
+        fence[1].x - fence[0].x,
+        fence[1].y - fence[0].y
+    ))
+
+    settings.floating_position[ 0 ] = min(
+      max( ( self.x - fence[0].x + self.offset.x ) / ( span.x) * 100.0, 0.0 ),
+      100.0
+    )
+    settings.floating_position[ 1 ] = min(
+      max( ( self.y - fence[0].y + self.offset.y ) / ( span.y) * 100.0, 0.0 ),
+      100.0
+    )
+    return { 'FINISHED' }
+
+  def modal( self, context, event ):
+    settings = context.preferences.addons['touchview'].preferences
+    if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
+      context.region.tag_redraw()
+      self.x = event.mouse_region_x
+      self.y = event.mouse_region_y
+      self.execute( context )
+    elif event.value == 'RELEASE':  # Confirm
+      if not self.__hasMoved():
+        settings.floating_position[0] = self.init_x
+        settings.floating_position[1] = self.init_y
+        bpy.ops.wm.call_menu_pie("INVOKE_DEFAULT", name="PIE_MT_Floating_Menu")
+      return { 'FINISHED' }
+
+    return { 'RUNNING_MODAL' }
+
+  def __hasMoved(self) -> bool:
+    settings = bpy.context.preferences.addons['touchview'].preferences
+    init = Vector((self.mouse_init_x, self.mouse_init_y))
+    final = Vector((self.x, self.y))
+    if (final - init).length > settings.menu_spacing / 2:
+      return True
+    return False
+
+  def invoke( self, context, event ):
+    self.has_moved = False
+    settings = context.preferences.addons[ 'touchview' ].preferences
+    fence = buildSafeArea() 
+    span = Vector((
+        fence[1].x - fence[0].x,
+        fence[1].y - fence[0].y
+    ))
+    self.init_x = settings.floating_position[ 0 ]
+    self.init_y = settings.floating_position[ 1 ]
+    self.mouse_init_x = self.x = event.mouse_region_x
+    self.mouse_init_y = self.y = event.mouse_region_y
     self.offset = Vector(( 
       (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
       (span.y * self.init_y * 0.01 + fence[0].y) - self.y

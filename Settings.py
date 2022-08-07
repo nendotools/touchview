@@ -13,7 +13,7 @@ class MenuModeGroup( PropertyGroup ):
   menu_slot_5: StringProperty( name="Menu Item", default="" )
   menu_slot_6: StringProperty( name="Menu Item", default="" )
   menu_slot_7: StringProperty( name="Menu Item", default="" )
-  menu_slot_8 = "view3d.move_float_menu"
+  menu_slot_8: StringProperty( name="Menu Item", default="" )
 
 
 class OverlaySettings( bpy.types.AddonPreferences ):

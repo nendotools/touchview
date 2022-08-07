@@ -26,6 +26,7 @@ class GizmoSet:
   visible: bool = True;
   
   def setup(self, group:GizmoGroup, config: dict ):
+    self.config = config
     self.has_dependent = 'has_dependent' in config or False
     self.group = group
     self.scale =  config['scale'] if ('scale' in config) else 14
@@ -95,6 +96,8 @@ class GizmoSet:
     gizmo.icon = icon
     gizmo.use_tooltip = False
     gizmo.use_event_handle_all = True
+    gizmo.use_grab_cursor = True if 'use_grab_cursor' in self.config else False
+    gizmo.line_width = 5.0
     gizmo.draw_options = { 'BACKDROP', 'OUTLINE' }
     self.__setColors( gizmo )
     gizmo.scale_basis = self.scale or 14
@@ -110,6 +113,7 @@ class GizmoSet:
 
 class GizmoSetBoolean( GizmoSet ):
   def setup(self, group:GizmoGroup, config: dict ):
+    self.config = config
     self.has_dependent = 'has_dependent' in config or False
     self.group = group
     self.scale =  config['scale'] if ('scale' in config) else 14

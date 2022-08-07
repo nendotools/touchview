@@ -27,8 +27,9 @@ def panel( type ) -> tuple:
 
 # returns a tuple (bottom-left, top-right) safe area in viewport for UI elements
 def buildSafeArea() -> tuple[Vector, Vector]:
-    min = Vector((0.0,0.0))
-    max = Vector((bpy.context.region.width, bpy.context.region.height))
+    buffer = bpy.context.preferences.addons['touchview'].preferences.menu_spacing + 30 * dpi_factor()
+    min = Vector((buffer, buffer))
+    max = Vector((bpy.context.region.width-buffer, bpy.context.region.height-buffer))
 
     if (panel( 'TOOLS' )[2] == 'LEFT'):
         min.x += 22.0 * dpi_factor() + panel('TOOLS')[0]

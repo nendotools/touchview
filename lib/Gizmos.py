@@ -33,7 +33,7 @@ class GIZMO_GT_FloatingGizmoGroup( GizmoGroup ):
   bl_options = { 'PERSISTENT', 'SCALE' }
 
   def setup( self, _: Context ):
-    self.__buildGizmo( "wm.call_menu_pie", "SETTINGS" )
+    self.__buildGizmo( "view3d.move_float_menu", "SETTINGS" )
 
   def draw_prepare( self, context: Context ):
     region = context.region
@@ -54,8 +54,7 @@ class GIZMO_GT_FloatingGizmoGroup( GizmoGroup ):
   # initialize each gizmo, add them to named list with icon name(s)
   def __buildGizmo( self, operator_name: str, on_icon: str ) -> Gizmo:
     gizmo = self.gizmos.new( "GIZMO_GT_button_2d" )
-    props = gizmo.target_set_operator( operator_name )
-    props.name = "PIE_MT_Floating_Menu"
+    gizmo.target_set_operator( operator_name )
     gizmo.icon = on_icon
     gizmo.use_tooltip = False
     gizmo.use_event_handle_all = True
