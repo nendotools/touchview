@@ -1,9 +1,14 @@
 import bpy
 from bpy.types import Context, PropertyGroup
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
+
+from .lib.ui_gizmo.gizmo_group_2d import gizmo_sets
 from .lib.items import position_items, pivot_items, edit_modes, menu_defaults, menu_style_items, double_click_items, menu_orientation_items
 
 
+##
+# Action Menu Settings
+##
 class MenuModeGroup( PropertyGroup ):
   mode: StringProperty( name="mode", default="OBJECT" )
   menu_slot_1: StringProperty( name="Menu Item", default="" )
@@ -19,31 +24,22 @@ class MenuModeGroup( PropertyGroup ):
 class OverlaySettings( bpy.types.AddonPreferences ):
   bl_idname = __package__
 
-  is_enabled: BoolProperty(
-    name="Enable Controls",
-    default=True,
+  ##
+  # Viewport Control Options
+  ##
+  is_enabled: BoolProperty( name="Enable Controls", default=True )
+  isVisible: BoolProperty( name="Show Overlay", default=False )
+
+  double_click_mode: EnumProperty(
+    items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
   )
-  swap_panrotate: BoolProperty(
-    name="Swap Pan/Rotate",
-    default=False,
-  )
-  width: FloatProperty(
-    name="Width",
-    default=40.0,
-    min=10.0,
-    max=100,
-  )
-  radius: FloatProperty(
-    name="Radius",
-    default=35.0,
-    min=10.0,
-    max=100.0,
-  )
-  isVisible: BoolProperty(
-    name="Show Overlay",
-    default=False,
-  )
-  pivot_mode: EnumProperty( name="Sculpt Pivot Mode", items=pivot_items, default="SURFACE" )
+
+  swap_panrotate: BoolProperty( name="Swap Pan/Rotate", default=False )
+
+  width: FloatProperty( name="Width", default=40.0, min=10.0, max=100 )
+  radius: FloatProperty( name="Radius", default=35.0, min=10.0, max=100.0 )
+
+  use_multiple_colors: BoolProperty( name="Multicolor Overlay", default=False )
   overlay_main_color: FloatVectorProperty(
     name="Overlay Main Color",
     default=( 1.0, 1.0, 1.0, 0.01 ),
@@ -51,10 +47,6 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     min=0.0,
     max=1.0,
     size=4,
-  )
-  use_multiple_colors: BoolProperty(
-    name="Multicolor Overlay",
-    default=False,
   )
   overlay_secondary_color: FloatVectorProperty(
     name="Overlay Secondary Color",
@@ -64,33 +56,25 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     max=1.0,
     size=4,
   )
-  gizmo_colors = {
-    "disabled": {
-      "color": [ 0.0, 0.0, 0.0 ],
-      "color_highlight": [ 0.0, 0.0, 0.0 ],
-      "alpha": 0.3,
-      "alpha_highlight": 0.3
-    },
-    "active": {
-      "color": [ 0.0, 0.0, 0.0 ],
-      "alpha": 0.5,
-      "color_highlight": [ 0.5, 0.5, 0.5 ],
-      "alpha_highlight": 0.5
-    },
-    "error": {
-      "color": [ 0.3, 0.0, 0.0 ],
-      "alpha": 0.15,
-      "color_highlight": [ 1.0, 0.2, 0.2 ],
-      "alpha_highlight": 0.5
-    },
-    "warn": {
-      "color": [ 0.35, 0.3, 0.14 ],
-      "alpha": 0.15,
-      "color_highlight": [ 0.8, 0.7, 0.3 ],
-      "alpha_highlight": 0.3
-    }
-  }
-  show_gizmo_bar: BoolProperty( name="Show Gizmo Bar", default=True )
+
+
+  ##
+  # Gizmo Options
+  ##
+  show_menu: BoolProperty( name="Toggle Menu Display", default=True )
+  menu_style: EnumProperty(
+    name="Menu Style", default="float.radial", items=menu_style_items
+  )
+  menu_orientation: EnumProperty(
+    name="Menu Orientation", default="HORIZONTAL", items=menu_orientation_items
+  )
+  menu_spacing: FloatProperty(
+    name="Menu Size", default=20.0, precision=2, step=1, min=20.0, max=100.0
+  )
+  menu_position: FloatVectorProperty(
+    name="Menu Position", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
+  )
+
   show_undoredo: BoolProperty( name="Undo/Redo", default=True )
   show_show_fullscreen: BoolProperty( name="Fullscreen", default=True )
   show_region_quadviews: BoolProperty( name="Quadview", default=True )
@@ -103,47 +87,21 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   show_brush_dynamics: BoolProperty( name="Brush Dynamics", default=True )
   gizmo_position: EnumProperty( items=position_items, name="Gizmo Position", default="RIGHT" )
   subdivision_limit: IntProperty( name="Subdivision Limit", default=4, min=1, max=7 )
-  gizmo_sets = {
-    # ALL includes only the modes in this list
-    "ALL": { "undoredo", "fullscreen", "quadview", "snap_view", "n_panel", "rotation_lock" },
-    "SCULPT": { "pivot_mode", "voxel_remesh", "multires", "brush_dynamics" },
-    "OBJECT": { "multires" },
-    "EDIT_MESH": {},
-    "POSE": {},
-    "PAINT_TEXTURE": {},
-    "PAINT_VERTEX": {},
-    "PAINT_WEIGHT": {},
-    "PAINT_GPENCIL": {}
-  }
+  pivot_mode: EnumProperty( name="Sculpt Pivot Mode", items=pivot_items, default="SURFACE" )
 
-  show_menu: BoolProperty(
-    name="Toggle Menu Display", default=True
-  )
-  menu_spacing: FloatProperty(
-    name="Menu Size", default=20.0, precision=2, step=1, min=20.0, max=100.0
-  )
-  menu_style: EnumProperty(
-    name="Menu Style", default="float.radial", items=menu_style_items
-  )
-  menu_orientation: EnumProperty(
-    name="Menu Orientation", default="HORIZONTAL", items=menu_orientation_items
-  )
-  menu_position: FloatVectorProperty(
-    name="Menu Position", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
-  )
-
+  ##
+  # Action Menu Options
+  ##
+  show_float_menu: BoolProperty( name="Enable Floating Menu", default=False )
   floating_position: FloatVectorProperty(
     name="Floating Offset", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
   )
-
-  show_float_menu: BoolProperty( name="Enable Floating Menu", default=False )
-
-  double_click_mode: EnumProperty(
-    items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
-  )
-
-  active_menu: EnumProperty( name="Mode Settings", items=edit_modes )
   menu_sets: CollectionProperty( type=MenuModeGroup )
+
+  ##
+  # UI Panel Controls 
+  ##
+  active_menu: EnumProperty( name="Mode Settings", items=edit_modes )
 
   # set up addon preferences UI
   def draw( self, context: Context ):
@@ -188,6 +146,9 @@ class OverlaySettings( bpy.types.AddonPreferences ):
       for i in range( 7 ):
         col.prop( mList, "menu_slot_" + str( i + 1 ) )
 
+  ##
+  # Data Accessors
+  ##
   def getMenuSettings( self, mode: str ):
     m = None
     for opts in self.menu_sets:
@@ -202,11 +163,11 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     return m
 
   def getGizmoSet( self, mode: str ):
-    available = list( self.gizmo_sets[ "ALL" ] )
+    available = list( gizmo_sets[ "ALL" ] )
 
-    if not self.gizmo_sets[ mode ]:
+    if not gizmo_sets[ mode ]:
       return available
-    return available + list( self.gizmo_sets[ mode ] )
+    return available + list( gizmo_sets[ mode ] )
 
   def getShowLock( self ):
     return self.show_lock

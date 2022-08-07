@@ -187,7 +187,45 @@ rotLocToggleConfig = {
   "onIcon": "LOCKED",
   "offIcon": "UNLOCKED"
 }
+gizmo_sets = {
+# ALL includes only the modes in this list
+    "ALL": { "undoredo", "show_fullscreen", "region_quadviews", "snap_view", "n_panel", "lock_rotation" },
+    "SCULPT": { "pivot_mode", "voxel_remesh", "multires", "brush_dynamics" },
+    "OBJECT": { "multires" },
+    "EDIT_MESH": {},
+    "POSE": {},
+    "PAINT_TEXTURE": {},
+    "PAINT_VERTEX": {},
+    "PAINT_WEIGHT": {},
+    "PAINT_GPENCIL": {}
+}
 
+gizmo_colors = {
+    "disabled": {
+        "color": [ 0.0, 0.0, 0.0 ],
+        "color_highlight": [ 0.0, 0.0, 0.0 ],
+        "alpha": 0.3,
+        "alpha_highlight": 0.3
+    },
+    "active": {
+        "color": [ 0.0, 0.0, 0.0 ],
+        "alpha": 0.5,
+        "color_highlight": [ 0.5, 0.5, 0.5 ],
+        "alpha_highlight": 0.5
+    },
+    "error": {
+        "color": [ 0.3, 0.0, 0.0 ],
+        "alpha": 0.15,
+        "color_highlight": [ 1.0, 0.2, 0.2 ],
+        "alpha_highlight": 0.5
+    },
+    "warn": {
+        "color": [ 0.35, 0.3, 0.14 ],
+        "alpha": 0.15,
+        "color_highlight": [ 0.8, 0.7, 0.3 ],
+        "alpha_highlight": 0.3
+    }
+}
 # Enum 2D Gizmo
 pivotModeConfig = [
   (bpy.context.preferences.addons["touchview"].preferences, "pivot_mode"), # property location, watch-enum

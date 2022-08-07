@@ -450,7 +450,6 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
         settings.menu_position[1] = self.init_y
         settings.show_menu = not settings.show_menu
       return { 'FINISHED' }
-
     return { 'RUNNING_MODAL' }
 
   def __hasMoved(self) -> bool:
@@ -519,7 +518,6 @@ class VIEW3D_OT_MenuController( Operator ):
         settings.floating_position[1] = self.init_y
         bpy.ops.wm.call_menu_pie("INVOKE_DEFAULT", name="PIE_MT_Floating_Menu")
       return { 'FINISHED' }
-
     return { 'RUNNING_MODAL' }
 
   def __hasMoved(self) -> bool:

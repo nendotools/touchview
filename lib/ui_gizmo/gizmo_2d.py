@@ -2,6 +2,8 @@ import bpy
 from bpy.types import Gizmo, GizmoGroup, bpy_prop_collection
 from mathutils import Matrix, Vector
 
+from .gizmo_config import gizmo_colors
+
 def dpi_factor() -> float:
   systemPreferences = bpy.context.preferences.system
   retinaFactor = getattr( systemPreferences, "pixel_size", 1 )
@@ -53,7 +55,11 @@ class GizmoSet:
 
   def __updatevisible(self):
     if(self.binding['location'] == "prefs"):
-      self.visible = getattr(bpy.context.preferences.addons["touchview"].preferences, 'show_'+self.binding['name']);
+      self.visible = getattr(
+        bpy.context.preferences.addons["touchview"].preferences,
+        'show_'+self.binding['name']
+      ) and self.binding['name'] in self.__getSettings().getGizmoSet( bpy.context.mode )
+
     if self.visible:
       self.visible = self.__visibilityLock() and not self.__checkAttributeBind()
     self.primary.hide = not self.visible
@@ -98,6 +104,7 @@ class GizmoSet:
     gizmo.use_event_handle_all = True
     gizmo.use_grab_cursor = True if 'use_grab_cursor' in self.config else False
     gizmo.line_width = 5.0
+    gizmo.use_draw_modal = True
     gizmo.draw_options = { 'BACKDROP', 'OUTLINE' }
     self.__setColors( gizmo )
     gizmo.scale_basis = self.scale or 14
@@ -105,10 +112,10 @@ class GizmoSet:
 
   def __setColors(self, gizmo: Gizmo):
     settings = self.__getSettings()
-    gizmo.color = settings.gizmo_colors[ "active" ][ "color" ]
-    gizmo.color_highlight = settings.gizmo_colors[ "active" ][ "color_highlight" ]
-    gizmo.alpha = settings.gizmo_colors[ "active" ][ "alpha" ]
-    gizmo.alpha_highlight = settings.gizmo_colors[ "active" ][ "alpha_highlight" ]
+    gizmo.color = gizmo_colors[ "active" ][ "color" ]
+    gizmo.color_highlight = gizmo_colors[ "active" ][ "color_highlight" ]
+    gizmo.alpha = gizmo_colors[ "active" ][ "alpha" ]
+    gizmo.alpha_highlight = gizmo_colors[ "active" ][ "alpha_highlight" ]
 
 
 class GizmoSetBoolean( GizmoSet ):
