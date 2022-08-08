@@ -190,6 +190,12 @@ Select it and click `Install Add-on`.
 
 </details>
 
+<details open><summary><b>v1.2.4</b></summary><br>
+
+- `ADDED` : Toggle Double-tap action on/off 
+
+</details>
+
 <details open><summary><b>v1.2.3</b></summary><br>
 
 - `ADDED`   : Sculpt Brush Dynamics

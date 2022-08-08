@@ -30,6 +30,7 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   is_enabled: BoolProperty( name="Enable Controls", default=True )
   isVisible: BoolProperty( name="Show Overlay", default=False )
 
+  enable_double_click: BoolProperty( name="Enable Double Click", default=True )
   double_click_mode: EnumProperty(
     items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
   )
@@ -96,6 +97,12 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   floating_position: FloatVectorProperty(
     name="Floating Offset", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
   )
+
+  double_click_mode: EnumProperty(
+    items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
+  )
+
+  active_menu: EnumProperty( name="Mode Settings", items=edit_modes )
   menu_sets: CollectionProperty( type=MenuModeGroup )
 
   ##
@@ -115,10 +122,8 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     ##
     col = row.column()
     col.label( text="Control Zones" )
-    if self.is_enabled:
-      col.operator( "view3d.toggle_touch", text="Touch Enabled", depress=True )
-    else:
-      col.operator( "view3d.toggle_touch", text="Touch Disabled" )
+    col.prop(self, "is_enabled", toggle=1)
+    col.prop(self, "enable_double_click", toggle=1)
     col.prop( self, "swap_panrotate" )
     col.prop( self, "isVisible", text="Show Overlay" )
     col.prop( self, "use_multiple_colors" )

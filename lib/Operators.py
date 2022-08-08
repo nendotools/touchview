@@ -7,7 +7,6 @@ from bpy.types import Context, Event, Operator
 
 from .utils import buildSafeArea
 
-from .Gizmos import dpi_factor, panel
 from .items import input_mode_items, pivot_items
 
 
@@ -18,6 +17,8 @@ class VIEW3D_OT_Doubletap_Action( Operator ):
 
   def execute( self, context: Context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    if not settings.enable_double_click:
+        return { 'PASS_THROUGH' }
     op = settings.double_click_mode.split( '.' )
     opgrp = getattr( bpy.ops, op[ 0 ] )
     getattr( opgrp, op[ 1 ] )( 'INVOKE_DEFAULT' )
