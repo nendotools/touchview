@@ -120,7 +120,8 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
   def __menuBar(self, visible_gizmos: list[GizmoSet], floating: bool):
     settings = self.__getSettings()
     origin = self.origin
-    padding = 30 * dpi_factor()
+    scalar = 30
+    padding = (scalar*1.5) * dpi_factor()
     count = len(visible_gizmos)
     if not floating:
       safe_area = buildSafeArea()
@@ -142,26 +143,26 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
 
     if ((settings.gizmo_position in ['TOP','BOTTOM'] and settings.menu_style == 'fixed.bar') or
       (settings.menu_orientation == 'HORIZONTAL' and settings.menu_style == 'float.bar')):
-      start = origin.x - ((count-1) * (settings.menu_spacing/20) * padding) / 2
+      start = origin.x - ((count-1) * (settings.menu_spacing/scalar) * padding) / 2
       if settings.menu_style == 'float.bar':
         origin.y = origin.y + padding + settings.menu_spacing / 2
       for i, gizmo in enumerate(visible_gizmos):
         self.__move_gizmo(
             gizmo,
             Vector((
-            start + i * (settings.menu_spacing/20) * padding,
+            start + i * (settings.menu_spacing/scalar) * padding,
             origin.y,
             0.0 
             ))
         )
     else:
-      start = origin.y + (count * (settings.menu_spacing/20) * padding) / 2
+      start = origin.y + (count * (settings.menu_spacing/scalar) * padding) / 2
       for i, gizmo in enumerate(visible_gizmos):
         self.__move_gizmo(
             gizmo,
             Vector((
             origin.x,
-            start - i * (settings.menu_spacing/20) * padding,
+            start - i * (settings.menu_spacing/scalar) * padding,
             0.0 
             ))
         )

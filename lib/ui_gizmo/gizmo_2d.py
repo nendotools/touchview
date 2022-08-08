@@ -24,9 +24,9 @@ def dpi_factor() -> float:
 
 class GizmoSet:
   group: GizmoGroup;
-  visible: bool = True;
   
   def setup(self, group:GizmoGroup, config: dict ):
+    self.visible = True
     self.config = config
     self.has_dependent = 'has_dependent' in config or False
     self.group = group
@@ -44,6 +44,8 @@ class GizmoSet:
     self.skip_draw = False
     self.__updatevisible()
 
+    if self.binding['name'] == 'float_menu':
+      self.primary.hide = not settings.show_float_menu
     if self.binding['name'] in ['menu_controller']:
       self.primary.hide = 'float' not in settings.menu_style
     if self.binding['name'] in ['menu_controller', 'float_menu']:
@@ -119,6 +121,7 @@ class GizmoSet:
 
 class GizmoSetBoolean( GizmoSet ):
   def setup(self, group:GizmoGroup, config: dict ):
+    self.visible = True
     self.config = config
     self.has_dependent = 'has_dependent' in config or False
     self.group = group

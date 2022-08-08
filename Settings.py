@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import Context, PropertyGroup, UILayout
+from bpy.types import Context, PropertyGroup
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
 
 from .lib.ui_gizmo.gizmo_group_2d import gizmo_sets
@@ -101,8 +101,6 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   double_click_mode: EnumProperty(
     items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
   )
-
-  active_menu: EnumProperty( name="Mode Settings", items=edit_modes )
   menu_sets: CollectionProperty( type=MenuModeGroup )
 
   ##
@@ -122,8 +120,8 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     ##
     col = row.column()
     col.label( text="Control Zones" )
-    col.prop(self, "is_enabled", toggle=1)
-    col.prop(self, "enable_double_click", toggle=1)
+    col.prop( self, "is_enabled", toggle=1)
+    col.prop( self, "enable_double_click", toggle=1)
     col.prop( self, "swap_panrotate" )
     col.prop( self, "isVisible", text="Show Overlay" )
     col.prop( self, "use_multiple_colors" )

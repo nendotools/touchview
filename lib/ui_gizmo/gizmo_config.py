@@ -24,7 +24,7 @@ controllerConfig = {
 floatingConfig = {
   "type": "default",
   "binding": {
-    "location": "",
+    "location": "prefs",
     "name": "float_menu"
   },
   "command": "view3d.move_float_menu",

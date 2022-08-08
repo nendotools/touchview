@@ -1,7 +1,6 @@
 import bpy
 from bpy.types import Context, Panel, Menu, VIEW3D_PT_gizmo_display
 
-
 class VIEW3D_PT_NendoPanel:
   bl_space_type = 'VIEW_3D'
   bl_region_type = 'UI'
@@ -9,18 +8,25 @@ class VIEW3D_PT_NendoPanel:
 
 
 class VIEW3D_PT_NendoViewport( VIEW3D_PT_NendoPanel, Panel ):
-  bl_idname = "VIEW3D_PT_view_ops"
-  bl_label = "Viewport Settings"
+  bl_idname = "VIEW3D_PT_NendoViewport"
+  bl_label = "Touchview Settings"
+
+  def draw(self, context: Context):
+    pass
+
+
+class VIEW3D_PT_ControlZones( VIEW3D_PT_NendoPanel, Panel):
+  bl_label = "Control Zones"
+  bl_parent_id = "VIEW3D_PT_NendoViewport"
 
   def draw( self, context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
-    view = context.space_data
-    space = context.area.spaces.active
 
     col = self.layout.column()
-    col.label( text="Control Zones" )
     col.prop( settings, "is_enabled", toggle=1 )
     col.prop( settings, "enable_double_click", toggle=1 )
+    col.prop_menu_enum( settings, "double_click_mode" )
+
     col.prop( settings, "swap_panrotate" )
     col.prop( settings, "isVisible", text="Show Overlay" )
     col.prop( settings, "use_multiple_colors" )
@@ -29,41 +35,38 @@ class VIEW3D_PT_NendoViewport( VIEW3D_PT_NendoPanel, Panel ):
       col.prop( settings, "overlay_secondary_color", text="Secondary Color" )
     col.prop( settings, "width" )
     col.prop( settings, "radius" )
-
     col.separator()
 
-    col.label( text="Viewport Options" )
-    col.label(text="Gizmo Menu Style")
-    tabs = col.grid_flow()
-    tabs.props_enum(settings, "menu_style")
+class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
+  bl_label = "Viewport Options"
+  bl_parent_id = "VIEW3D_PT_NendoViewport"
+
+  def draw(self, context:Context ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    view = context.space_data
+    space = context.area.spaces.active
+
+    group = self.layout.column()
+
+    group.prop_menu_enum(settings, "menu_style")
 
     if settings.menu_style == 'fixed.bar':
-        col.prop_menu_enum( settings, "gizmo_position" )
-    col.prop( settings, "menu_spacing", slider=True )
-    col.operator( "view3d.tools_region_flip", text="Flip Tools" )
+        group.prop_menu_enum( settings, "gizmo_position" )
+    group.prop( settings, "menu_spacing", slider=True )
+    group.operator( "view3d.tools_region_flip", text="Flip Tools" )
 
     if len( space.region_quadviews ) > 0:
-      col.operator( "screen.region_quadview", text="Disable Quadview" )
+      group.operator( "screen.region_quadview", text="Disable Quadview" )
     else:
-      col.operator( "screen.region_quadview", text="Enable Quadview" )
-      col.prop( space, "lock_cursor", text="Lock to Cursor" )
-      col.prop( view.region_3d, "lock_rotation", text="Lock Rotation" )
+      group.operator( "screen.region_quadview", text="Enable Quadview" )
+      group.prop( space, "lock_cursor", text="Lock to Cursor" )
+      group.prop( view.region_3d, "lock_rotation", text="Lock Rotation" )
 
-    col.separator()
-    col.prop( settings, "subdivision_limit" )
-    col.prop_menu_enum( settings, "double_click_mode" )
-    col.separator()
+    group.separator()
+    group.prop( settings, "subdivision_limit" )
+    group.separator()
 
-    if not settings.show_float_menu:
-      col.operator( "view3d.toggle_floating_menu", text="Show Floating Menu" )
-    else:
-      col.operator( "view3d.toggle_floating_menu", text="Hide Floating Menu", depress=True )
-      col.label( text="Floating Menu Settings" )
-      col.prop( settings, "active_menu", text="" )
-      box = col.box()
-      mList = settings.getMenuSettings( settings.active_menu )
-      for i in range( 7 ):
-        box.prop( mList, "menu_slot_" + str( i + 1 ), text="" )
+    group.prop( settings, "show_float_menu", toggle=1 )
     context.area.tag_redraw()
 
 
@@ -164,4 +167,23 @@ class VIEW3D_PT_gizmo_panel( VIEW3D_PT_gizmo_display ):
         col.label(text="Camera")
         col.prop(view, "show_gizmo_camera_lens", text="Lens")
         col.prop(view, "show_gizmo_camera_dof_distance", text="Focus Distance")
+
+__classes__ = (
+  PIE_MT_Floating_Menu,
+  VIEW3D_PT_NendoViewport, VIEW3D_PT_ControlZones,
+  VIEW3D_PT_ViewportOptions, VIEW3D_PT_gizmo_panel
+)
+
+
+def register():
+  from bpy.utils import register_class
+  for cls in __classes__:
+    register_class( cls )
+
+
+def unregister():
+  from bpy.utils import unregister_class
+
+  for cls in reversed( __classes__ ):
+    unregister_class( cls )
 
