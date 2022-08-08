@@ -16,6 +16,8 @@ class VIEW3D_OT_Doubletap_Action( Operator ):
 
   def execute( self, context: Context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    if not settings.enable_double_click:
+        return { 'PASS_THROUGH' }
     op = settings.double_click_mode.split( '.' )
     opgrp = getattr( bpy.ops, op[ 0 ] )
     getattr( opgrp, op[ 1 ] )( 'INVOKE_DEFAULT' )

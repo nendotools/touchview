@@ -19,10 +19,8 @@ class VIEW3D_PT_NendoViewport( VIEW3D_PT_NendoPanel, Panel ):
 
     col = self.layout.column()
     col.label( text="Control Zones" )
-    if settings.is_enabled:
-      col.operator( "view3d.toggle_touch", text="Touch Enabled", depress=True )
-    else:
-      col.operator( "view3d.toggle_touch", text="Touch Disabled" )
+    col.prop( settings, "is_enabled", toggle=1 )
+    col.prop( settings, "enable_double_click", toggle=1 )
     col.prop( settings, "swap_panrotate" )
     col.prop( settings, "isVisible", text="Show Overlay" )
     col.prop( settings, "use_multiple_colors" )
