@@ -53,8 +53,10 @@ class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
     if settings.menu_style == 'fixed.bar':
         group.prop_menu_enum( settings, "gizmo_position" )
     group.prop( settings, "menu_spacing", slider=True )
-    group.operator( "view3d.tools_region_flip", text="Flip Tools" )
+    group.separator()
 
+    group.prop( settings, "show_float_menu", toggle=1 )
+    group.operator( "view3d.tools_region_flip", text="Flip Tools" )
     if len( space.region_quadviews ) > 0:
       group.operator( "screen.region_quadview", text="Disable Quadview" )
     else:
@@ -63,10 +65,7 @@ class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
       group.prop( view.region_3d, "lock_rotation", text="Lock Rotation" )
 
     group.separator()
-    group.prop( settings, "subdivision_limit" )
-    group.separator()
-
-    group.prop( settings, "show_float_menu", toggle=1 )
+    group.prop( settings, "subdivision_limit", slider=True )
     context.area.tag_redraw()
 
 

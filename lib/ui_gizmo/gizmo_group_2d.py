@@ -132,37 +132,38 @@ class GIZMO_GT_ViewportGizmoGroup( GizmoGroup ):
       ))
 
       if settings.gizmo_position == 'TOP':
-        origin.y = padding + safe_area[1].y
+        origin.y = safe_area[1].y
       elif settings.gizmo_position == 'BOTTOM':
-        origin.y = padding + safe_area[0].y
+        origin.y = safe_area[0].y
       else:
         if settings.gizmo_position == 'LEFT':
             origin.x = safe_area[0].x
         elif settings.gizmo_position == 'RIGHT':
             origin.x = safe_area[1].x
 
+    gizmo_spacing = (((settings.menu_spacing/scalar) * padding) + padding) * 0.5
     if ((settings.gizmo_position in ['TOP','BOTTOM'] and settings.menu_style == 'fixed.bar') or
       (settings.menu_orientation == 'HORIZONTAL' and settings.menu_style == 'float.bar')):
-      start = origin.x - ((count-1) * (settings.menu_spacing/scalar) * padding) / 2
+      start = origin.x - ((count-1) * gizmo_spacing) / 2
       if settings.menu_style == 'float.bar':
         origin.y = origin.y + padding + settings.menu_spacing / 2
       for i, gizmo in enumerate(visible_gizmos):
         self.__move_gizmo(
             gizmo,
             Vector((
-            start + i * (settings.menu_spacing/scalar) * padding,
+            start + i * gizmo_spacing, 
             origin.y,
             0.0 
             ))
         )
     else:
-      start = origin.y + (count * (settings.menu_spacing/scalar) * padding) / 2
+      start = origin.y + (count * gizmo_spacing) / 2
       for i, gizmo in enumerate(visible_gizmos):
         self.__move_gizmo(
             gizmo,
             Vector((
             origin.x,
-            start - i * (settings.menu_spacing/scalar) * padding,
+            start - i * gizmo_spacing, 
             0.0 
             ))
         )
