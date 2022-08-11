@@ -58,7 +58,6 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     size=4,
   )
 
-
   ##
   # Gizmo Options
   ##

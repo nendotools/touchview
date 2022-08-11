@@ -47,7 +47,7 @@ class GizmoSet:
     if self.binding['name'] == 'float_menu':
       self.primary.hide = not settings.show_float_menu
     if self.binding['name'] in ['menu_controller']:
-      self.primary.hide = 'float' not in settings.menu_style
+      self.primary.hide = 'float' not in settings.menu_style or not settings.show_menu
     if self.binding['name'] in ['menu_controller', 'float_menu']:
       gui_scale = 22 * dpi_factor()
       self.primary.scale_basis = max( settings.menu_spacing - gui_scale/1.5, gui_scale/2)
@@ -56,6 +56,10 @@ class GizmoSet:
     self.primary.matrix_basis = Matrix.Translation(position) 
 
   def __updatevisible(self):
+    if not self.__getSettings().show_menu and self.binding['name'] not in ['float_menu']:
+      self.visible = False
+      self.primary.hide = True
+      return
     if(self.binding['location'] == "prefs"):
       self.visible = getattr(
         bpy.context.preferences.addons["touchview"].preferences,
@@ -144,6 +148,10 @@ class GizmoSetBoolean( GizmoSet ):
     self.__updatevisible()
 
   def __updatevisible(self):
+    if not self._GizmoSet__getSettings().show_menu and self.binding['name'] not in ['float_menu']:
+      self.visible = False
+      self.primary.hide = True
+      return
     self.visible = getattr(bpy.context.preferences.addons["touchview"].preferences, 'show_'+self.binding['name']);
     if self.visible:
       self.visible = self._GizmoSet__visibilityLock() and not self._GizmoSet__checkAttributeBind()
