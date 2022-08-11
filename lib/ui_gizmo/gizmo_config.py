@@ -53,6 +53,16 @@ redoConfig = {
   "icon": "LOOP_FORWARDS"
 }
 
+touchViewConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "is_enabled",
+  },
+  "command":"view3d.toggle_touch",
+  "icon":"VIEW_PAN"
+}
+
 snapViewConfig = {
   "type": "default",
   "binding": {
@@ -189,7 +199,7 @@ rotLocToggleConfig = {
 }
 gizmo_sets = {
 # ALL includes only the modes in this list
-    "ALL": { "undoredo", "show_fullscreen", "region_quadviews", "snap_view", "n_panel", "lock_rotation" },
+    "ALL": { "undoredo", "is_enabled", "show_fullscreen", "region_quadviews", "snap_view", "n_panel", "lock_rotation" },
     "SCULPT": { "pivot_mode", "voxel_remesh", "multires", "brush_dynamics" },
     "OBJECT": { "multires" },
     "EDIT_MESH": {},
@@ -226,18 +236,16 @@ gizmo_colors = {
         "alpha_highlight": 0.3
     }
 }
+
 # Enum 2D Gizmo
-pivotModeConfig = [
-  (bpy.context.preferences.addons["touchview"].preferences, "pivot_mode"), # property location, watch-enum
-  ("view3d.step_pivot_mode", pivot_items, pivot_icon_items)                # enum stepper, enum mode, enum icon
-]
-
-
-#  Boolean/parameter binding handled the same way.
-#  Single config per button, paired after with binding config
-# 
-# - Generate Gizmos
-# - set on state, off state
-# 
-# Enums need a different solution: list binding
-# - I'm not sure yet... 
+#
+## not implemented yet
+pivorModeConfig = {
+  "type": "enum",
+  "binding": {
+    "location": "prefs",
+    "name": "pivot_mode"
+  },
+  "command": "",
+  "icons": pivot_icon_items
+}

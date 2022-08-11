@@ -31,6 +31,7 @@ def panel( type ) -> tuple:
 configs = [
   undoConfig,
   redoConfig,
+  touchViewConfig,
   snapViewConfig,
   fullscreenToggleConfig,
   quadviewToggleConfig,

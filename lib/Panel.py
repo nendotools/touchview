@@ -19,13 +19,11 @@ class VIEW3D_PT_ControlZones( VIEW3D_PT_NendoPanel, Panel):
   bl_label = "Control Zones"
   bl_parent_id = "VIEW3D_PT_NendoViewport"
 
-  def draw( self, context ):
+  def draw( self, context: Context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
 
     col = self.layout.column()
     col.prop( settings, "is_enabled", toggle=1 )
-    col.prop( settings, "enable_double_click", toggle=1 )
-    col.prop_menu_enum( settings, "double_click_mode" )
 
     col.prop( settings, "swap_panrotate" )
     col.prop( settings, "isVisible", text="Show Overlay" )
@@ -47,6 +45,9 @@ class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
     space = context.area.spaces.active
 
     group = self.layout.column()
+    group.prop( settings, "enable_double_click", toggle=1 )
+    if settings.enable_double_click:
+      group.prop_menu_enum( settings, "double_click_mode" )
 
     group.prop_menu_enum(settings, "menu_style")
 

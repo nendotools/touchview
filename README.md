@@ -117,7 +117,7 @@ This feature allows you to quickly access the UI for brush resizing and strength
 
 <img src="/docs/sample_menu.png" width="50%">
 
-This button allows you to assign up to 7 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the settings menu.
+This button allows you to assign up to 8 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the settings menu.
 
 
 
@@ -129,9 +129,8 @@ I'm continuing to look at features which could improve the experience of Blender
 
 Currently, I'm planning to add the following features:
 
-> - viewport camera toggle Gizmo for non-pen users
-> - scaleable Gizmos
 > - auto-retopology levels
+> - better 3D gizmos for edit mode
 
 This list will change as I explore options and get more user feedback.
 
@@ -183,7 +182,7 @@ Select it and click `Install Add-on`.
 
 - `UPDATED` : Gizmos-related code simplified and reorganized for easier management
 - `ADDED`   : floating gizmo bar and floating gizmo radial menu modes 
-- `ADDED`   : gizmo menu spacing
+- `ADDED`   : customizable gizmo menu spacing
 - `UPDATED` : viewport safe area calculation
 - `UPDATED` : floating action menu to use same move/access functionality as floating radial menu
 - `ADDED`   : 8th custom action for floating action menu
