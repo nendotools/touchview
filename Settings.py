@@ -122,7 +122,6 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     col = row.column()
     col.label( text="Control Zones" )
     col.prop( self, "is_enabled", toggle=1)
-    col.prop( self, "enable_double_click", toggle=1)
     col.prop( self, "swap_panrotate" )
     col.prop( self, "isVisible", text="Show Overlay" )
     col.prop( self, "use_multiple_colors" )
@@ -152,6 +151,7 @@ class OverlaySettings( bpy.types.AddonPreferences ):
 
         wrapper.separator()
         wrapper.label( text="Tool Settings" )
+        wrapper.prop( self, "enable_double_click", toggle=1)
         wrapper.prop_menu_enum( self, "double_click_mode" )
         wrapper.prop( self, "subdivision_limit", slider=True )
 
