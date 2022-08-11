@@ -62,6 +62,7 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   # Gizmo Options
   ##
   show_menu: BoolProperty( name="Toggle Menu Display", default=True )
+  show_gizmos: BoolProperty( name="Toggle Gizmos on Menu", default=True )
   menu_style: EnumProperty(
     name="Menu Style", default="float.radial", items=menu_style_items
   )
