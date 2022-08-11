@@ -32,3 +32,10 @@ double_click_items = [ ( "object.transfer_mode", "Transfer Mode", "" ),
                        ( "view3d.toggle_touch", "Toggle Touch View", "" ),
                        ( "view3d.localview", "Toggle Local View", "" ),
                        ( "screen.screen_full_area", "Toggle Full Screen", "" ) ]
+
+menu_style_items = [ ("fixed.bar","Fixed Bar",""),
+                     ("float.bar","Floating Bar",""),
+                     ("float.radial","Floating Radial","")]
+
+menu_orientation_items = [ ("HORIZONTAL","Horizontal",""),
+                           ("VERTICAL","Vertical","")]

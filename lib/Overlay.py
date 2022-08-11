@@ -10,8 +10,6 @@ from ..Settings import OverlaySettings
 
 
 class Overlay():
-  meshes: list[ object ]
-
   def __init__( self ):
     self.meshes = []
 
