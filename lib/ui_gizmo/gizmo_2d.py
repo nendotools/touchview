@@ -40,7 +40,7 @@ class GizmoSet:
 
   def draw_prepare(self):
     settings = self.__getSettings()
-    self.hidden = not settings.show_menu
+    self.hidden = not settings.show_gizmos
     self.skip_draw = False
     self.__updatevisible()
 
@@ -143,7 +143,7 @@ class GizmoSetBoolean( GizmoSet ):
 
   def draw_prepare(self):
     settings = self._GizmoSet__getSettings()
-    self.hidden = not settings.show_menu
+    self.hidden = not settings.show_gizmos
     self.skip_draw = False
     self.__updatevisible()
 

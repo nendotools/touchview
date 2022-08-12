@@ -449,7 +449,7 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
       if not self.__hasMoved():
         settings.menu_position[0] = self.init_x
         settings.menu_position[1] = self.init_y
-        settings.show_menu = not settings.show_gizmos
+        settings.show_gizmos = not settings.show_gizmos
       return { 'FINISHED' }
     return { 'RUNNING_MODAL' }
 
