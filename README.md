@@ -131,6 +131,8 @@ Currently, I'm planning to add the following features:
 
 > - auto-retopology levels
 > - better 3D gizmos for edit mode
+> - right-click action
+> - control gizmo enum (flip through object gizmos in sculpt mode)
 
 This list will change as I explore options and get more user feedback.
 
@@ -177,6 +179,10 @@ Select it and click `Install Add-on`.
 ###### *note:* You do not need to extract it, first. Simply install the ZIP, directly
 
 # Changelog
+
+<details open><summary><b>v2.1.0</b></summary><br>
+
+</details>
 
 <details open><summary><b>v2.0.0</b></summary><br>
 
