@@ -35,6 +35,20 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
   )
 
+  enable_right_click: BoolProperty( name="Enable Right Click", default=True )
+  right_click_mode: EnumProperty(
+    items=double_click_items, name="Right Click Mode", default="screen.screen_full_area"
+  )
+  right_click_source: EnumProperty(
+    items=[
+        ("none","none","disabled"),
+        ("mouse","mouse","mouse/touch right click"),
+        ("pen","pen","pen right click")
+    ],
+    name="Right Click Source",
+    default="mouse"
+  )
+
   swap_panrotate: BoolProperty( name="Swap Pan/Rotate", default=False )
 
   width: FloatProperty( name="Width", default=40.0, min=10.0, max=100 )
@@ -139,34 +153,54 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     tabs = col.column_flow(columns=3, align=True)
     tabs.prop_tabs_enum(self, "gizmo_tabs")
 
-    wrapper = col.box()
+    main= col.box()
     if self.gizmo_tabs == 'MENU':
-        wrapper.label(text="Gizmo Menu Style")
-        tabs = wrapper.column_flow(columns=3, align=True)
+        main.label(text="Gizmo Menu Style")
+        tabs = main.column_flow(columns=3, align=True)
         tabs.prop_tabs_enum(self, "menu_style")
 
         if self.menu_style == 'fixed.bar':
-            wrapper.prop_menu_enum( self, "gizmo_position" )
-        wrapper.prop( self, "menu_spacing", slider=True )
+            main.prop_menu_enum( self, "gizmo_position" )
+        main.prop( self, "menu_spacing", slider=True )
 
-        wrapper.separator()
-        wrapper.label( text="Tool Settings" )
+        main.separator()
+        main.label( text="Input Options" )
+        wrapper = main.box()
+        wrapper.label( text="Right Click Actions" )
+        r = wrapper.split(factor=0.3, align=True)
+        r.label( text="Input Source" )
+        r = r.row()
+        r.prop( self, "right_click_source", expand=True )
+
+        r = wrapper.split(factor=0.3, align=True)
+        r.label( text="Click Action" )
+        c = r.column()
+        c.prop( self, "right_click_mode", expand=True )
+        main.separator()
+        wrapper = main.box()
+        wrapper.label( text="Double Click Actions" )
         wrapper.prop( self, "enable_double_click", toggle=1)
-        wrapper.prop_menu_enum( self, "double_click_mode" )
-        wrapper.prop( self, "subdivision_limit", slider=True )
+        r = wrapper.split(factor=0.3, align=True)
+        r.label( text="Click Action" )
+        c = r.column()
+        c.prop( self, "double_click_mode", expand=True )
+
+        main.separator()
+        main.label( text="Tool Settings" )
+        main.prop( self, "subdivision_limit", slider=True )
 
     if self.gizmo_tabs == 'ACTIONS':
         if not self.show_float_menu:
-            wrapper.operator( "view3d.toggle_floating_menu", text="Show Floating Menu" )
+            main.operator( "view3d.toggle_floating_menu", text="Show Action Menu" )
         else:
-            wrapper.operator( "view3d.toggle_floating_menu", text="Hide Floating Menu", depress=True )
-            box = wrapper.box()
+            main.operator( "view3d.toggle_floating_menu", text="Hide Action Menu", depress=True )
+            box = main.box()
             box.active = self.show_float_menu
-            wrapper = box.column()
-            wrapper.prop( self, "active_menu" )
+            main = box.column()
+            main.prop( self, "active_menu" )
             mList = self.getMenuSettings( self.active_menu )
             for i in range( 7 ):
-                wrapper.prop( mList, "menu_slot_" + str( i + 1 ) )
+                main.prop( mList, "menu_slot_" + str( i + 1 ) )
 
   ##
   # Data Accessors

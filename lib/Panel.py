@@ -35,6 +35,65 @@ class VIEW3D_PT_ControlZones( VIEW3D_PT_NendoPanel, Panel):
     col.prop( settings, "radius" )
     col.separator()
 
+
+class VIEW3D_PT_RightClick_Menu( VIEW3D_PT_NendoPanel, Panel):
+  bl_label = "Right Click Actions"
+  bl_parent_id = "VIEW3D_PT_NendoViewport"
+
+  def draw(self, context:Context ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    group = self.layout.column()
+    r = group.split(factor=0.3, align=True)
+    r.label( text="Input Source" )
+    r = r.row()
+    r.prop( settings, "right_click_source", expand=True )
+
+    r = group.split(factor=0.3, align=True)
+    r.label( text="Click Action" )
+    c = r.column()
+    c.prop( settings, "right_click_mode", expand=True )
+
+
+class VIEW3D_PT_DoubleClick_Menu( VIEW3D_PT_NendoPanel, Panel):
+  bl_label = "Double Click Actions"
+  bl_parent_id = "VIEW3D_PT_NendoViewport"
+
+  def draw(self, context:Context ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    group = self.layout.column()
+    r = group.split(factor=0.3, align=True)
+    group.separator()
+    group.prop( settings, "enable_double_click", toggle=1)
+    r = group.split(factor=0.3, align=True)
+    r.label( text="Click Action" )
+    c = r.column()
+    c.prop( settings, "double_click_mode", expand=True )
+
+
+class VIEW3D_PT_GizmoBar( VIEW3D_PT_NendoPanel, Panel):
+  bl_label = "Gizmo Bar"
+  bl_parent_id = "VIEW3D_PT_NendoViewport"
+
+  def draw(self, context:Context ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    group = self.layout.column()
+    group.label( text="Menu Style" )
+    r = group.row()
+    r.prop(settings, "menu_style", expand=True )
+    if settings.menu_style == 'fixed.bar':
+        group.prop_menu_enum( settings, "gizmo_position" )
+    group.prop( settings, "menu_spacing", slider=True )
+
+
+class VIEW3D_PT_ToolSettings( VIEW3D_PT_NendoPanel, Panel):
+  bl_label = "Tool Options"
+  bl_parent_id = "VIEW3D_PT_NendoViewport"
+
+  def draw(self, context:Context ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    group = self.layout.column()
+    group.prop( settings, "subdivision_limit", slider=True )
+
 class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
   bl_label = "Viewport Options"
   bl_parent_id = "VIEW3D_PT_NendoViewport"
@@ -43,19 +102,7 @@ class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
     view = context.space_data
     space = context.area.spaces.active
-
     group = self.layout.column()
-    group.prop( settings, "enable_double_click", toggle=1 )
-    if settings.enable_double_click:
-      group.prop_menu_enum( settings, "double_click_mode" )
-
-    group.prop_menu_enum(settings, "menu_style")
-
-    if settings.menu_style == 'fixed.bar':
-        group.prop_menu_enum( settings, "gizmo_position" )
-    group.prop( settings, "menu_spacing", slider=True )
-    group.separator()
-
     group.prop( settings, "show_float_menu", toggle=1 )
     group.operator( "view3d.tools_region_flip", text="Flip Tools" )
     if len( space.region_quadviews ) > 0:
@@ -64,9 +111,6 @@ class VIEW3D_PT_ViewportOptions( VIEW3D_PT_NendoPanel, Panel):
       group.operator( "screen.region_quadview", text="Enable Quadview" )
       group.prop( space, "lock_cursor", text="Lock to Cursor" )
       group.prop( view.region_3d, "lock_rotation", text="Lock Rotation" )
-
-    group.separator()
-    group.prop( settings, "subdivision_limit", slider=True )
     context.area.tag_redraw()
 
 
@@ -170,8 +214,9 @@ class VIEW3D_PT_gizmo_panel( VIEW3D_PT_gizmo_display ):
 
 __classes__ = (
   PIE_MT_Floating_Menu,
-  VIEW3D_PT_NendoViewport, VIEW3D_PT_ControlZones,
-  VIEW3D_PT_ViewportOptions, VIEW3D_PT_gizmo_panel
+  VIEW3D_PT_NendoViewport, VIEW3D_PT_ControlZones, VIEW3D_PT_ViewportOptions,
+  VIEW3D_PT_RightClick_Menu, VIEW3D_PT_DoubleClick_Menu, VIEW3D_PT_GizmoBar,
+  VIEW3D_PT_ToolSettings, VIEW3D_PT_gizmo_panel
 )
 
 
