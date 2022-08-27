@@ -10,6 +10,43 @@ from .utils import buildSafeArea
 from .items import input_mode_items, pivot_items
 
 
+class VIEW3D_OT_RightClick_Action( Operator ):
+  """ Viewport right-click shortcut """
+  bl_idname = "view3d.rc_action"
+  bl_label = "Viewport right-click shortcut"
+
+  def execute( self, context: Context ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    op = settings.right_click_mode.split( '.' )
+    print(context.mode)
+    if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
+        return { 'FINISHED' }
+    opgrp = getattr( bpy.ops, op[ 0 ] )
+    getattr( opgrp, op[ 1 ] )( 'INVOKE_DEFAULT' )
+    return { 'FINISHED' }
+
+  def invoke( self, context: Context, event: Event ):
+    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    if settings.right_click_source == "none":
+        return { 'PASS_THROUGH' }
+    if event.type not in [ 'RIGHTMOUSE' ]:
+      return { 'PASS_THROUGH' }
+    if event.pressure == 1.0 and settings.right_click_source == "pen":
+      return { 'PASS_THROUGH' }
+    if event.pressure != 1.0 and settings.right_click_source == "mouse":
+      return { 'PASS_THROUGH' }
+    if event.value == "DOUBLE_CLICK":
+      return { 'PASS_THROUGH' }
+    self.execute( context )
+    return { 'FINISHED' }
+
+  @classmethod
+  def poll( cls, context: Context ):
+    return context.area.type in [
+      'NODE_EDITOR', 'VIEW_2D', 'VIEW_3D', 'IMAGE_EDITOR'
+    ] and context.region.type == 'WINDOW'
+
+
 class VIEW3D_OT_Doubletap_Action( Operator ):
   """ Viewport double-tap shortcut """
   bl_idname = "view3d.dt_action"

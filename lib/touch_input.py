@@ -5,6 +5,7 @@ MOUSE = 'MOUSE'
 PEN = 'PEN'
 MMOUSE = 'MIDDLEMOUSE'
 LMOUSE = 'LEFTMOUSE'
+RMOUSE = 'RIGHTMOUSE'
 PRESS = 'PRESS'
 DCLICK = 'DOUBLE_CLICK'
 
@@ -45,6 +46,9 @@ def assign_keymaps():
       modified_keymaps.append( ( km, kmi ) )
 
       kmi = km.keymap_items.new( 'view3d.dt_action', LMOUSE, DCLICK )
+      modified_keymaps.append( ( km, kmi ) )
+
+      kmi = km.keymap_items.new( 'view3d.rc_action', RMOUSE, PRESS )
       modified_keymaps.append( ( km, kmi ) )
 
 
