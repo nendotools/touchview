@@ -18,7 +18,6 @@ class VIEW3D_OT_RightClick_Action( Operator ):
   def execute( self, context: Context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
     op = settings.right_click_mode.split( '.' )
-    print(context.mode)
     if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
         return { 'FINISHED' }
     opgrp = getattr( bpy.ops, op[ 0 ] )
