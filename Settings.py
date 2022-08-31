@@ -92,6 +92,7 @@ class OverlaySettings( bpy.types.AddonPreferences ):
 
   show_undoredo: BoolProperty( name="Undo/Redo", default=True )
   show_is_enabled: BoolProperty( name="Toggle Touch", default=True )
+  show_control_gizmo: BoolProperty( name="Toggle Control Gizmo", default=True )
   show_show_fullscreen: BoolProperty( name="Fullscreen", default=True )
   show_region_quadviews: BoolProperty( name="Quadview", default=True )
   show_pivot_mode: BoolProperty( name="Pivot Mode", default=True )

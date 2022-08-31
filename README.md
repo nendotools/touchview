@@ -179,6 +179,14 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.2.0</b></summary><br>
+
+- `ADDED`   : Toggle control gizmo (translate, rotate, scale, none) 
+- `UPDATED` : Added Brush dynamics (from sculpt mode) to paint modes
+  - <span style="font-size: 0.6em">NOTE: some paint/sculpt modes when in 2D/Draw canvas mode aren't yet hooked up to brush dynamics </span>
+
+</details>
+
 <details open><summary><b>v2.1.0</b></summary><br>
 
 - `ADDED`   : Right Click Actions

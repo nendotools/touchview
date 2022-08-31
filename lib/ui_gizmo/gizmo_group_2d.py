@@ -32,6 +32,7 @@ configs = [
   undoConfig,
   redoConfig,
   touchViewConfig,
+  controlGizmoConfig,
   snapViewConfig,
   fullscreenToggleConfig,
   quadviewToggleConfig,

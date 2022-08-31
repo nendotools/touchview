@@ -63,6 +63,16 @@ touchViewConfig = {
   "icon":"VIEW_PAN"
 }
 
+controlGizmoConfig = {
+  "type": "default",
+  "binding": {
+    "location": "prefs",
+    "name": "control_gizmo",
+  },
+  "command": "view3d.cycle_control_gizmo",
+  "icon": "ORIENTATION_LOCAL"
+}
+
 snapViewConfig = {
   "type": "default",
   "binding": {
@@ -200,14 +210,14 @@ rotLocToggleConfig = {
 gizmo_sets = {
 # ALL includes only the modes in this list
     "ALL": { "undoredo", "is_enabled", "show_fullscreen", "region_quadviews", "snap_view", "n_panel", "lock_rotation" },
-    "SCULPT": { "pivot_mode", "voxel_remesh", "multires", "brush_dynamics" },
-    "OBJECT": { "multires" },
-    "EDIT_MESH": {},
+    "SCULPT": { "control_gizmo", "pivot_mode", "voxel_remesh", "multires", "brush_dynamics" },
+    "OBJECT": { "control_gizmo", "multires" },
+    "EDIT_MESH": { "control_gizmo" },
     "POSE": {},
-    "PAINT_TEXTURE": {},
-    "PAINT_VERTEX": {},
-    "PAINT_WEIGHT": {},
-    "PAINT_GPENCIL": {}
+    "PAINT_TEXTURE": { "brush_dynamics" },
+    "PAINT_VERTEX": { "brush_dynamics" },
+    "PAINT_WEIGHT": { "brush_dynamics" },
+    "PAINT_GPENCIL": { "brush_dynamics" }
 }
 
 gizmo_colors = {
@@ -240,7 +250,7 @@ gizmo_colors = {
 # Enum 2D Gizmo
 #
 ## not implemented yet
-pivorModeConfig = {
+pivotModeConfig = {
   "type": "enum",
   "binding": {
     "location": "prefs",

@@ -39,3 +39,8 @@ menu_style_items = [ ("fixed.bar","Fixed Bar",""),
 
 menu_orientation_items = [ ("HORIZONTAL","Horizontal",""),
                            ("VERTICAL","Vertical","")]
+
+control_gizmo_items = [ ("none","","disable_gizmo"),
+                       ("translate","show_gizmo_object_translate",""),
+                       ("rotate","show_gizmo_object_rotate",""),
+                       ("scale","show_gizmo_object_scale","")]

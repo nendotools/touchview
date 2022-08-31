@@ -3,7 +3,7 @@ from mathutils import Vector
 
 from bpy import ops
 from bpy.props import EnumProperty
-from bpy.types import Context, Event, Operator
+from bpy.types import Context, Event, Operator, SpaceView3D
 
 from .utils import buildSafeArea
 
@@ -342,9 +342,24 @@ class VIEW3D_OT_BrushResize( Operator ):
             context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
           else:
             context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
+        data_path = "tool_settings.sculpt.brush.size"
+        if context.mode == 'PAINT_VERTEX':
+          data_path = "tool_settings.vertex_paint.brush.size"
+        if context.mode == 'PAINT_WEIGHT':
+          data_path = "tool_settings.weight_paint.brush.size"
+        if context.mode == 'PAINT_IMAGE':
+          data_path = "tool_settings.image_paint.brush.size"
+        if context.mode == 'PAINT_TEXTURE':
+          data_path = "tool_settings.image_paint.brush.size"
+        if context.mode == 'PAINT_GPENCIL':
+            bpy.ops.wm.radial_control(
+                    "INVOKE_DEFAULT",
+                    data_path_primary = "tool_settings.gpencil_paint.brush.size", 
+                    )
+            return { 'FINISHED' }
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
-                data_path_primary = "tool_settings.sculpt.brush.size",
+                data_path_primary = data_path, 
                 data_path_secondary = "tool_settings.unified_paint_settings.size",
                 use_secondary = "tool_settings.unified_paint_settings.use_unified_size",
                 rotation_path = "tool_settings.sculpt.brush.texture_slot.angle",
@@ -374,9 +389,24 @@ class VIEW3D_OT_BrushStrength( Operator ):
             context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
           else:
             context.window.cursor_warp(self.mousex, math.floor(context.region.height/2))
+        data_path = "tool_settings.sculpt.brush.strength"
+        if context.mode == 'PAINT_VERTEX':
+          data_path = "tool_settings.vertex_paint.brush.strength"
+        if context.mode == 'PAINT_WEIGHT':
+          data_path = "tool_settings.weight_paint.brush.strength"
+        if context.mode == 'PAINT_GPENCIL':
+          bpy.ops.wm.radial_control(
+                "INVOKE_DEFAULT",
+                data_path_primary = "tool_settings.gpencil_paint.brush.gpencil_settings.pen_strength"
+          )
+          return { 'FINISHED' }
+        if context.mode == 'PAINT_IMAGE':
+          data_path = "tool_settings.image_paint.brush.strength"
+        if context.mode == 'PAINT_TEXTURE':
+          data_path = "tool_settings.image_paint.brush.strength"
         bpy.ops.wm.radial_control(
                 "INVOKE_DEFAULT",
-                data_path_primary = "tool_settings.sculpt.brush.strength",
+                data_path_primary = data_path, 
                 data_path_secondary = "tool_settings.unified_paint_settings.strength",
                 use_secondary = "tool_settings.unified_paint_settings.use_unified_strength",
                 rotation_path = "tool_settings.sculpt.brush.texture_slot.angle",
@@ -586,3 +616,39 @@ class VIEW3D_OT_MenuController( Operator ):
     context.window_manager.modal_handler_add( self )
     return { 'RUNNING_MODAL' }
 
+
+class VIEW_3D_OT_CycleControlGizmo( Operator ):
+  bl_idname = "view3d.cycle_control_gizmo"
+  bl_label = "switch object control gizmo"
+
+  def execute( self, context: Context):
+    space = context.space_data
+    mode = self.getMode(space)
+    self.clearControls(space)
+    if mode == 'none':
+      space.show_gizmo_object_translate = True
+    if mode == 'translate':
+      space.show_gizmo_object_rotate = True
+    if mode == 'rotate':
+      space.show_gizmo_object_scale = True
+    return { 'FINISHED' }
+
+  def getMode(self, space: SpaceView3D):
+    if space.show_gizmo_object_translate:
+      return 'translate'
+    if space.show_gizmo_object_rotate:
+      return 'rotate'
+    if space.show_gizmo_object_scale:
+      return 'scale'
+    return 'none'
+
+  def clearControls(self, space: SpaceView3D):
+    space.show_gizmo_object_translate = False
+    space.show_gizmo_object_rotate = False
+    space.show_gizmo_object_scale = False
+
+  @classmethod
+  def poll( cls, context: Context):
+    return context.area.type in [
+      'VIEW_2D', 'VIEW_3D'
+    ] and context.region.type == 'WINDOW'
