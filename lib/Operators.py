@@ -50,7 +50,7 @@ class VIEW3D_OT_Doubletap_Action( Operator ):
   bl_idname = "view3d.dt_action"
   bl_label = "Viewport double-tap shortcut"
 
-  def execute( self, context: Context ):
+  def execute( self, _: Context ):
     settings = bpy.context.preferences.addons[ 'touchview' ].preferences
     if not settings.enable_double_click:
         return { 'PASS_THROUGH' }

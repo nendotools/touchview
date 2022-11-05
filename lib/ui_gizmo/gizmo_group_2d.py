@@ -83,7 +83,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
                 gizmo.setup(self, conf)
             self.gizmo_2d_sets.append(gizmo)
 
-    def __buildController(self, context: Context):
+    def __buildController(self, _: Context):
         self.controller = GizmoSet()
         self.controller.setup(self, controllerConfig)
         self.action_menu = GizmoSet()

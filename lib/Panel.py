@@ -12,7 +12,7 @@ class VIEW3D_PT_NendoViewport(VIEW3D_PT_NendoPanel, Panel):
     bl_idname = "VIEW3D_PT_NendoViewport"
     bl_label = "Touchview Settings"
 
-    def draw(self, context: Context):
+    def draw(self, _: Context):
         pass
 
 
@@ -20,7 +20,7 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
     bl_label = "Control Zones"
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
-    def draw(self, context: Context):
+    def draw(self, _: Context):
         settings = bpy.context.preferences.addons['touchview'].preferences
 
         col = self.layout.column()
@@ -43,7 +43,7 @@ class VIEW3D_PT_RightClick_Menu(VIEW3D_PT_NendoPanel, Panel):
     bl_label = "Right Click Actions"
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
-    def draw(self, context: Context):
+    def draw(self, _: Context):
         settings = bpy.context.preferences.addons['touchview'].preferences
         group = self.layout.column()
         r = group.split(factor=0.3, align=True)
@@ -61,7 +61,7 @@ class VIEW3D_PT_DoubleClick_Menu(VIEW3D_PT_NendoPanel, Panel):
     bl_label = "Double Click Actions"
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
-    def draw(self, context: Context):
+    def draw(self, _: Context):
         settings = bpy.context.preferences.addons['touchview'].preferences
         group = self.layout.column()
         r = group.split(factor=0.3, align=True)
@@ -77,7 +77,7 @@ class VIEW3D_PT_GizmoBar(VIEW3D_PT_NendoPanel, Panel):
     bl_label = "Gizmo Bar"
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
-    def draw(self, context: Context):
+    def draw(self, _: Context):
         settings = bpy.context.preferences.addons['touchview'].preferences
         group = self.layout.column()
         group.label(text="Menu Style")
@@ -92,7 +92,7 @@ class VIEW3D_PT_ToolSettings(VIEW3D_PT_NendoPanel, Panel):
     bl_label = "Tool Options"
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
-    def draw(self, context: Context):
+    def draw(self, _: Context):
         settings = bpy.context.preferences.addons['touchview'].preferences
         group = self.layout.column()
         group.prop(settings, "subdivision_limit", slider=True)

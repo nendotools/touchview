@@ -1,5 +1,4 @@
-import bpy
-from ..items import pivot_items, pivot_icon_items
+from ..items import pivot_icon_items
 ###
 #  Config Standard
 #  ( TYPE  BINDING  COMMAND  ICON )

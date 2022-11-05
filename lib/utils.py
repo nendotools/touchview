@@ -1,5 +1,4 @@
 import bpy
-from bpy.types import Context
 from mathutils import Vector
 
 
