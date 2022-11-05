@@ -174,7 +174,7 @@ indent_closing_brackets=False
 indent_dictionary_value=False
 
 # The number of columns to use for indentation.
-indent_width=2
+indent_width=4
 
 # Join short lines into one line. E.g., single line 'if' statements.
 join_multiple_lines=True

@@ -6,7 +6,6 @@ from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator, SpaceView3D
 
 from .utils import buildSafeArea
-
 from .items import input_mode_items, pivot_items
 
 
@@ -212,7 +211,7 @@ class VIEW3D_OT_FlipTools( Operator ):
   bl_label = "Tools Region Swap"
 
   def execute( self, context: Context ):
-    override = bpy.context.copy()
+    override: Context = bpy.context.copy()
     for r in context.area.regions:
       if r.type == 'TOOLS':
         override[ "region" ] = r
