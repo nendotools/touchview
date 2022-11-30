@@ -24,7 +24,7 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
         settings = bpy.context.preferences.addons['touchview'].preferences
 
         col = self.layout.column()
-        col.label(text="Input Source")
+        col.label(text="Input Mode")
         r = col.row()
         r.prop(settings, "input_mode", expand=True)
         col.prop(settings, "is_enabled", toggle=1)
