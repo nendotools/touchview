@@ -30,6 +30,16 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   is_enabled: BoolProperty( name="Enable Controls", default=True )
   isVisible: BoolProperty( name="Show Overlay", default=False )
 
+  input_mode: EnumProperty(
+    items=[
+        ("pen","pen","pen input only"),
+        ("touch","touch","mouse/touch input only"),
+        ("both","both","mouse/touch and pen input")
+    ],
+    name="Input Mode",
+    default="both"
+  )
+
   enable_double_click: BoolProperty( name="Enable Double Click", default=True )
   double_click_mode: EnumProperty(
     items=double_click_items, name="Double Click Mode", default="screen.screen_full_area"
@@ -136,6 +146,9 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     ##
     col = row.column()
     col.label( text="Control Zones" )
+    col.label(text="Input Mode")
+    tabs = col.column_flow(columns=3, align=True)
+    tabs.prop_tabs_enum(self, "input_mode")
     col.prop( self, "is_enabled", toggle=1)
     col.prop( self, "swap_panrotate" )
     col.prop( self, "isVisible", text="Show Overlay" )

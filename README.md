@@ -179,6 +179,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.3.0</b></summary><br>
+
+- `ADDED`   : Input Mode selection (for devices with only touch or pen support)
+
+</details>
+
 <details open><summary><b>v2.2.0</b></summary><br>
 
 - `ADDED`   : Toggle control gizmo (translate, rotate, scale, none) 
