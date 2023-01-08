@@ -7,6 +7,7 @@ from bgl import glEnable, glDisable, GL_BLEND
 from gpu_extras.batch import batch_for_shader
 
 from ..Settings import OverlaySettings
+from .utils import get_settings
 
 
 class Overlay():
@@ -19,9 +20,6 @@ class Overlay():
             SpaceView3D.draw_handler_remove(mesh, 'WINDOW')
         self.meshes = []
 
-    def __getSettings(self) -> OverlaySettings:
-        return bpy.context.preferences.addons['touchview'].preferences
-
     def __getMidpoint(self, view: Region) -> Vector:
         return self.__getSize(view, 0.5)
 
@@ -29,7 +27,7 @@ class Overlay():
         return Vector((view.width * scalar, view.height * scalar))
 
     def __getColors(self, type: str):
-        settings = self.__getSettings()
+        settings = get_settings()
         if not settings or not settings.is_enabled:
             return (0.0, 0.0, 0.0, 0.0)
         if type == 'main' or not settings.use_multiple_colors:
@@ -48,7 +46,7 @@ class Overlay():
         self.meshes.append(_handle)
 
     def __renderRailing(self):
-        settings = self.__getSettings()
+        settings = get_settings()
         view = bpy.context.area
         if not settings.isVisible: return
         for region in view.regions:
@@ -57,7 +55,7 @@ class Overlay():
 
     def __makeBox(self, view: Region, color: tuple[float, float, float,
                                                    float]):
-        settings = self.__getSettings()
+        settings = get_settings()
         mid = self.__getMidpoint(view)
         dimensions = self.__getSize(view)
         left_rail = (Vector(
@@ -84,7 +82,7 @@ class Overlay():
         glDisable(GL_BLEND)
 
     def __renderCircle(self):
-        settings = self.__getSettings()
+        settings = get_settings()
         view = bpy.context.area
         if not settings.isVisible: return
         for region in view.regions:
@@ -94,7 +92,7 @@ class Overlay():
 
     def __makeCircle(self, view: Region, color: tuple[float, float, float,
                                                       float]):
-        settings = self.__getSettings()
+        settings = get_settings()
         mid = self.__getMidpoint(view)
         radius = math.dist((0, 0), mid) * (settings.getRadius() * 0.5)
         self.__drawCircle(mid, radius, color)

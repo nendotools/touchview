@@ -31,6 +31,17 @@ floatingConfig = {
     "use_grab_cursor": True
 }
 
+floatingToggleConfig = {
+    "type": "default",
+    "binding": {
+        "location": "",
+        "name": "float_toggle"
+    },
+    "command": "view3d.handle_toggle",
+    "icon": "BLANK1",
+    "use_grab_cursor": True
+}
+
 undoConfig = {
     "type": "default",
     "binding": {
@@ -206,6 +217,7 @@ rotLocToggleConfig = {
     "onIcon": "LOCKED",
     "offIcon": "UNLOCKED"
 }
+
 gizmo_sets = {
     # ALL includes only the modes in this list
     "ALL": {
@@ -249,6 +261,21 @@ gizmo_colors = {
         "alpha": 0.15,
         "color_highlight": [0.8, 0.7, 0.3],
         "alpha_highlight": 0.3
+    }
+}
+
+toggle_colors = {
+    "active": {
+        "color": [0.1, 0.1, 0.2],
+        "alpha": 0.5,
+        "color_highlight": [0.15, 0.15, 0.3],
+        "alpha_highlight": 0.7
+    },
+    "inactive": {
+        "color": [0.0, 0.0, 0.0],
+        "alpha": 0.5,
+        "color_highlight": [0.05, 0.05, 0.05],
+        "alpha_highlight": 0.7
     }
 }
 

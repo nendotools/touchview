@@ -1,6 +1,8 @@
 import bpy
 from bpy.types import Context, Panel, Menu, VIEW3D_PT_gizmo_display
 
+from .utils import get_settings
+
 
 class VIEW3D_PT_NendoPanel:
     bl_space_type = 'VIEW_3D'
@@ -21,7 +23,7 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
     def draw(self, _: Context):
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
 
         col = self.layout.column()
         col.label(text="Input Mode")
@@ -47,7 +49,7 @@ class VIEW3D_PT_RightClick_Menu(VIEW3D_PT_NendoPanel, Panel):
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
     def draw(self, _: Context):
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         group = self.layout.column()
         r = group.split(factor=0.3, align=True)
         r.label(text="Input Source")
@@ -65,7 +67,7 @@ class VIEW3D_PT_DoubleClick_Menu(VIEW3D_PT_NendoPanel, Panel):
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
     def draw(self, _: Context):
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         group = self.layout.column()
         r = group.split(factor=0.3, align=True)
         group.separator()
@@ -81,7 +83,7 @@ class VIEW3D_PT_GizmoBar(VIEW3D_PT_NendoPanel, Panel):
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
     def draw(self, _: Context):
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         group = self.layout.column()
         group.label(text="Menu Style")
         r = group.row()
@@ -96,7 +98,7 @@ class VIEW3D_PT_ToolSettings(VIEW3D_PT_NendoPanel, Panel):
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
     def draw(self, _: Context):
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         group = self.layout.column()
         group.prop(settings, "subdivision_limit", slider=True)
 
@@ -106,7 +108,7 @@ class VIEW3D_PT_ViewportOptions(VIEW3D_PT_NendoPanel, Panel):
     bl_parent_id = "VIEW3D_PT_NendoViewport"
 
     def draw(self, context: Context):
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         view = context.space_data
         space = context.area.spaces.active
         group = self.layout.column()
@@ -128,7 +130,7 @@ class PIE_MT_Floating_Menu(Menu):
     bl_description = "Customized Floating Menu"
 
     def draw(self, context: Context):
-        settings = context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         menu = settings.getMenuSettings(context.mode)
 
         layout = self.layout
@@ -172,7 +174,7 @@ class VIEW3D_PT_gizmo_panel(VIEW3D_PT_gizmo_display):
         split = layout.split(factor=0.5)
         left_col = split.column()
         left_col.label(text="Touch Gizmos")
-        settings = bpy.context.preferences.addons['touchview'].preferences
+        settings = get_settings()
         available_gizmos = settings.getGizmoSet(context.object.mode)
 
         col = left_col.column(align=True)

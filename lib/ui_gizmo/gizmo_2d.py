@@ -2,7 +2,8 @@ import bpy
 from bpy.types import Gizmo, GizmoGroup, bpy_prop_collection
 from mathutils import Matrix, Vector
 
-from .gizmo_config import gizmo_colors
+from ..utils import get_settings
+from .gizmo_config import gizmo_colors, toggle_colors
 
 
 def dpi_factor() -> float:
@@ -39,29 +40,30 @@ class GizmoSet:
             'attribute'] if 'attribute' in self.binding else False
         self.primary = self.__buildGizmo(config['command'], config['icon'])
 
-    def __getSettings(self):
-        return bpy.context.preferences.addons['touchview'].preferences
-
     def draw_prepare(self):
-        settings = self.__getSettings()
+        settings = get_settings() 
         self.hidden = not settings.show_gizmos
         self.skip_draw = False
         self.__updatevisible()
 
+        if self.binding['name'] == 'float_toggle':
+            self.primary.hide = settings.input_mode == 'full'
         if self.binding['name'] == 'float_menu':
             self.primary.hide = not settings.show_float_menu
         if self.binding['name'] in ['menu_controller']:
             self.primary.hide = 'float' not in settings.menu_style or not settings.show_menu
-        if self.binding['name'] in ['menu_controller', 'float_menu']:
+        if self.binding['name'] in ['menu_controller', 'float_menu', 'float_toggle']:
             gui_scale = 22 * dpi_factor()
             self.primary.scale_basis = max(
                 settings.menu_spacing - gui_scale / 1.5, gui_scale / 2)
+        if self.binding['name'] == 'float_toggle':
+            self.__setToggleColors(self.primary)
 
     def move(self, position: Vector):
         self.primary.matrix_basis = Matrix.Translation(position)
 
     def __updatevisible(self):
-        if not self.__getSettings().show_menu and self.binding['name'] not in [
+        if not get_settings().show_menu and self.binding['name'] not in [
                 'float_menu'
         ]:
             self.visible = False
@@ -69,9 +71,9 @@ class GizmoSet:
             return
         if (self.binding['location'] == "prefs"):
             self.visible = getattr(
-                bpy.context.preferences.addons["touchview"].preferences,
+                get_settings(),
                 'show_' + self.binding['name']
-            ) and self.binding['name'] in self.__getSettings().getGizmoSet(
+            ) and self.binding['name'] in get_settings().getGizmoSet(
                 bpy.context.mode)
 
         if self.visible:
@@ -80,7 +82,7 @@ class GizmoSet:
         self.primary.hide = not self.visible
 
     def __visibilityLock(self) -> bool:
-        if self.__getSettings().menu_style == 'fixed.bar':
+        if get_settings().menu_style == 'fixed.bar':
             return True
         return not self.hidden
 
@@ -132,6 +134,13 @@ class GizmoSet:
         gizmo.alpha = gizmo_colors["active"]["alpha"]
         gizmo.alpha_highlight = gizmo_colors["active"]["alpha_highlight"]
 
+    def __setToggleColors(self, gizmo: Gizmo):
+        mode = 'active' if get_settings().is_enabled else 'inactive'
+        gizmo.color = toggle_colors[mode]["color"]
+        gizmo.color_highlight = toggle_colors[mode]["color_highlight"]
+        gizmo.alpha = toggle_colors[mode]["alpha"]
+        gizmo.alpha_highlight = toggle_colors[mode]["alpha_highlight"]
+
 
 class GizmoSetBoolean(GizmoSet):
 
@@ -156,19 +165,18 @@ class GizmoSetBoolean(GizmoSet):
         self.primary = self.onGizmo if state else self.offGizmo
 
     def draw_prepare(self):
-        settings = self._GizmoSet__getSettings()
+        settings = get_settings() 
         self.hidden = not settings.show_gizmos
         self.skip_draw = False
         self.__updatevisible()
 
     def __updatevisible(self):
-        if not self._GizmoSet__getSettings(
-        ).show_menu and self.binding['name'] not in ['float_menu']:
+        if not get_settings().show_menu and self.binding['name'] not in ['float_menu']:
             self.visible = False
             self.primary.hide = True
             return
         self.visible = getattr(
-            bpy.context.preferences.addons["touchview"].preferences,
+            get_settings(),
             'show_' + self.binding['name'])
         if self.visible:
             self.visible = self._GizmoSet__visibilityLock(

@@ -2,6 +2,10 @@ import bpy
 from mathutils import Vector
 
 
+def get_settings() -> bpy.types.AddonPreferences:
+    return bpy.context.preferences.addons[__package__.split('.')[0]].preferences
+
+
 # returns dpi scale factor for UI
 def dpi_factor() -> float:
     systemPreferences = bpy.context.preferences.system

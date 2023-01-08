@@ -14,6 +14,7 @@ __classes__ = (
     VIEW3D_OT_BrushResize,
     VIEW3D_OT_BrushStrength,
     VIEW_3D_OT_CycleControlGizmo,
+    VIEW3D_OT_FloatController,
     VIEW3D_OT_ToggleNPanel,
     VIEW3D_OT_ToggleFloatingMenu,
     VIEW3D_OT_ToggleTouchControls,

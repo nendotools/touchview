@@ -179,6 +179,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.4.0</b></summary><br>
+
+- `UPDATED`   : preferences access simplified with utility function
+- `ADDED`   : single-input mode now activates large floating toggle button
+
+</details>
+
 <details open><summary><b>v2.3.0</b></summary><br>
 
 - `ADDED`   : Input Mode selection (for devices with only touch or pen support)

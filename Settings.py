@@ -28,16 +28,22 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   # Viewport Control Options
   ##
   is_enabled: BoolProperty( name="Enable Controls", default=True )
+  toggle_position: FloatVectorProperty(
+      name="Toggle Position", 
+      subtype="XYZ",
+      default=(0.5, 0.5, 0.0)
+  ) 
+
   isVisible: BoolProperty( name="Show Overlay", default=False )
 
   input_mode: EnumProperty(
     items=[
         ("pen","pen","pen input only"),
         ("touch","touch","mouse/touch input only"),
-        ("both","both","mouse/touch and pen input")
+        ("full","full","mouse/touch and pen input")
     ],
     name="Input Mode",
-    default="both"
+    default="full"
   )
 
   enable_double_click: BoolProperty( name="Enable Double Click", default=True )

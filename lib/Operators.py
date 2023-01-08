@@ -5,7 +5,7 @@ from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator, SpaceView3D
 
-from .utils import buildSafeArea
+from .utils import buildSafeArea, get_settings
 from .items import input_mode_items, pivot_items
 
 
@@ -15,7 +15,7 @@ class VIEW3D_OT_RightClick_Action( Operator ):
   bl_label = "Viewport right-click shortcut"
 
   def execute( self, context: Context ):
-    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     op = settings.right_click_mode.split( '.' )
     if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
         return { 'FINISHED' }
@@ -24,7 +24,7 @@ class VIEW3D_OT_RightClick_Action( Operator ):
     return { 'FINISHED' }
 
   def invoke( self, context: Context, event: Event ):
-    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     if settings.right_click_source == "none":
         return { 'PASS_THROUGH' }
     if event.type not in [ 'RIGHTMOUSE' ]:
@@ -51,7 +51,7 @@ class VIEW3D_OT_Doubletap_Action( Operator ):
   bl_label = "Viewport double-tap shortcut"
 
   def execute( self, _: Context ):
-    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     if not settings.enable_double_click:
         return { 'PASS_THROUGH' }
     op = settings.double_click_mode.split( '.' )
@@ -108,7 +108,7 @@ class VIEW2D_OT_TouchInput( Operator ):
     return { 'FINISHED' }
 
   def invoke( self, context: Context, event: Event ):
-    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     if not settings.is_enabled: return { 'PASS_THROUGH' }
     if settings.input_mode == 'both' and (event.type == "PEN" or event.pressure != 1.0): return { 'PASS_THROUGH' }
 
@@ -166,7 +166,7 @@ class VIEW3D_OT_TouchInput( Operator ):
     return { 'FINISHED' }
 
   def invoke( self, context: Context, event: Event ):
-    settings = bpy.context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
 
     if not settings.is_enabled: return { 'PASS_THROUGH' }
     if settings.input_mode == 'both' and (event.type == "PEN" or event.pressure != 1.0): return { 'PASS_THROUGH' }
@@ -232,7 +232,7 @@ class VIEW3D_OT_NextPivotMode( Operator ):
   bl_label = "Use next Pivot mode"
 
   def execute( self, context: Context ):
-    settings = context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     count = 0
     for enum, _, _ in pivot_items:
       if enum == settings.pivot_mode:
@@ -257,7 +257,7 @@ class VIEW3D_OT_ToggleTouchControls( Operator ):
   bl_label = "Toggle Touch Controls"
 
   def execute( self, context: Context ):
-    context.preferences.addons[ 'touchview' ].preferences.is_enabled ^= True
+    get_settings()
     context.area.tag_redraw()
     return { 'FINISHED' }
 
@@ -282,7 +282,7 @@ class VIEW3D_OT_ToggleFloatingMenu( Operator ):
   bl_label = "Toggle Floating Menu"
 
   def execute( self, context: Context ):
-    context.preferences.addons[ 'touchview' ].preferences.show_float_menu ^= True
+    get_settings()
     return { 'FINISHED' }
 
 
@@ -338,7 +338,7 @@ class VIEW3D_OT_BrushResize( Operator ):
 
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context):
-        settings = context.preferences.addons[ 'touchview' ].preferences
+        settings = get_settings()
         if settings.menu_style in ['fixed.bar']:
           if settings.gizmo_position in ["LEFT", "RIGHT"]:
             context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
@@ -385,7 +385,7 @@ class VIEW3D_OT_BrushStrength( Operator ):
 
     # activate radial_control to change sculpt brush size
     def execute( self, context: Context ):
-        settings = context.preferences.addons[ 'touchview' ].preferences
+        settings = get_settings()
         if settings.menu_style in ['fixed.bar']:
           if settings.gizmo_position in ["LEFT", "RIGHT"]:
             context.window.cursor_warp(math.floor(context.region.width/2), self.mousey)
@@ -431,7 +431,7 @@ class VIEW3D_OT_IncreaseMultires( Operator ):
   bl_label = "Increment Multires modifier by 1 or add subdivision level"
 
   def execute( self, context: Context ):
-    settings = context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     if not context.active_object: return { 'CANCELLED' }
     if not len( context.active_object.modifiers ): return { 'CANCELLED' }
     for mod in context.active_object.modifiers:
@@ -489,7 +489,7 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
   bl_label = "Relocate Gizmo Menu"
 
   def execute( self, context ):
-    settings = context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     fence = buildSafeArea() 
     span = Vector((
         fence[1].x - fence[0].x,
@@ -507,7 +507,7 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
     return { 'FINISHED' }
 
   def modal( self, context, event ):
-    settings = context.preferences.addons['touchview'].preferences
+    settings = get_settings()
     if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
       context.region.tag_redraw()
       self.x = event.mouse_region_x
@@ -522,7 +522,7 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
     return { 'RUNNING_MODAL' }
 
   def __hasMoved(self) -> bool:
-    settings = bpy.context.preferences.addons['touchview'].preferences
+    settings = get_settings()
     init = Vector((self.mouse_init_x, self.mouse_init_y))
     final = Vector((self.x, self.y))
     if (final - init).length > settings.menu_spacing / 2:
@@ -532,7 +532,7 @@ class VIEW3D_OT_MoveFloatMenu( Operator ):
 
   def invoke( self, context, event ):
     self.has_moved = False
-    settings = context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     fence = buildSafeArea() 
     span = Vector((
         fence[1].x - fence[0].x,
@@ -557,7 +557,7 @@ class VIEW3D_OT_MenuController( Operator ):
   bl_label = "Relocate Action Menu"
 
   def execute( self, context ):
-    settings = context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     fence = buildSafeArea() 
     span = Vector((
         fence[1].x - fence[0].x,
@@ -575,7 +575,7 @@ class VIEW3D_OT_MenuController( Operator ):
     return { 'FINISHED' }
 
   def modal( self, context, event ):
-    settings = context.preferences.addons['touchview'].preferences
+    settings = get_settings()
     if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
       context.region.tag_redraw()
       self.x = event.mouse_region_x
@@ -590,7 +590,7 @@ class VIEW3D_OT_MenuController( Operator ):
     return { 'RUNNING_MODAL' }
 
   def __hasMoved(self) -> bool:
-    settings = bpy.context.preferences.addons['touchview'].preferences
+    settings = get_settings()
     init = Vector((self.mouse_init_x, self.mouse_init_y))
     final = Vector((self.x, self.y))
     if (final - init).length > settings.menu_spacing / 2:
@@ -599,7 +599,7 @@ class VIEW3D_OT_MenuController( Operator ):
 
   def invoke( self, context, event ):
     self.has_moved = False
-    settings = context.preferences.addons[ 'touchview' ].preferences
+    settings = get_settings()
     fence = buildSafeArea() 
     span = Vector((
         fence[1].x - fence[0].x,
@@ -654,3 +654,71 @@ class VIEW_3D_OT_CycleControlGizmo( Operator ):
     return context.area.type in [
       'VIEW_2D', 'VIEW_3D'
     ] and context.region.type == 'WINDOW'
+
+
+class VIEW3D_OT_FloatController( Operator ):
+  bl_idname = "view3d.handle_toggle"
+  bl_label = "Relocate Toggle Button"
+
+  def execute( self, context ):
+    settings = get_settings()
+    fence = buildSafeArea() 
+    span = Vector((
+        fence[1].x - fence[0].x,
+        fence[1].y - fence[0].y
+    ))
+
+    settings.toggle_position[ 0 ] = min(
+      max( ( self.x - fence[0].x + self.offset.x ) / ( span.x) * 100.0, 0.0 ),
+      100.0
+    )
+    settings.toggle_position[ 1 ] = min(
+      max( ( self.y - fence[0].y + self.offset.y ) / ( span.y) * 100.0, 0.0 ),
+      100.0
+    )
+    return { 'FINISHED' }
+
+  def modal( self, context, event ):
+    settings = get_settings()
+    if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
+      context.region.tag_redraw()
+      self.x = event.mouse_region_x
+      self.y = event.mouse_region_y
+      self.execute( context )
+    elif event.value == 'RELEASE':  # Confirm
+      if not self.__hasMoved():
+        settings.toggle_position[0] = self.init_x
+        settings.toggle_position[1] = self.init_y
+        settings.is_enabled = not settings.is_enabled
+      return { 'FINISHED' }
+    return { 'RUNNING_MODAL' }
+
+  def __hasMoved(self) -> bool:
+    settings = get_settings()
+    init = Vector((self.mouse_init_x, self.mouse_init_y))
+    final = Vector((self.x, self.y))
+    if (final - init).length > settings.menu_spacing / 2:
+      return True
+    return False
+
+  def invoke( self, context, event ):
+    self.has_moved = False
+    settings = get_settings()
+    fence = buildSafeArea() 
+    span = Vector((
+        fence[1].x - fence[0].x,
+        fence[1].y - fence[0].y
+    ))
+    self.init_x = settings.toggle_position[ 0 ]
+    self.init_y = settings.toggle_position[ 1 ]
+    self.mouse_init_x = self.x = event.mouse_region_x
+    self.mouse_init_y = self.y = event.mouse_region_y
+    self.offset = Vector(( 
+      (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
+      (span.y * self.init_y * 0.01 + fence[0].y) - self.y
+    ))
+    self.execute( context )
+
+    context.window_manager.modal_handler_add( self )
+    return { 'RUNNING_MODAL' }
+
