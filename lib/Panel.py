@@ -27,9 +27,16 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
 
         col = self.layout.column()
         col.label(text="Input Mode")
-        r = col.row()
+        box = col.box()
+        if settings.input_mode == 'full':
+            box.label(text="pen, mouse, and touch input", icon="CON_CAMERASOLVER")
+        if settings.input_mode == 'pen':
+            box.label(text="pen-only input", icon="STYLUS_PRESSURE")
+        if settings.input_mode == 'touch':
+            box.label(text="mouse/touch only input", icon="VIEW_PAN")
+        r = box.row()
         r.prop(settings, "input_mode", expand=True)
-        col.prop(settings, "is_enabled", toggle=1)
+        box.prop(settings, "is_enabled", toggle=1)
 
         col.prop(settings, "swap_panrotate")
         col.prop(settings, "isVisible", text="Show Overlay")

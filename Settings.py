@@ -33,14 +33,22 @@ class OverlaySettings( bpy.types.AddonPreferences ):
       subtype="XYZ",
       default=(0.5, 0.5, 0.0)
   ) 
+  toggle_color: FloatVectorProperty(
+    name="Toggle Button Color",
+    default=( 0.1, 0.1, 0.2, 0.5 ),
+    subtype='COLOR',
+    min=0.0,
+    max=1.0,
+    size=4,
+  )
 
   isVisible: BoolProperty( name="Show Overlay", default=False )
 
   input_mode: EnumProperty(
     items=[
+        ("full","full","mouse/touch and pen input"),
         ("pen","pen","pen input only"),
-        ("touch","touch","mouse/touch input only"),
-        ("full","full","mouse/touch and pen input")
+        ("touch","touch","mouse/touch input only")
     ],
     name="Input Mode",
     default="full"
@@ -146,6 +154,20 @@ class OverlaySettings( bpy.types.AddonPreferences ):
 
   # set up addon preferences UI
   def draw( self, context: Context ):
+    # Input Mode
+    col = self.layout.column()
+    col.label(text="Input Mode")
+    col = col.box()
+    if self.input_mode == 'full':
+      col.label(text="pen, mouse, and touch input", icon="CON_CAMERASOLVER")
+    if self.input_mode == 'pen':
+      col.label(text="pen-only input", icon="STYLUS_PRESSURE")
+    if self.input_mode == 'touch':
+      col.label(text="mouse/touch only input", icon="VIEW_PAN")
+    tabs = col.column_flow(columns=3, align=True)
+    tabs.prop_tabs_enum(self, "input_mode")
+
+    # main settings
     row = self.layout.split(factor=0.4)
     ##
     # Viewport Settings
@@ -153,8 +175,6 @@ class OverlaySettings( bpy.types.AddonPreferences ):
     col = row.column()
     col.label( text="Control Zones" )
     col.label(text="Input Mode")
-    tabs = col.column_flow(columns=3, align=True)
-    tabs.prop_tabs_enum(self, "input_mode")
     col.prop( self, "is_enabled", toggle=1)
     col.prop( self, "swap_panrotate" )
     col.prop( self, "isVisible", text="Show Overlay" )
