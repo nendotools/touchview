@@ -169,7 +169,7 @@ class VIEW3D_OT_TouchInput( Operator ):
     settings = get_settings()
 
     if not settings.is_enabled: return { 'PASS_THROUGH' }
-    if settings.input_mode == 'both' and (event.type == "PEN" or event.pressure != 1.0): return { 'PASS_THROUGH' }
+    if settings.input_mode == 'full' and (event.type == "PEN" or event.pressure != 1.0): return { 'PASS_THROUGH' }
 
     if event.value != "PRESS": return { 'PASS_THROUGH' }
     self.delta = ( event.mouse_region_x, event.mouse_region_y )
