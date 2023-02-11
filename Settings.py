@@ -110,6 +110,9 @@ class OverlaySettings( bpy.types.AddonPreferences ):
   menu_spacing: FloatProperty(
     name="Menu Size", default=20.0, precision=2, step=1, min=20.0, max=100.0
   )
+  gizmo_scale: FloatProperty(
+    name="Gizmo Scale", default=1.0, precision=2, step=1, min=0.5, max=2.0
+  )
   menu_position: FloatVectorProperty(
     name="Menu Position", default=( 95.00, 5.00 ), size=2, precision=2, step=1, soft_min=5, soft_max=100
   )
@@ -202,6 +205,7 @@ class OverlaySettings( bpy.types.AddonPreferences ):
         if self.menu_style == 'fixed.bar':
             main.prop_menu_enum( self, "gizmo_position" )
         main.prop( self, "menu_spacing", slider=True )
+        main.prop( self, "gizmo_scale", slider=True )
 
         main.separator()
         main.label( text="Input Options" )

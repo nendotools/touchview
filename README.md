@@ -179,6 +179,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.5.0</b></summary><br>
+
+- `ADDED`   : Gizmo size control
+
+</details>
+
 <details open><summary><b>v2.4.0</b></summary><br>
 
 - `UPDATED`   : preferences access simplified with utility function
