@@ -224,33 +224,33 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v1.2.4</b></summary><br>
+<details><summary><b>v1.2.4</b></summary><br>
 
 - `ADDED` : Toggle Double-tap action on/off 
 
 </details>
 
-<details open><summary><b>v1.2.3</b></summary><br>
+<details><summary><b>v1.2.3</b></summary><br>
 
 - `ADDED`   : Sculpt Brush Dynamics
 - `UPDATED` : Viewport rotation in sculpt mode automatically sets pivot to mesh under touch point
 
 </details>
 
-<details open><summary><b>v1.2.2</b></summary><br>
+<details><summary><b>v1.2.2</b></summary><br>
 
 - `UPDATED` : Gizmo panel layout split
 
 </details>
 
-<details open><summary><b>v1.2.1</b></summary><br>
+<details><summary><b>v1.2.1</b></summary><br>
 
 - `REMOVED` : Middle Mouse keybind
 - `REMOVED` : viewport rotation lock when using the Grease Pencil
 
 </details>
 
-<details open><summary><b>v1.2.0</b></summary><br>
+<details><summary><b>v1.2.0</b></summary><br>
 
 - `BREAKING`: This version requires previous version to be disabled before install
 - `UPDATED` : Improved Pen detection and simplified key configs
