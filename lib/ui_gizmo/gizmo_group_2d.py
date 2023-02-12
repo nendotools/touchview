@@ -119,7 +119,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     def __menuBar(self, visible_gizmos: list[GizmoSet], floating: bool):
         settings = get_settings()
         origin = self.origin
-        scalar = 30 * settings.gizmo_scale
+        scalar = 22 * dpi_factor()
         padding = (scalar * 1.5) * get_settings().gizmo_scale
         count = len(visible_gizmos)
         if not floating:
@@ -158,8 +158,9 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     def __menuRadial(self, visible_gizmos: list[GizmoSet]):
         settings = get_settings()
         # calculate minimum radius to prevent overlapping buttons
-        min_spacing = (len(visible_gizmos) * 30 * dpi_factor() * get_settings().gizmo_scale) / (2 * pi)
-        spacing = max(settings.menu_spacing * dpi_factor() * get_settings().gizmo_scale, min_spacing)
+        gui_scale = 22 * dpi_factor()
+        radial_size = (settings.menu_spacing + gui_scale)
+        spacing = radial_size + gui_scale * get_settings().gizmo_scale * 0.75
 
         count = len(visible_gizmos)
         # reposition Gizmos to origin
