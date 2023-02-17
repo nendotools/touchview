@@ -1,5 +1,4 @@
-import bpy
-from bpy.types import Context, PropertyGroup
+from bpy.types import Context, PropertyGroup, AddonPreferences
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
 
 from .lib.ui_gizmo.gizmo_group_2d import gizmo_sets
@@ -21,7 +20,7 @@ class MenuModeGroup( PropertyGroup ):
   menu_slot_8: StringProperty( name="Menu Item", default="" )
 
 
-class OverlaySettings( bpy.types.AddonPreferences ):
+class OverlaySettings( AddonPreferences ):
   bl_idname = __package__
 
   ##

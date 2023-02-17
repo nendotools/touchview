@@ -2,14 +2,8 @@ import bpy
 from bpy.types import Gizmo, GizmoGroup, bpy_prop_collection
 from mathutils import Matrix, Vector
 
-from ..utils import get_settings
+from ..utils import get_settings, dpi_factor
 from .gizmo_config import gizmo_colors, toggle_colors
-
-
-def dpi_factor() -> float:
-    systemPreferences = bpy.context.preferences.system
-    retinaFactor = getattr(systemPreferences, "pixel_size", 1)
-    return int(systemPreferences.dpi * retinaFactor) / 72
 
 
 ##

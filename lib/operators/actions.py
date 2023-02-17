@@ -12,7 +12,7 @@ class VIEW3D_OT_FlipTools( Operator ):
   bl_label = "Tools Region Swap"
 
   def execute( self, context: Context ):
-    override: Context = bpy.context.copy()
+    override: Context = context.copy()
     for r in context.area.regions:
       if r.type == 'TOOLS':
         override[ "region" ] = r

@@ -1,12 +1,14 @@
 import bpy
 from bpy.types import Region, SpaceView3D
+
 import math
 from mathutils import Vector
+
 import gpu
+
 from bgl import glEnable, glDisable, GL_BLEND
 from gpu_extras.batch import batch_for_shader
 
-from ..Settings import OverlaySettings
 from .utils import get_settings
 
 

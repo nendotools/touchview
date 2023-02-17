@@ -1,9 +1,27 @@
 import bpy
+from bpy.types import AddonPreferences
 from mathutils import Vector
 
 
-def get_settings() -> bpy.types.AddonPreferences:
+def get_settings() -> AddonPreferences:
     return bpy.context.preferences.addons[__package__.split('.')[0]].preferences
+
+
+def panel(type) -> tuple:
+    ''' Panel in the region.
+    
+    type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS', 'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE', 'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
+    return (tuple) - Dimension of the region.
+    '''
+    width = 0
+    height = 0
+    alignment = 'NONE'
+    for region in bpy.context.area.regions:
+        if region.type == type:
+            width = region.width
+            height = region.height
+            alignment = region.alignment
+    return (width, height, alignment)
 
 
 # returns dpi scale factor for UI

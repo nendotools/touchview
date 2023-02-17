@@ -1,36 +1,13 @@
 import bpy
-from math import pi, radians, sin, cos
+from math import radians, sin, cos
 from mathutils import Vector
 from bpy.types import Context, GizmoGroup
 
-from ..utils import buildSafeArea, get_settings
+from ..utils import buildSafeArea, get_settings, dpi_factor
 from .gizmo_2d import GizmoSet, GizmoSetBoolean
 from .gizmo_config import *
 
 __module__ = __name__.split('.')[0]
-
-
-def dpi_factor() -> float:
-    systemPreferences = bpy.context.preferences.system
-    retinaFactor = getattr(systemPreferences, "pixel_size", 1)
-    return int(systemPreferences.dpi * retinaFactor) / 72
-
-
-def panel(type) -> tuple:
-    ''' Panel in the region.
-    
-    type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS', 'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE', 'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
-    return (tuple) - Dimension of the region.
-    '''
-    width = 0
-    height = 0
-    alignment = 'NONE'
-    for region in bpy.context.area.regions:
-        if region.type == type:
-            width = region.width
-            height = region.height
-            alignment = region.alignment
-    return (width, height, alignment)
 
 
 configs = [
