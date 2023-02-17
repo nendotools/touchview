@@ -3,7 +3,7 @@ from bpy.types import Context, PropertyGroup
 from bpy.props import BoolProperty, CollectionProperty, FloatVectorProperty, EnumProperty, FloatProperty, IntProperty, StringProperty
 
 from .lib.ui_gizmo.gizmo_group_2d import gizmo_sets
-from .lib.items import position_items, pivot_items, edit_modes, menu_defaults, menu_style_items, double_click_items, menu_orientation_items
+from .lib.constants import * 
 
 
 ##

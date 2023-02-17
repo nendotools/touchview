@@ -3,7 +3,7 @@ import bpy, math
 from bpy.types import Context, Event, Operator
 
 from ..utils import get_settings
-from ..items import pivot_items
+from ..constants import pivot_items
 
 
 class VIEW3D_OT_FlipTools( Operator ):

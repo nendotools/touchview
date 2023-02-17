@@ -6,7 +6,7 @@ from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
 
 from ..utils import get_settings
-from ..items import input_mode_items
+from ..constants import input_mode_items
 
 
 class VIEW3D_OT_RightClick_Action( Operator ):

@@ -1,3 +1,16 @@
+TWEAK = 'TWEAK'
+MOUSE = 'MOUSE'
+PEN = 'PEN'
+MMOUSE = 'MIDDLEMOUSE'
+LMOUSE = 'LEFTMOUSE'
+RMOUSE = 'RIGHTMOUSE'
+PRESS = 'PRESS'
+DCLICK = 'DOUBLE_CLICK'
+
+flat_modes = ["Node Editor", "Image", "Image Paint", "UV Editor", "View2D"]
+top_level_names = ("Node Editor", "UV Editor", "Image Editor", "Image Paint",
+                   "3D View", "Image", "View2D", "Grease Pencil")
+
 input_mode_items = [('ORBIT', 'rotate', 'Rotate the viewport'),
                     ('PAN', 'pan', 'Move the viewport'),
                     ('DOLLY', 'zoom', 'Zoom in/out the viewport')]
