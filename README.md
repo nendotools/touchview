@@ -182,6 +182,7 @@ Select it and click `Install Add-on`.
 <details open><summary><b>v2.5.0</b></summary><br>
 
 - `ADDED`   : Gizmo size control
+- `UPDATE`  : moved operators into folder
 
 </details>
 
