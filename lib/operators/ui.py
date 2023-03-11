@@ -1,7 +1,7 @@
 import bpy
 from mathutils import Vector
 
-from bpy.types import Context, Operator, SpaceView3D
+from bpy.types import Context, Event, Operator, SpaceView3D
 
 from ..utils import buildSafeArea, get_settings
 
@@ -78,7 +78,7 @@ class VIEW3D_OT_MenuController( Operator ):
   bl_idname = "view3d.move_float_menu"
   bl_label = "Relocate Action Menu"
 
-  def execute( self, context ):
+  def execute( self, _:Context ):
     settings = get_settings()
     fence = buildSafeArea() 
     span = Vector((
@@ -96,7 +96,7 @@ class VIEW3D_OT_MenuController( Operator ):
     )
     return { 'FINISHED' }
 
-  def modal( self, context, event ):
+  def modal( self, context:Context, event:Event ):
     settings = get_settings()
     if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
       context.region.tag_redraw()
@@ -182,7 +182,7 @@ class VIEW3D_OT_FloatController( Operator ):
   bl_idname = "view3d.handle_toggle"
   bl_label = "Relocate Toggle Button"
 
-  def execute( self, context ):
+  def execute( self, _:Context ):
     settings = get_settings()
     fence = buildSafeArea() 
     span = Vector((
@@ -200,7 +200,7 @@ class VIEW3D_OT_FloatController( Operator ):
     )
     return { 'FINISHED' }
 
-  def modal( self, context, event ):
+  def modal( self, context:Context, event:Event ):
     settings = get_settings()
     if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
       context.region.tag_redraw()
@@ -223,7 +223,7 @@ class VIEW3D_OT_FloatController( Operator ):
       return True
     return False
 
-  def invoke( self, context, event ):
+  def invoke( self, context:Context, event:Event ):
     self.has_moved = False
     settings = get_settings()
     fence = buildSafeArea() 

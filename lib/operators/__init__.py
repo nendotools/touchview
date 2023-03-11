@@ -1,6 +1,6 @@
-from touch import *
-from actions import *
-from ui import *
+from .touch import *
+from .actions import *
+from .ui import *
 
 __classes__ = (
     VIEW3D_OT_TouchInput,

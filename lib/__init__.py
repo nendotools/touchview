@@ -1,6 +1,7 @@
 from .Overlay import Overlay
 from . import Panel
 
+from . import operators
 from . import ui_gizmo
 
 ov = Overlay()
@@ -9,6 +10,7 @@ ov = Overlay()
 def register():
     from .touch_input import register_keymaps
 
+    operators.register()
     ui_gizmo.register()
     ov.drawUI()
 
@@ -24,3 +26,4 @@ def unregister():
 
     ov.clear_overlays()
     ui_gizmo.unregister()
+    operators.unregister()
