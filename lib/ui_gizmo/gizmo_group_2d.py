@@ -97,7 +97,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         settings = get_settings()
         origin = self.origin
         scalar = 22 * dpi_factor()
-        padding = (scalar * 1.5) * get_settings().gizmo_scale
+        padding = (scalar * 0.8) * get_settings().gizmo_scale
         count = len(visible_gizmos)
         if not floating:
             safe_area = buildSafeArea()
