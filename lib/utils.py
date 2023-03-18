@@ -1,16 +1,18 @@
 import bpy
-from bpy.types import AddonPreferences
+from bpy.types import AddonPreferences, Preferences
 from mathutils import Vector
 
 
 def get_settings() -> AddonPreferences:
-    return bpy.context.preferences.addons[__package__.split('.')[0]].preferences
+    return Preferences.addons[__package__.split('.')[0]].preferences
 
 
 def panel(type) -> tuple:
     ''' Panel in the region.
-    
-    type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS', 'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE', 'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
+
+    type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS',
+                   'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE',
+                   'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
     return (tuple) - Dimension of the region.
     '''
     width = 0
@@ -26,30 +28,12 @@ def panel(type) -> tuple:
 
 # returns dpi scale factor for UI
 def dpi_factor() -> float:
-    systemPreferences = bpy.context.preferences.system
-    retinaFactor = getattr(systemPreferences, "pixel_size", 1)
-    return int(systemPreferences.dpi * retinaFactor) / 72
+    retinaFactor = getattr(Preferences.system, "pixel_size", 1)
+    return int(Preferences.system.dpi * retinaFactor) / 72
 
 
-# iterates over UI regions in current context
-def panel(type) -> tuple:
-    ''' Panel in the region.
-    
-    type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS', 'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE', 'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
-    return (tuple) - Dimension of the region.
-    '''
-    width = 0
-    height = 0
-    alignment = 'NONE'
-    for region in bpy.context.area.regions:
-        if region.type == type:
-            width = region.width
-            height = region.height
-            alignment = region.alignment
-    return (width, height, alignment)
-
-
-# returns a tuple (bottom-left, top-right) safe area in viewport for UI elements
+# returns a tuple (bottom-left, top-right)
+# safe area in viewport for UI elements
 def buildSafeArea() -> tuple[Vector, Vector]:
     buffer = 30 * dpi_factor()
     min = Vector((buffer, buffer))
