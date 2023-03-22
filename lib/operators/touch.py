@@ -1,4 +1,5 @@
-import bpy, math
+import bpy
+import math
 from mathutils import Vector
 
 from bpy import ops
@@ -9,7 +10,7 @@ from ..utils import get_settings
 from ..constants import input_mode_items
 
 
-class VIEW3D_OT_RightClick_Action( Operator ):
+class VIEW3D_OT_RightClick_Action(Operator):
   """ Viewport right-click shortcut """
   bl_idname = "view3d.rc_action"
   bl_label = "Viewport right-click shortcut"

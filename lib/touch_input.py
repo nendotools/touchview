@@ -1,5 +1,5 @@
 import bpy
-from .constants import *
+from constants import *
 
 default_keymaps = []
 modified_keymaps = []
@@ -10,16 +10,19 @@ def register_keymaps():
     bpy.app.timers.register(assign_keymaps, first_interval=0.2)
 
 
-# two main goals: preserve action from MOUSE to PEN, add viewport control to MOUSE
+# two main goals: preserve action from MOUSE to PEN,
+# add viewport control to MOUSE
 def assign_keymaps():
     wm = bpy.context.window_manager
 
     # add global default action
     km = wm.keyconfigs.addon.keymaps.new(name="3D View", space_type='VIEW_3D')
-    kmi = km.keymap_items.new('view3d.toggle_touch',
-                              type='T',
-                              value=PRESS,
-                              alt=True)
+    kmi = km.keymap_items.new(
+        'view3d.toggle_touch',
+        type='T',
+        value=PRESS,
+        alt=True
+    )
     modified_keymaps.append((km, kmi))
 
     # make menus draggable
