@@ -1,3 +1,4 @@
+# type: ignore
 import bpy
 from bpy.types import Region, SpaceView3D
 
@@ -19,7 +20,7 @@ class Overlay():
 
     def clear_overlays(self):
         for mesh in self.meshes:
-            SpaceView3D.draw_handler_remove(mesh, 'WINDOW')
+            SpaceView3D.draw_handler_remove(mesh, 'WINDOW', None)
         self.meshes = []
 
     def __getMidpoint(self, view: Region) -> Vector:
@@ -40,17 +41,26 @@ class Overlay():
             return (0.0, 0.0, 0.0, 0.0)
 
     def drawUI(self):
-        _handle = SpaceView3D.draw_handler_add(self.__renderCircle, (),
-                                               'WINDOW', 'POST_PIXEL')
+        _handle = SpaceView3D.draw_handler_add(
+            self.__renderCircle,
+            (),
+            'WINDOW',
+            'POST_PIXEL',
+        )
         self.meshes.append(_handle)
-        _handle = SpaceView3D.draw_handler_add(self.__renderRailing, (),
-                                               'WINDOW', 'POST_PIXEL')
+        _handle = SpaceView3D.draw_handler_add(
+            self.__renderRailing,
+            (),
+            'WINDOW',
+            'POST_PIXEL'
+        )
         self.meshes.append(_handle)
 
     def __renderRailing(self):
         settings = get_settings()
         view = bpy.context.area
-        if not settings.isVisible: return
+        if not settings.isVisible:
+            return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer():
                 self.__makeBox(region, self.__getColors('main'))
@@ -86,7 +96,8 @@ class Overlay():
     def __renderCircle(self):
         settings = get_settings()
         view = bpy.context.area
-        if not settings.isVisible: return
+        if not settings.isVisible:
+            return
         for region in view.regions:
             if bpy.context.region.as_pointer() == region.as_pointer(
             ) and not region.data.lock_rotation:
@@ -107,10 +118,15 @@ class Overlay():
         for p in range(segments):
             if p > 0:
                 point = Vector(
-                    (mid.x +
-                     radius * math.cos(math.radians(360 / segments) * p),
-                     mid.y +
-                     radius * math.sin(math.radians(360 / segments) * p)))
+                    (
+                        mid.x + radius * math.cos(
+                            math.radians(360 / segments) * p
+                        ),
+                        mid + radius * math.sin(
+                            math.radians(360 / segments) * p
+                        )
+                    )
+                )
                 vertices.append(point)
                 indices.append((0, p - 1, p))
         indices.append((0, 1, p))

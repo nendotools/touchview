@@ -15,11 +15,17 @@
 #  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 # ##### END GPL LICENSE BLOCK #####
+import bpy
+from . import lib
+from .Settings import OverlaySettings, MenuModeGroup
 
 bl_info = {
     "name": "Touch Viewport",
     "description":
-    "Creates active touch zones over View 3D areas for easier viewport navigation with touch screens and pen tablets.",
+        """
+            Creates active touch zones over View 2D and 3D areas for
+            easier viewport navigation with touch screens and pen tablets.
+        """,
     "author": "NENDO",
     "version": (2, 5, 0),
     "blender": (2, 93, 0),
@@ -30,9 +36,6 @@ bl_info = {
     "category": "3D View",
 }
 
-import bpy
-from . import lib
-from .Settings import OverlaySettings, MenuModeGroup
 
 def register():
     lib.register()

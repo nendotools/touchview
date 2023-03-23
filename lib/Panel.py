@@ -29,7 +29,10 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
         col.label(text="Input Mode")
         box = col.box()
         if settings.input_mode == 'full':
-            box.label(text="pen, mouse, and touch input", icon="CON_CAMERASOLVER")
+            box.label(
+                text="pen, mouse, and touch input",
+                icon="CON_CAMERASOLVER"
+            )
         if settings.input_mode == 'pen':
             box.label(text="pen-only input", icon="STYLUS_PRESSURE")
         if settings.input_mode == 'touch':
@@ -160,7 +163,7 @@ class PIE_MT_Floating_Menu(Menu):
             for prop in names:
                 a = getattr(a, prop)
             a.__repr__()
-        except:
+        except e:
             return False
         return True
 

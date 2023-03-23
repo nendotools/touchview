@@ -1,0 +1,8 @@
+[flake8]
+ignore = 
+  # F722 - syntax error in forward annotation
+  F722,
+  # undefined name 'name'
+  F821,
+# undefined name 'name' in __all__
+  F822

@@ -1,10 +1,15 @@
 import bpy
 from bpy.types import AddonPreferences, Preferences
 from mathutils import Vector
+from ..Settings import OverlaySettings
 
 
-def get_settings() -> AddonPreferences:
-    return Preferences.addons[__package__.split('.')[0]].preferences
+def get_settings() -> OverlaySettings:
+    prefs = Preferences.addons[__package__.split('.')[0]].preferences
+    # ensure prefs is of type OverlaySettings
+    if isinstance(prefs, OverlaySettings):
+        return prefs
+    raise RuntimeWarning('Invalid Preferences')
 
 
 def panel(type) -> tuple:

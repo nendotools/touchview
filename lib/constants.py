@@ -29,7 +29,10 @@ pivot_items = [
     ("ACTIVE", "Active Vertex",
      "Sets the pivot position to the active vertex position."),
     ("UNMASKED", "Unmasked",
-     "Sets the pivot position to the average position of the unmasked vertices."
+     """
+        Sets the pivot position to the average position of the unmasked
+        vertices.
+     """
      ), ("ORIGIN", "Origin", "Sets the pivot to the origin of the sculpt."),
     ("BORDER", "Mask Border",
      "Sets the pivot position to the center of the border of the mask.")
