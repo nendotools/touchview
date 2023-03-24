@@ -35,7 +35,7 @@ class GizmoSet:
         self.primary = self.__buildGizmo(config['command'], config['icon'])
 
     def draw_prepare(self):
-        settings = get_settings() 
+        settings = get_settings()
         self.hidden = not settings.show_gizmos
         self.skip_draw = False
         self.__updatevisible()
@@ -46,9 +46,17 @@ class GizmoSet:
         if self.binding['name'] == 'float_menu':
             self.primary.hide = not settings.show_float_menu
         if self.binding['name'] in ['menu_controller']:
-            self.primary.hide = 'float' not in settings.menu_style or not settings.show_menu
-        if self.binding['name'] in ['menu_controller', 'float_menu', 'float_toggle']:
-            self.primary.scale_basis = (settings.menu_spacing + gui_scale) * 0.45
+            self.primary.hide = (
+                'float' not in settings.menu_style or not settings.show_menu
+            )
+        if self.binding['name'] in [
+            'menu_controller',
+            'float_menu',
+            'float_toggle'
+        ]:
+            self.primary.scale_basis = (
+                settings.menu_spacing + gui_scale
+            ) * 0.45
         else:
             self.primary.scale_basis = gui_scale * settings.gizmo_scale * 0.35
         if self.binding['name'] == 'float_toggle':
@@ -69,7 +77,8 @@ class GizmoSet:
                 get_settings(),
                 'show_' + self.binding['name']
             ) and self.binding['name'] in get_settings().getGizmoSet(
-                bpy.context.mode)
+                bpy.context.mode
+            )
 
         if self.visible:
             self.visible = self.__visibilityLock(
@@ -91,13 +100,14 @@ class GizmoSet:
         return not state
 
     # search for attribute, value through context.
-    # will traverse bpy_prop_collection entries by next attr to value comparison
-    def __findAttribute(self, path: str, value: any):
+    # will traverse bpy_prop_collection entries
+    # by next attr to value comparison
+    def __findAttribute(self, path: str, value: str):
         names = path.split(".")
         current = bpy.context
         for i, prop in enumerate(names):
             current = getattr(current, prop)
-            if current == None:
+            if current is None:
                 return False
 
             if isinstance(current, bpy_prop_collection):
@@ -112,13 +122,13 @@ class GizmoSet:
     def __buildGizmo(self, command: str, icon: str) -> Gizmo:
         gizmo = self.group.gizmos.new("GIZMO_GT_button_2d")
         gizmo.target_set_operator(command)
-        gizmo.icon = icon
+        gizmo.icon = icon  # type: ignore
         gizmo.use_tooltip = False
         gizmo.use_event_handle_all = True
-        gizmo.use_grab_cursor = True if 'use_grab_cursor' in self.config else False
+        gizmo.use_grab_cursor = 'use_grab_cursor' in self.config
         gizmo.line_width = 5.0
         gizmo.use_draw_modal = True
-        gizmo.draw_options = {'BACKDROP', 'OUTLINE'}
+        gizmo.draw_options = {'BACKDROP', 'OUTLINE'}  # type: ignore
         self.__setColors(gizmo)
         gizmo.scale_basis = self.scale or 14
         return gizmo
@@ -148,10 +158,14 @@ class GizmoSetBoolean(GizmoSet):
         self.binding = config['binding']
         self.has_attribute_bind = self.binding[
             'attribute'] if 'attribute' in self.binding else False
-        self.onGizmo = self._GizmoSet__buildGizmo(config['command'],
-                                                  config['onIcon'])
-        self.offGizmo = self._GizmoSet__buildGizmo(config['command'],
-                                                   config['offIcon'])
+        self.onGizmo = self._GizmoSet__buildGizmo(  # type: ignore
+            config['command'],
+            config['onIcon']
+        )
+        self.offGizmo = self._GizmoSet__buildGizmo(  # type: ignore
+            config['command'],
+            config['offIcon']
+        )
         self.__setActiveGizmo(True)
 
     def __setActiveGizmo(self, state: bool):
@@ -160,7 +174,7 @@ class GizmoSetBoolean(GizmoSet):
         self.primary = self.onGizmo if state else self.offGizmo
 
     def draw_prepare(self):
-        settings = get_settings() 
+        settings = get_settings()
         self.hidden = not settings.show_gizmos
         self.skip_draw = False
         self.__updatevisible()
@@ -168,7 +182,9 @@ class GizmoSetBoolean(GizmoSet):
         self.primary.scale_basis = gui_scale * settings.gizmo_scale * 0.35
 
     def __updatevisible(self):
-        if not get_settings().show_menu and self.binding['name'] not in ['float_menu']:
+        if not get_settings().show_menu and (
+            self.binding['name'] not in ['float_menu']
+        ):
             self.visible = False
             self.primary.hide = True
             return
@@ -176,12 +192,15 @@ class GizmoSetBoolean(GizmoSet):
             get_settings(),
             'show_' + self.binding['name'])
         if self.visible:
-            self.visible = self._GizmoSet__visibilityLock(
-            ) and not self._GizmoSet__checkAttributeBind()
+            self.visible = self._GizmoSet__visibilityLock(  # type: ignore
+            ) and not self._GizmoSet__checkAttributeBind()  # type: ignore
 
         bind = self.binding
         self.__setActiveGizmo(
-            self._GizmoSet__findAttribute(bind['location'], bind['name']))
+            self._GizmoSet__findAttribute(  # type: ignore
+                bind['location'], bind['name']
+            )
+        )
         self.primary.hide = not self.visible
 
 

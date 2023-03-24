@@ -54,7 +54,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
             if conf['type'] == "boolean":
                 gizmo = GizmoSetBoolean()
                 gizmo.setup(self, conf)
-            else:  #assume Type = Default
+            else:  # assume Type = Default
                 gizmo = GizmoSet()
                 gizmo.setup(self, conf)
             self.gizmo_2d_sets.append(gizmo)
@@ -117,9 +117,9 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         gizmo_spacing = ((
             (settings.menu_spacing / scalar) * padding) + padding) * 0.5
         if ((settings.gizmo_position in ['TOP', 'BOTTOM']
-             and settings.menu_style == 'fixed.bar')
-                or (settings.menu_orientation == 'HORIZONTAL'
-                    and settings.menu_style == 'float.bar')):
+            and settings.menu_style == 'fixed.bar')
+            or (settings.menu_orientation == 'HORIZONTAL'
+                and settings.menu_style == 'float.bar')):
             start = origin.x - ((count - 1) * gizmo_spacing) / 2
             if settings.menu_style == 'float.bar':
                 origin.y = origin.y + padding + settings.menu_spacing / 2

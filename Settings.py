@@ -314,7 +314,7 @@ class OverlaySettings(AddonPreferences):
                 setattr(m, 'menu_slot_' + str(i + 1), o)
         return m
 
-    def getGizmoSet(self, mode: str):
+    def getGizmoSet(self, mode: str | int):
         available = list(gizmo_sets['ALL'])
 
         if not gizmo_sets[mode]:

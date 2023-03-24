@@ -2,7 +2,8 @@
 # Gizmo structure update
 #
 # Refactor the gizmo structure to be more modular and easier to maintain.
-# Gizmo context (UI, space, etc), state (2-mode, 3-mode, etc), layout (vertical, horizontal, etc)
+# Gizmo context (UI, space, etc), state (2-mode, 3-mode, etc),
+# layout (vertical, horizontal, etc)
 # to be managed through inheritance.
 ###
 from .gizmo_group_2d import GIZMO_GT_ViewportGizmoGroup

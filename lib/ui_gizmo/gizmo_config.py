@@ -281,7 +281,7 @@ toggle_colors = {
 
 # Enum 2D Gizmo
 #
-## not implemented yet
+# not implemented yet
 pivotModeConfig = {
     "type": "enum",
     "binding": {
