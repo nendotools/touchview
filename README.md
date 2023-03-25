@@ -185,6 +185,7 @@ Select it and click `Install Add-on`.
 - `UPDATED` : added alternative action for TransferMode when used in OBJECT mode
 - `UPDATED` : fixed desktop scaling issue with radial gizmo menu
 - `UPDATED` : fixed toggle touch gizmo and RC/DC action
+- `UPDATED` : fixed error message when rotation locked and pan/rotate swapped
 
 </details>
 

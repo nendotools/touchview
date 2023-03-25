@@ -241,7 +241,7 @@ class VIEW3D_OT_TouchInput(Operator):
         else:
             self.mode = "ORBIT"
 
-        if settings.swap_panrotate:
+        if settings.swap_panrotate and not is_locked:
             if self.mode == "PAN":
                 self.mode = "ORBIT"
             elif self.mode == "ORBIT":
