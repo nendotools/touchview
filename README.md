@@ -181,14 +181,15 @@ Select it and click `Install Add-on`.
 
 <details open><summary><b>v2.6.0</b></summary><br>
 
-- `UPDATE`  : code spec now based on flake8
+- `UPDATED`  : code spec now based on flake8
+- `UPDATED` : added alternative action for TransferMode when used in OBJECT mode
 
 </details>
 
 <details open><summary><b>v2.5.0</b></summary><br>
 
 - `ADDED`   : Gizmo size control
-- `UPDATE`  : moved operators into folder
+- `UPDATED`  : moved operators into folder
 
 </details>
 
