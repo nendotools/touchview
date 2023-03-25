@@ -20,8 +20,10 @@ class VIEW3D_OT_RightClick_Action(Operator):
     def execute(self, context: Context):
         settings = get_settings()
         op = settings.right_click_mode.split('.')
+        if op[1] == 'transfer_mode' and context.area.type != 'VIEW_3D':
+            return PASSTHROUGH
         if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
-            bpy.ops.view3d.select('INVOKE_DEFAULT')
+            bpy.ops.view3d.select('INVOKE_DEFAULT')  # type: ignore
             return PASSTHROUGH
         opgrp = getattr(bpy.ops, op[0])
         getattr(opgrp, op[1])('INVOKE_DEFAULT')
@@ -60,8 +62,10 @@ class VIEW3D_OT_Doubletap_Action(Operator):
             return PASSTHROUGH
         op = settings.double_click_mode.split('.')
         opgrp = getattr(bpy.ops, op[0])
+        if op[1] == 'transfer_mode' and context.area.type != 'VIEW_3D':
+            return PASSTHROUGH
         if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
-            bpy.ops.view3d.select('INVOKE_DEFAULT')
+            bpy.ops.view3d.select('INVOKE_DEFAULT')  # type: ignore
             return PASSTHROUGH
         getattr(opgrp, op[1])('INVOKE_DEFAULT')
         return FINISHED

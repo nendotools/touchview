@@ -61,7 +61,8 @@ class VIEW3D_OT_ToggleTouchControls(Operator):
     bl_label = "Toggle Touch Controls"
 
     def execute(self, context: Context):
-        get_settings()
+        settings = get_settings()
+        settings.is_enabled = not settings.is_enabled
         context.area.tag_redraw()
         return FINISHED
 
