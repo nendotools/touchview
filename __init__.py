@@ -22,10 +22,8 @@ from .Settings import OverlaySettings, MenuModeGroup
 bl_info = {
     "name": "Touch Viewport",
     "description":
-        """
-            Creates active touch zones over View 2D and 3D areas for
-            easier viewport navigation with touch screens and pen tablets.
-        """,
+        "Creates active touch zones over View 2D and 3D areas for"
+        "easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
     "version": (2, 6, 0),
     "blender": (2, 93, 0),

@@ -40,7 +40,7 @@ class GizmoSet:
         self.skip_draw = False
         self.__updatevisible()
 
-        gui_scale = 22 * dpi_factor()
+        gui_scale = 35 / dpi_factor()
         if self.binding['name'] == 'float_toggle':
             self.primary.hide = settings.input_mode == 'full'
         if self.binding['name'] == 'float_menu':
@@ -55,10 +55,12 @@ class GizmoSet:
             'float_toggle'
         ]:
             self.primary.scale_basis = (
-                settings.menu_spacing + gui_scale
-            ) * 0.45
+                gui_scale + settings.menu_spacing
+            )
         else:
-            self.primary.scale_basis = gui_scale * settings.gizmo_scale * 0.35
+            self.primary.scale_basis = (
+                gui_scale * settings.gizmo_scale
+            )
         if self.binding['name'] == 'float_toggle':
             self.__setToggleColors(self.primary)
 
@@ -178,8 +180,10 @@ class GizmoSetBoolean(GizmoSet):
         self.hidden = not settings.show_gizmos
         self.skip_draw = False
         self.__updatevisible()
-        gui_scale = 22 * dpi_factor()
-        self.primary.scale_basis = gui_scale * settings.gizmo_scale * 0.35
+        gui_scale = 35 / dpi_factor()
+        self.primary.scale_basis = (
+            gui_scale * settings.gizmo_scale
+        )
 
     def __updatevisible(self):
         if not get_settings().show_menu and (

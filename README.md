@@ -183,6 +183,7 @@ Select it and click `Install Add-on`.
 
 - `UPDATED`  : code spec now based on flake8
 - `UPDATED` : added alternative action for TransferMode when used in OBJECT mode
+- `UPDATED` : fixed desktop scaling issue with radial gizmo menu
 
 </details>
 
