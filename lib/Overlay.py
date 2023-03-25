@@ -1,4 +1,6 @@
 # type: ignore
+# NOTE: ignoring types here due to lack of compatibility in lower-level access
+# and issues calling a class method without a proper reference to 'self'
 import bpy
 from bpy.types import Region, SpaceView3D
 

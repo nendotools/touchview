@@ -1,3 +1,4 @@
+# flake8: noqa
 from .touch import *
 from .actions import *
 from .ui import *

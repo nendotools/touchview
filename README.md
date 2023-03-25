@@ -179,6 +179,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.6.0</b></summary><br>
+
+- `UPDATE`  : code spec now based on flake8
+
+</details>
+
 <details open><summary><b>v2.5.0</b></summary><br>
 
 - `ADDED`   : Gizmo size control

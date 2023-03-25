@@ -1,5 +1,5 @@
 import bpy
-from bpy.types import AddonPreferences, Preferences
+from bpy.types import Preferences
 from mathutils import Vector
 from ..Settings import OverlaySettings
 

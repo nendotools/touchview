@@ -2,9 +2,11 @@
 ignore = 
   # defaults
   E121,E123,E126,E226,E24,E704,W503,W504,
-  # F722 - syntax error in forward annotation
+  # do not use bare except
+  E722,
+  # syntax error in forward annotation
   F722,
   # undefined name 'name'
   F821,
-# undefined name 'name' in __all__
-  F822,
+  # undefined name 'name' in __all__
+  F822

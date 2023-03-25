@@ -1,4 +1,3 @@
-import bpy
 from math import radians, sin, cos
 from mathutils import Vector
 from bpy.types import Context, GizmoGroup

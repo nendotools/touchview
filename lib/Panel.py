@@ -1,3 +1,7 @@
+# type: ignore
+# NOTE: generally, we don't want to ingore all type-enforcement in a file,
+# but the current implementation of the AnyType[T] used as input for prop()
+# doesn't get enforced as the native: any[T]
 import bpy
 from bpy.types import Context, Panel, Menu, VIEW3D_PT_gizmo_display
 
@@ -163,7 +167,7 @@ class PIE_MT_Floating_Menu(Menu):
             for prop in names:
                 a = getattr(a, prop)
             a.__repr__()
-        except e:
+        except:
             return False
         return True
 

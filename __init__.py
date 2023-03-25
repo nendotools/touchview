@@ -27,7 +27,7 @@ bl_info = {
             easier viewport navigation with touch screens and pen tablets.
         """,
     "author": "NENDO",
-    "version": (2, 5, 0),
+    "version": (2, 6, 0),
     "blender": (2, 93, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",

@@ -1,3 +1,4 @@
+# INPUT EVENTS
 TWEAK = 'TWEAK'
 MOUSE = 'MOUSE'
 PEN = 'PEN'
@@ -7,7 +8,13 @@ RMOUSE = 'RIGHTMOUSE'
 PRESS = 'PRESS'
 DCLICK = 'DOUBLE_CLICK'
 
+# OPERATOR RESPONSES
+FINISHED = {'FINISHED'}
+MODAL = {'RUNNING_MODAL'}
+CANCEL = {'CANCELLED'}
+PASSTHROUGH = {'PASS_THROUGH'}
 
+# DICTIONARIES
 flat_modes = ["Node Editor", "Image", "Image Paint", "UV Editor", "View2D"]
 top_level_names = ("Node Editor", "UV Editor", "Image Editor", "Image Paint",
                    "3D View", "Image", "View2D", "Grease Pencil")
