@@ -5,10 +5,9 @@ from bpy.props import (
     EnumProperty, FloatProperty, IntProperty, StringProperty
 )
 
-from .lib.ui_gizmo.gizmo_group_2d import gizmo_sets
 from .lib.constants import (
     menu_style_items, menu_orientation_items, double_click_items,
-    position_items
+    position_items, pivot_items, edit_modes, gizmo_sets
 )
 
 

@@ -218,25 +218,6 @@ rotLocToggleConfig = {
     "offIcon": "UNLOCKED"
 }
 
-gizmo_sets = {
-    # ALL includes only the modes in this list
-    "ALL": {
-        "undoredo", "is_enabled", "show_fullscreen", "region_quadviews",
-        "snap_view", "n_panel", "lock_rotation"
-    },
-    "SCULPT": {
-        "control_gizmo", "pivot_mode", "voxel_remesh", "multires",
-        "brush_dynamics"
-    },
-    "OBJECT": {"control_gizmo", "multires"},
-    "EDIT_MESH": {"control_gizmo"},
-    "POSE": {},
-    "PAINT_TEXTURE": {"brush_dynamics"},
-    "PAINT_VERTEX": {"brush_dynamics"},
-    "PAINT_WEIGHT": {"brush_dynamics"},
-    "PAINT_GPENCIL": {"brush_dynamics"}
-}
-
 gizmo_colors = {
     "disabled": {
         "color": [0.0, 0.0, 0.0],

@@ -1,5 +1,5 @@
 import bpy
-from constants import (
+from .constants import (
     PRESS, DCLICK, LMOUSE, RMOUSE, top_level_names, flat_modes
 )
 

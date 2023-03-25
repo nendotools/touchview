@@ -170,10 +170,12 @@ class VIEW3D_OT_BrushResize(Operator):
             data_path = "tool_settings.image_paint.brush.size"
         if context.mode == 'PAINT_GPENCIL':
             bpy.ops.wm.radial_control(
+                'INVOKE_DEFAULT',
                 data_path_primary="tool_settings.gpencil_paint.brush.size",
             )
             return FINISHED
         bpy.ops.wm.radial_control(
+            'INVOKE_DEFAULT',
             data_path_primary=data_path,
             data_path_secondary="tool_settings.unified_paint_settings.size",
             use_secondary=(
@@ -217,6 +219,7 @@ class VIEW3D_OT_BrushStrength(Operator):
             data_path = "tool_settings.weight_paint.brush.strength"
         if context.mode == 'PAINT_GPENCIL':
             bpy.ops.wm.radial_control(
+                'INVOKE_DEFAULT',
                 data_path_primary=(
                     "tool_settings.gpencil_paint"  # NOTE: should concat fine
                     ".brush.gpencil_settings.pen_strength"
@@ -228,6 +231,7 @@ class VIEW3D_OT_BrushStrength(Operator):
         if context.mode == 'PAINT_TEXTURE':
             data_path = "tool_settings.image_paint.brush.strength"
         bpy.ops.wm.radial_control(
+            'INVOKE_DEFAULT',
             data_path_primary=data_path,
             data_path_secondary=(
                 "tool_settings.unified_paint_settings.strength"

@@ -1,12 +1,12 @@
 import bpy
-from bpy.types import Preferences
 from mathutils import Vector
 from ..Settings import OverlaySettings
 
 
 def get_settings() -> OverlaySettings:
-    prefs = Preferences.addons[__package__.split('.')[0]].preferences
-    # ensure prefs is of type OverlaySettings
+    prefs = (
+        bpy.context.preferences.addons[__package__.split('.')[0]].preferences
+    )
     if isinstance(prefs, OverlaySettings):
         return prefs
     raise RuntimeWarning('Invalid Preferences')
@@ -33,8 +33,8 @@ def panel(type) -> tuple:
 
 # returns dpi scale factor for UI
 def dpi_factor() -> float:
-    retinaFactor = getattr(Preferences.system, "pixel_size", 1)
-    return int(Preferences.system.dpi * retinaFactor) / 72
+    retinaFactor = getattr(bpy.context.preferences.system, "pixel_size", 1)
+    return int(bpy.context.preferences.system.dpi * retinaFactor) / 72
 
 
 # returns a tuple (bottom-left, top-right)

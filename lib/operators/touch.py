@@ -21,7 +21,8 @@ class VIEW3D_OT_RightClick_Action(Operator):
         settings = get_settings()
         op = settings.right_click_mode.split('.')
         if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
-            return FINISHED
+            bpy.ops.view3d.select('INVOKE_DEFAULT')
+            return PASSTHROUGH
         opgrp = getattr(bpy.ops, op[0])
         getattr(opgrp, op[1])('INVOKE_DEFAULT')
         return FINISHED
@@ -53,12 +54,15 @@ class VIEW3D_OT_Doubletap_Action(Operator):
     bl_idname = "view3d.dt_action"
     bl_label = "Viewport double-tap shortcut"
 
-    def execute(self, _: Context):
+    def execute(self, context: Context):
         settings = get_settings()
         if not settings.enable_double_click:
             return PASSTHROUGH
         op = settings.double_click_mode.split('.')
         opgrp = getattr(bpy.ops, op[0])
+        if op[1] == 'transfer_mode' and context.mode == 'OBJECT':
+            bpy.ops.view3d.select('INVOKE_DEFAULT')
+            return PASSTHROUGH
         getattr(opgrp, op[1])('INVOKE_DEFAULT')
         return FINISHED
 

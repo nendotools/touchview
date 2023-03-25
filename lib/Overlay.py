@@ -124,7 +124,7 @@ class Overlay():
                         mid.x + radius * math.cos(
                             math.radians(360 / segments) * p
                         ),
-                        mid + radius * math.sin(
+                        mid.y + radius * math.sin(
                             math.radians(360 / segments) * p
                         )
                     )

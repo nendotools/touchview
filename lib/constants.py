@@ -81,3 +81,22 @@ control_gizmo_items = [("none", "", "disable_gizmo"),
                        ("translate", "show_gizmo_object_translate", ""),
                        ("rotate", "show_gizmo_object_rotate", ""),
                        ("scale", "show_gizmo_object_scale", "")]
+
+gizmo_sets = {
+    # ALL includes only the modes in this list
+    "ALL": {
+        "undoredo", "is_enabled", "show_fullscreen", "region_quadviews",
+        "snap_view", "n_panel", "lock_rotation"
+    },
+    "SCULPT": {
+        "control_gizmo", "pivot_mode", "voxel_remesh", "multires",
+        "brush_dynamics"
+    },
+    "OBJECT": {"control_gizmo", "multires"},
+    "EDIT_MESH": {"control_gizmo"},
+    "POSE": {},
+    "PAINT_TEXTURE": {"brush_dynamics"},
+    "PAINT_VERTEX": {"brush_dynamics"},
+    "PAINT_WEIGHT": {"brush_dynamics"},
+    "PAINT_GPENCIL": {"brush_dynamics"}
+}

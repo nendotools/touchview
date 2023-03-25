@@ -45,5 +45,5 @@ def register():
 
 def unregister():
     lib.unregister()
-    bpy.utils.unregister_class(MenuModeGroup)
     bpy.utils.unregister_class(OverlaySettings)
+    bpy.utils.unregister_class(MenuModeGroup)
