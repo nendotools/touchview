@@ -84,14 +84,14 @@ class VIEW3D_OT_ToggleNPanel(Operator):
         )
 
 
-# TODO: look into why this is empty
 class VIEW3D_OT_ToggleFloatingMenu(Operator):
     """ Toggle Floating Menu """
     bl_idname = "view3d.toggle_floating_menu"
     bl_label = "Toggle Floating Menu"
 
     def execute(self, _: Context):
-        get_settings()
+        settings = get_settings()
+        settings.show_float_menu = not settings.show_float_menu
         return FINISHED
 
 
@@ -170,12 +170,12 @@ class VIEW3D_OT_BrushResize(Operator):
             data_path = "tool_settings.image_paint.brush.size"
         if context.mode == 'PAINT_GPENCIL':
             bpy.ops.wm.radial_control(
-                'INVOKE_DEFAULT',
+                'INVOKE_DEFAULT',  # type: ignore
                 data_path_primary="tool_settings.gpencil_paint.brush.size",
             )
             return FINISHED
         bpy.ops.wm.radial_control(
-            'INVOKE_DEFAULT',
+            'INVOKE_DEFAULT',  # type: ignore
             data_path_primary=data_path,
             data_path_secondary="tool_settings.unified_paint_settings.size",
             use_secondary=(
@@ -219,7 +219,7 @@ class VIEW3D_OT_BrushStrength(Operator):
             data_path = "tool_settings.weight_paint.brush.strength"
         if context.mode == 'PAINT_GPENCIL':
             bpy.ops.wm.radial_control(
-                'INVOKE_DEFAULT',
+                'INVOKE_DEFAULT',  # type: ignore
                 data_path_primary=(
                     "tool_settings.gpencil_paint"  # NOTE: should concat fine
                     ".brush.gpencil_settings.pen_strength"
@@ -231,7 +231,7 @@ class VIEW3D_OT_BrushStrength(Operator):
         if context.mode == 'PAINT_TEXTURE':
             data_path = "tool_settings.image_paint.brush.strength"
         bpy.ops.wm.radial_control(
-            'INVOKE_DEFAULT',
+            'INVOKE_DEFAULT',  # type: ignore
             data_path_primary=data_path,
             data_path_secondary=(
                 "tool_settings.unified_paint_settings.strength"

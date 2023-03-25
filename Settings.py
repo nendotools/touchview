@@ -7,7 +7,7 @@ from bpy.props import (
 
 from .lib.constants import (
     menu_style_items, menu_orientation_items, double_click_items,
-    position_items, pivot_items, edit_modes, gizmo_sets
+    position_items, pivot_items, edit_modes, gizmo_sets, menu_defaults
 )
 
 
@@ -305,12 +305,12 @@ class OverlaySettings(AddonPreferences):
         for opts in self.menu_sets:
             if opts.mode == mode:
                 m = opts
-            if m is None:
-                m = self.menu_sets.add()
-            m.mode = mode
-            ops = menu_defaults[mode]
-            for i, o in enumerate(ops):
-                setattr(m, 'menu_slot_' + str(i + 1), o)
+        if m is None:
+            m = self.menu_sets.add()
+        m.mode = mode
+        ops = menu_defaults[mode]
+        for i, o in enumerate(ops):
+            setattr(m, 'menu_slot_' + str(i + 1), o)
         return m
 
     def getGizmoSet(self, mode: str | int):
