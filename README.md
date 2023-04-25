@@ -1,6 +1,16 @@
-![touch view header](/docs/header.jpg?raw=true)
+<div align="center" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+  <h1>TouchView</h1>
+  <div>BLENDER 3D add-on</div>
+  <div><sup>customizable rotate/pan/zoom</sup></div>
+  <div style="display: flex; flex-direction: row;">
+    <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/nendotools/touchview?style=flat-square">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/nendotools/touchview?style=flat-square">
+    <img alt="GitHub" src="https://img.shields.io/github/license/nendotools/touchview?style=flat-square">
+    <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fake-bpy-module-latest?style=flat-square">
+  </div>
+</div>
 
-### Index
+### Table of Contents
 
 - [Features](https://github.com/nendotools/touchview#features)
 - [Building from Github](https://github.com/nendotools/touchview#building-from-github)
@@ -11,13 +21,12 @@
 
 This add-on is designed to improve the user experience of Blender for users without immediate access to a keyboard or mouse. It provides many customizable UI improvements to cater to your workflow needs.
 
-
-
-## Viewport Touch Control
+<div style="display:flex; flex-direction:row;">
+<img align="right" src="/docs/simple_demo.gif" width="40%">
+<div width="60%">
+<h2>Viewport Touch Control</h2>
 
 Pan, Rotate, and Zoom the viewport with your finger.
-
-<img src="/docs/simple_demo.gif" width="50%">
 
 The viewport has be updated to use 3 interactive "hot regions" to control the camera position.
 
@@ -29,13 +38,15 @@ If your tablet doesn't support touch; you can set the middle mouse button to act
 - Zoom by dragging along the left or right edge of the viewport
 - Rotate by dragging the remaining space in the viewport
 
-### Additional Details
+<h3>Additional Details</h3>
 
 Touch Controls come with a toggleable overlay which can be assigned colors.
 
 It is recommended to disable the overlay once you are comfortable with the size of each touch region, or set the transparency very low. (note: the overlay will not be shown in the render output)
 
 You may chose to switch the Pan and Rotate regions. If you lock the viewport rotation, Panning can be done anywhere between the Zoom control regions.
+</div>
+</div>
 
 ## Customizable Double-tap Action
 
