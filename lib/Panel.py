@@ -1,5 +1,5 @@
 # type: ignore
-# NOTE: generally, we don't want to ingore all type-enforcement in a file,
+# NOTE: generally, we don't want to ignore all type-enforcement in a file,
 # but the current implementation of the AnyType[T] used as input for prop()
 # doesn't get enforced as the native: any[T]
 import bpy
