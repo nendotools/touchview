@@ -1,7 +1,7 @@
 import bpy
-from .constants import (
-    PRESS, DCLICK, LMOUSE, RMOUSE, top_level_names, flat_modes
-)
+
+from .constants import (DCLICK, LMOUSE, PRESS, RMOUSE, flat_modes,
+                        top_level_names)
 
 default_keymaps = []
 modified_keymaps = []

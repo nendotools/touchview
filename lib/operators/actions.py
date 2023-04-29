@@ -1,10 +1,10 @@
-import bpy
 import math
 
+import bpy
 from bpy.types import Context, Event, MultiresModifier, Operator, SpaceView3D
 
+from ..constants import CANCEL, FINISHED, pivot_items
 from ..utils import get_settings
-from ..constants import pivot_items, FINISHED, CANCEL
 
 
 class VIEW3D_OT_FlipTools(Operator):
@@ -301,26 +301,17 @@ class VIEW3D_OT_DecreaseMultires(Operator):
         ):
             return CANCEL
         for mod in context.active_object.modifiers:
-            if isinstance(mod, MultiresModifier):
-                if context.mode == 'SCULPT':
-                    if mod.sculpt_levels == 0:
-                        try:
-                            bpy.ops.object.multires_unsubdivide(
-                                modifier=mod.name
-                            )
-                        except:
-                            pass
-                    else:
-                        mod.sculpt_levels -= 1
-                else:
-                    if mod.levels == 0:
-                        try:
-                            bpy.ops.object.multires_unsubdivide(
-                                modifier=mod.name
-                            )
-                        except:
-                            pass
-                    else:
-                        mod.levels -= 1
+            if not isinstance(mod, MultiresModifier):
                 return FINISHED
+            if context.mode == 'SCULPT':
+                if mod.sculpt_levels == 0:
+                    bpy.ops.object.multires_unsubdivide(modifier=mod.name)
+                else:
+                    mod.sculpt_levels -= 1
+            else:
+                if mod.levels == 0:
+                    bpy.ops.object.multires_unsubdivide(modifier=mod.name)
+                else:
+                    mod.levels -= 1
+            return FINISHED
         return CANCEL

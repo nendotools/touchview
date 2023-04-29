@@ -16,8 +16,9 @@
 #
 # ##### END GPL LICENSE BLOCK #####
 import bpy
+
 from . import lib
-from .Settings import OverlaySettings, MenuModeGroup
+from .Settings import MenuModeGroup, OverlaySettings
 
 bl_info = {
     "name": "Touch Viewport",

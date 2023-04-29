@@ -1,8 +1,9 @@
-from math import radians, sin, cos
-from mathutils import Vector
-from bpy.types import Context, GizmoGroup
+from math import cos, radians, sin
 
-from ..utils import get_settings, dpi_factor, buildSafeArea
+from bpy.types import Context, GizmoGroup
+from mathutils import Vector
+
+from ..utils import buildSafeArea, dpi_factor, get_settings
 from .gizmo_2d import GizmoSet, GizmoSetBoolean
 from .gizmo_config import *
 

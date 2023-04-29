@@ -1,9 +1,9 @@
 # type: ignore
-# NOTE: generally, we don't want to ingore all type-enforcement in a file,
+# NOTE: generally, we don't want to ignore all type-enforcement in a file,
 # but the current implementation of the AnyType[T] used as input for prop()
 # doesn't get enforced as the native: any[T]
 import bpy
-from bpy.types import Context, Panel, Menu, VIEW3D_PT_gizmo_display
+from bpy.types import Context, Menu, Panel, VIEW3D_PT_gizmo_display
 
 from .utils import get_settings
 

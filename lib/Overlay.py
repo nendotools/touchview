@@ -1,16 +1,14 @@
 # type: ignore
 # NOTE: ignoring types here due to lack of compatibility in lower-level access
 # and issues calling a class method without a proper reference to 'self'
-import bpy
-from bpy.types import Region, SpaceView3D
-
 import math
-from mathutils import Vector
 
+import bpy
 import gpu
-
-from bgl import glEnable, glDisable, GL_BLEND
+from bgl import GL_BLEND, glDisable, glEnable
+from bpy.types import Region, SpaceView3D
 from gpu_extras.batch import batch_for_shader
+from mathutils import Vector
 
 from .utils import get_settings
 

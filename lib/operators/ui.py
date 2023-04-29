@@ -1,12 +1,9 @@
 import bpy
+from bpy.types import Context, Event, Operator, SpaceView3D
 from mathutils import Vector
 
-from bpy.types import Context, Event, Operator, SpaceView3D
-
+from ..constants import CANCEL, FINISHED, MODAL
 from ..utils import buildSafeArea, get_settings
-from ..constants import (
-    CANCEL, FINISHED, MODAL
-)
 
 
 class VIEW3D_OT_MoveFloatMenu(Operator):

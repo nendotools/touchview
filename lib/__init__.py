@@ -1,8 +1,5 @@
+from . import Panel, operators, ui_gizmo
 from .Overlay import Overlay
-from . import Panel
-
-from . import operators
-from . import ui_gizmo
 
 ov = Overlay()
 

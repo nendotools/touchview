@@ -4,6 +4,10 @@ ignore =
   E121,E123,E126,E226,E24,E704,W503,W504,
   # do not use bare except
   E722,
+  # wildcard imports
+  F403,
+  # undefined, possibly by wildcard (should try to eliminate this error later)
+  F405,
   # syntax error in forward annotation
   F722,
   # undefined name 'name'
