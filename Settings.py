@@ -1,14 +1,12 @@
 # type: ignore
-from bpy.types import Context, PropertyGroup, AddonPreferences
-from bpy.props import (
-    BoolProperty, CollectionProperty, FloatVectorProperty,
-    EnumProperty, FloatProperty, IntProperty, StringProperty
-)
+from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
+                       FloatProperty, FloatVectorProperty, IntProperty,
+                       StringProperty)
+from bpy.types import AddonPreferences, Context, PropertyGroup
 
-from .lib.constants import (
-    menu_style_items, menu_orientation_items, double_click_items,
-    position_items, pivot_items, edit_modes, gizmo_sets, menu_defaults
-)
+from .lib.constants import (double_click_items, edit_modes, gizmo_sets,
+                            menu_defaults, menu_orientation_items,
+                            menu_style_items, pivot_items, position_items)
 
 
 ##

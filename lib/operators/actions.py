@@ -1,10 +1,10 @@
-import bpy
 import math
 
+import bpy
 from bpy.types import Context, Event, MultiresModifier, Operator, SpaceView3D
 
+from ..constants import CANCEL, FINISHED, pivot_items
 from ..utils import get_settings
-from ..constants import pivot_items, FINISHED, CANCEL
 
 
 class VIEW3D_OT_FlipTools(Operator):

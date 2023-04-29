@@ -1,4 +1,5 @@
 from ..constants import pivot_icon_items
+
 ###
 #  Config Standard
 #  ( TYPE  BINDING  COMMAND  ICON )

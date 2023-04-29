@@ -3,7 +3,7 @@
 # but the current implementation of the AnyType[T] used as input for prop()
 # doesn't get enforced as the native: any[T]
 import bpy
-from bpy.types import Context, Panel, Menu, VIEW3D_PT_gizmo_display
+from bpy.types import Context, Menu, Panel, VIEW3D_PT_gizmo_display
 
 from .utils import get_settings
 

@@ -1,15 +1,14 @@
-import bpy
 import math
-from mathutils import Vector
 
+import bpy
 from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
+from mathutils import Vector
 
+from ..constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE,
+                         input_mode_items)
 from ..utils import get_settings
-from ..constants import (
-    LMOUSE, PEN, PRESS, RMOUSE, input_mode_items, FINISHED, PASSTHROUGH
-)
 
 
 class VIEW3D_OT_RightClick_Action(Operator):

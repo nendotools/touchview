@@ -2,9 +2,8 @@ import bpy
 from bpy.types import Gizmo, GizmoGroup, bpy_prop_collection
 from mathutils import Matrix, Vector
 
-from ..utils import get_settings, dpi_factor
+from ..utils import dpi_factor, get_settings
 from .gizmo_config import gizmo_colors, toggle_colors
-
 
 ##
 # GizmoSet

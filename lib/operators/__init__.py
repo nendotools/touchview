@@ -1,6 +1,6 @@
 # flake8: noqa
-from .touch import *
 from .actions import *
+from .touch import *
 from .ui import *
 
 __classes__ = (
