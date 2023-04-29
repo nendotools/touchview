@@ -305,22 +305,12 @@ class VIEW3D_OT_DecreaseMultires(Operator):
                 return FINISHED
             if context.mode == 'SCULPT':
                 if mod.sculpt_levels == 0:
-                    try:
-                        bpy.ops.object.multires_unsubdivide(
-                            modifier=mod.name
-                        )
-                    except:
-                        pass
+                    bpy.ops.object.multires_unsubdivide(modifier=mod.name)
                 else:
                     mod.sculpt_levels -= 1
             else:
                 if mod.levels == 0:
-                    try:
-                        bpy.ops.object.multires_unsubdivide(
-                            modifier=mod.name
-                        )
-                    except:
-                        pass
+                    bpy.ops.object.multires_unsubdivide(modifier=mod.name)
                 else:
                     mod.levels -= 1
             return FINISHED
