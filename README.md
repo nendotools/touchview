@@ -4,6 +4,7 @@
   <div><sup>customizable rotate/pan/zoom</sup></div>
   <div style="display: flex; flex-direction: row;">
     <img alt="GitHub release (latest by date)" src="https://img.shields.io/github/v/release/nendotools/touchview?style=flat-square">
+    <img alt="GitHub Workflow Status (with branch)" src="https://img.shields.io/github/actions/workflow/status/nendotools/touchview/linting.yml?style=flat-square">
     <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/nendotools/touchview?style=flat-square">
     <img alt="GitHub" src="https://img.shields.io/github/license/nendotools/touchview?style=flat-square">
     <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/fake-bpy-module-latest?style=flat-square">
