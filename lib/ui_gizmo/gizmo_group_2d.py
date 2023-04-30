@@ -14,6 +14,7 @@ configs = [
     undoConfig, redoConfig, touchViewConfig, controlGizmoConfig,
     snapViewConfig, fullscreenToggleConfig, quadviewToggleConfig,
     rotLocToggleConfig, nPanelConfig, voxelSizeConfig, voxelRemeshConfig,
+    voxelStepUpConfig, voxelStepDownConfig,
     subdivConfig, unsubdivConfig, brushResizeConfig, brushStrengthConfig
 ]
 

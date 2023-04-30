@@ -315,3 +315,20 @@ class VIEW3D_OT_DecreaseMultires(Operator):
                     mod.levels -= 1
             return FINISHED
         return CANCEL
+
+
+class VIEW3D_OT_DensityUp(Operator):
+    """ Decrement Multires by 1 """
+    bl_idname = "nendo.density_up"
+    bl_label = "Increase voxel density and remesh (excluding dynamic-topology)"
+
+    def execute(self, context: Context):
+        if (not context.active_object):
+            return CANCEL
+        for mod in context.active_object.modifiers:
+            if isinstance(mod, MultiresModifier):
+                return CANCEL
+            if context.mode == 'SCULPT':
+                context.brush
+            return FINISHED
+        return CANCEL

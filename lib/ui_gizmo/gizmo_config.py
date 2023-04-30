@@ -146,7 +146,7 @@ voxelStepDownConfig = {
         }
     },
     "command": "nendo.density_down",
-    "icon": "MINUS"
+    "icon": "TRIA_DOWN"
 }
 
 voxelStepUpConfig = {
@@ -161,7 +161,7 @@ voxelStepUpConfig = {
         }
     },
     "command": "nendo.density_up",
-    "icon": "PLUS"
+    "icon": "TRIA_UP"
 }
 
 subdivConfig = {
