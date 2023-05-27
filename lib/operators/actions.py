@@ -318,9 +318,9 @@ class VIEW3D_OT_DecreaseMultires(Operator):
 
 
 class VIEW3D_OT_DensityUp(Operator):
-    """ Decrement Multires by 1 """
+    """ Increase voxel density """
     bl_idname = "nendo.density_up"
-    bl_label = "Increase voxel density and remesh (excluding dynamic-topology)"
+    bl_label = "Increase voxel density and remesh"
 
     def execute(self, context: Context):
         if (not context.active_object):
@@ -328,7 +328,33 @@ class VIEW3D_OT_DensityUp(Operator):
         for mod in context.active_object.modifiers:
             if isinstance(mod, MultiresModifier):
                 return CANCEL
-            if context.mode == 'SCULPT':
-                context.brush
+            if context.mode != 'SCULPT':
+                return CANCEL
+            if context.active_object.type != 'MESH':
+                return CANCEL
+            mesh = bpy.data.meshes[context.active_object.name]
+            mesh.remesh_voxel_size *= 0.9
+            bpy.ops.object.voxel_remesh()
+            return FINISHED
+        return CANCEL
+
+class VIEW3D_OT_DensityDown(Operator):
+    """ Decrease voxel density """
+    bl_idname = "nendo.density_down"
+    bl_label = "Decrease voxel density and remesh"
+
+    def execute(self, context: Context):
+        if (not context.active_object):
+            return CANCEL
+        for mod in context.active_object.modifiers:
+            if isinstance(mod, MultiresModifier):
+                return CANCEL
+            if context.mode != 'SCULPT':
+                return CANCEL
+            if context.active_object.type != 'MESH':
+                return CANCEL
+            mesh = bpy.data.meshes[context.active_object.name]
+            mesh.remesh_voxel_size /= 0.9
+            bpy.ops.object.voxel_remesh()
             return FINISHED
         return CANCEL

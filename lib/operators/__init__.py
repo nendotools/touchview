@@ -23,6 +23,8 @@ __classes__ = (
     VIEW3D_OT_ViewportRecenter,
     VIEW3D_OT_IncreaseMultires,
     VIEW3D_OT_DecreaseMultires,
+    VIEW3D_OT_DensityUp,
+    VIEW3D_OT_DensityDown,
 )
 
 
