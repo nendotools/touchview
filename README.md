@@ -186,6 +186,7 @@ Select it and click `Install Add-on`.
 <details open><summary><b>v2.7.0</b></summary><br>
 
 - `ADDED` : relative remesh
+- `UPDATED` : fixed error when disabling add-on
 
 </details>
 
