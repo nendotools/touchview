@@ -140,7 +140,7 @@ voxelStepDownConfig = {
         "location": "prefs",
         "name": "voxel_remesh",
         "attribute": {
-            "path":  "active_object",
+            "path": "active_object.modifiers.type",
             "value": "MULTIRES",
             "state": False
         }
@@ -155,7 +155,7 @@ voxelStepUpConfig = {
         "location": "prefs",
         "name": "voxel_remesh",
         "attribute": {
-            "path":  "active_object",
+            "path": "active_object.modifiers.type",
             "value": "MULTIRES",
             "state": False
         }

@@ -328,15 +328,11 @@ class VIEW3D_OT_DensityUp(Operator):
         for mod in context.active_object.modifiers:
             if isinstance(mod, MultiresModifier):
                 return CANCEL
-            if context.mode != 'SCULPT':
-                return CANCEL
-            if context.active_object.type != 'MESH':
-                return CANCEL
-            mesh = bpy.data.meshes[context.active_object.name]
-            mesh.remesh_voxel_size *= 0.9
-            bpy.ops.object.voxel_remesh()
-            return FINISHED
-        return CANCEL
+        mesh = bpy.data.meshes[context.active_object.name]
+        mesh.remesh_voxel_size *= 0.8
+        bpy.ops.object.voxel_remesh()
+        return FINISHED
+
 
 class VIEW3D_OT_DensityDown(Operator):
     """ Decrease voxel density """
@@ -349,12 +345,7 @@ class VIEW3D_OT_DensityDown(Operator):
         for mod in context.active_object.modifiers:
             if isinstance(mod, MultiresModifier):
                 return CANCEL
-            if context.mode != 'SCULPT':
-                return CANCEL
-            if context.active_object.type != 'MESH':
-                return CANCEL
-            mesh = bpy.data.meshes[context.active_object.name]
-            mesh.remesh_voxel_size /= 0.9
-            bpy.ops.object.voxel_remesh()
-            return FINISHED
-        return CANCEL
+        mesh = bpy.data.meshes[context.active_object.name]
+        mesh.remesh_voxel_size /= 0.8
+        bpy.ops.object.voxel_remesh()
+        return FINISHED
