@@ -20,7 +20,7 @@ class Overlay():
 
     def clear_overlays(self):
         for mesh in self.meshes:
-            SpaceView3D.draw_handler_remove(mesh, 'WINDOW', None)
+            SpaceView3D.draw_handler_remove(mesh, 'WINDOW')
         self.meshes = []
 
     def __getMidpoint(self, view: Region) -> Vector:
