@@ -168,6 +168,23 @@ class OverlaySettings(AddonPreferences):
     )
 
     ##
+    # Topology Control
+    ##
+    topology_mode: EnumProperty(
+        name="Topology Mode",
+        items=[
+            ("MANUAL", "manual", "user-defined vertex density"),
+            ("RELATIVE", "relative", "relative mesh vertex density steps"),
+            (
+                "RELATIVE-EXP",
+                "exponential",
+                "relative mesh vertex density steps with scaling"
+            ),
+        ],
+        default="MANUAL"
+    )
+
+    ##
     # Action Menu Options
     ##
     show_float_menu: BoolProperty(name='Enable Floating Menu', default=False)

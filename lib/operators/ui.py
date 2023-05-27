@@ -143,7 +143,7 @@ class VIEW3D_OT_MenuController(Operator):
         return MODAL
 
 
-class VIEW_3D_OT_CycleControlGizmo(Operator):
+class VIEW3D_OT_CycleControlGizmo(Operator):
     bl_idname = "view3d.cycle_control_gizmo"
     bl_label = "switch object control gizmo"
 

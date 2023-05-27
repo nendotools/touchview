@@ -134,6 +134,36 @@ voxelRemeshConfig = {
     "icon": "MOD_UVPROJECT"
 }
 
+voxelStepDownConfig = {
+    "type": "default",
+    "binding": {
+        "location": "prefs",
+        "name": "voxel_remesh",
+        "attribute": {
+            "path": "active_object.modifiers.type",
+            "value": "MULTIRES",
+            "state": False
+        }
+    },
+    "command": "nendo.density_down",
+    "icon": "TRIA_DOWN"
+}
+
+voxelStepUpConfig = {
+    "type": "default",
+    "binding": {
+        "location": "prefs",
+        "name": "voxel_remesh",
+        "attribute": {
+            "path": "active_object.modifiers.type",
+            "value": "MULTIRES",
+            "state": False
+        }
+    },
+    "command": "nendo.density_up",
+    "icon": "TRIA_UP"
+}
+
 subdivConfig = {
     "type": "default",
     "binding": {

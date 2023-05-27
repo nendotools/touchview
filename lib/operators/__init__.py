@@ -8,7 +8,7 @@ __classes__ = (
     VIEW2D_OT_TouchInput,
     VIEW3D_OT_Doubletap_Action,
     VIEW3D_OT_RightClick_Action,
-    VIEW_3D_OT_CycleControlGizmo,
+    VIEW3D_OT_CycleControlGizmo,
     VIEW3D_OT_FloatController,
     VIEW3D_OT_MoveFloatMenu,
     VIEW3D_OT_MenuController,
@@ -23,6 +23,8 @@ __classes__ = (
     VIEW3D_OT_ViewportRecenter,
     VIEW3D_OT_IncreaseMultires,
     VIEW3D_OT_DecreaseMultires,
+    VIEW3D_OT_DensityUp,
+    VIEW3D_OT_DensityDown,
 )
 
 
