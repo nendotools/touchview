@@ -43,12 +43,6 @@ class VIEW3D_OT_RightClick_Action(Operator):
         self.execute(context)
         return FINISHED
 
-    @classmethod
-    def poll(cls, context: Context):
-        return context.area.type in [
-            'NODE_EDITOR', 'VIEW_2D', 'VIEW_3D', 'IMAGE_EDITOR'
-        ] and context.region.type == 'WINDOW'
-
 
 class VIEW3D_OT_Doubletap_Action(Operator):
     """ Viewport double-tap shortcut """

@@ -70,7 +70,7 @@ class OverlaySettings(AddonPreferences):
     right_click_mode: EnumProperty(
         items=double_click_items,
         name='Right Click Mode',
-        default='screen.screen_full_area'
+        default='wm.window_fullscreen_toggle'
     )
     right_click_source: EnumProperty(
         items=[
@@ -201,7 +201,7 @@ class OverlaySettings(AddonPreferences):
     double_click_mode: EnumProperty(
         items=double_click_items,
         name='Double Click Mode',
-        default='screen.screen_full_area'
+        default='wm.window_fullscreen_toggle'
     )
     menu_sets: CollectionProperty(type=MenuModeGroup)
 

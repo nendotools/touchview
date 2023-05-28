@@ -183,6 +183,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.7.1</b></summary><br>
+
+- `UPDATED` : replaced region_full_area with window_fullscreen
+
+</details>
+
 <details open><summary><b>v2.7.0</b></summary><br>
 
 - `ADDED` : relative remesh
