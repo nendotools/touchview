@@ -89,49 +89,41 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
 
         if settings.menu_style == 'float.radial':
             self.__menuRadial(visible_gizmos)
-        if settings.menu_style == 'float.bar':
-            self.__menuBar(visible_gizmos, True)
         if settings.menu_style == 'fixed.bar':
-            self.__menuBar(visible_gizmos, False)
+            self.__menuBar(visible_gizmos)
 
-    def __menuBar(self, visible_gizmos: list[GizmoSet], floating: bool):
+    def __menuBar(self, visible_gizmos: list[GizmoSet]):
         settings = get_settings()
         origin = self.origin
         scalar = 22 * dpi_factor()
         padding = (scalar * 0.8) * get_settings().gizmo_scale
         count = len(visible_gizmos)
-        if not floating:
-            safe_area = buildSafeArea()
-            origin = Vector(((safe_area[0].x + safe_area[1].x) / 2,
-                             (safe_area[0].y + safe_area[1].y) / 2, 0.0))
+        safe_area = buildSafeArea()
+        origin = Vector(((safe_area[0].x + safe_area[1].x) / 2,
+                            (safe_area[0].y + safe_area[1].y) / 2, 0.0))
 
-            if settings.gizmo_position == 'TOP':
-                origin.y = safe_area[1].y
-            elif settings.gizmo_position == 'BOTTOM':
-                origin.y = safe_area[0].y
-            else:
-                if settings.gizmo_position == 'LEFT':
-                    origin.x = safe_area[0].x
-                elif settings.gizmo_position == 'RIGHT':
-                    origin.x = safe_area[1].x
+        if settings.gizmo_position == 'TOP':
+            origin.y = safe_area[1].y
+        elif settings.gizmo_position == 'BOTTOM':
+            origin.y = safe_area[0].y
+        else:
+            if settings.gizmo_position == 'LEFT':
+                origin.x = safe_area[0].x
+            elif settings.gizmo_position == 'RIGHT':
+                origin.x = safe_area[1].x
 
-        gizmo_spacing = ((
-            (settings.menu_spacing / scalar) * padding) + padding) * 0.5
+        gizmo_spacing = ((settings.menu_spacing + scalar) + padding)
         if ((settings.gizmo_position in ['TOP', 'BOTTOM']
-            and settings.menu_style == 'fixed.bar')
-            or (settings.menu_orientation == 'HORIZONTAL'
-                and settings.menu_style == 'float.bar')):
+            and settings.menu_style == 'fixed.bar')):
             start = origin.x - ((count - 1) * gizmo_spacing) / 2
-            if settings.menu_style == 'float.bar':
-                origin.y = origin.y + padding + settings.menu_spacing / 2
             for i, gizmo in enumerate(visible_gizmos):
                 self.__move_gizmo(
-                    gizmo, Vector((start + i * gizmo_spacing, origin.y, 0.0)))
+                    gizmo, Vector((start + (i * gizmo_spacing), origin.y, 0.0)))
         else:
             start = origin.y + (count * gizmo_spacing) / 2
             for i, gizmo in enumerate(visible_gizmos):
                 self.__move_gizmo(
-                    gizmo, Vector((origin.x, start - i * gizmo_spacing, 0.0)))
+                    gizmo, Vector((origin.x, start - (i * gizmo_spacing), 0.0)))
 
     def __menuRadial(self, visible_gizmos: list[GizmoSet]):
         settings = get_settings()

@@ -53,13 +53,9 @@ class GizmoSet:
             'float_menu',
             'float_toggle'
         ]:
-            self.primary.scale_basis = (
-                gui_scale + settings.menu_spacing
-            )
+            self.primary.scale_basis = gui_scale + settings.menu_spacing
         else:
-            self.primary.scale_basis = (
-                gui_scale * settings.gizmo_scale
-            )
+            self.primary.scale_basis = gui_scale * settings.gizmo_scale
         if self.binding['name'] == 'float_toggle':
             self.__setToggleColors(self.primary)
 

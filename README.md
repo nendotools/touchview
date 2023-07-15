@@ -183,6 +183,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.8.0</b></summary><br>
+
+- `UPDATED` : fixed issues with menu bar spacing
+- `REMOVED` : floating menu bar
+
+</details>
+
 <details open><summary><b>v2.7.1</b></summary><br>
 
 - `UPDATED` : replaced region_full_area with window_fullscreen

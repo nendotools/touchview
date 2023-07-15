@@ -71,7 +71,6 @@ double_click_items = [("object.transfer_mode", "Transfer Mode", ""),
                       ("wm.window_fullscreen_toggle", "Toggle Full Screen", "")]
 
 menu_style_items = [("fixed.bar", "Fixed Bar", ""),
-                    ("float.bar", "Floating Bar", ""),
                     ("float.radial", "Floating Radial", "")]
 
 menu_orientation_items = [("HORIZONTAL", "Horizontal", ""),

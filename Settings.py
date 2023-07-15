@@ -258,7 +258,7 @@ class OverlaySettings(AddonPreferences):
         main = col.box()
         if self.gizmo_tabs == 'MENU':
             main.label(text='Gizmo Menu Style')
-            tabs = main.column_flow(columns=3, align=True)
+            tabs = main.column_flow(columns=2, align=True)
             tabs.prop_tabs_enum(self, 'menu_style')
 
             if self.menu_style == 'fixed.bar':
