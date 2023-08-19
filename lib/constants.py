@@ -84,7 +84,7 @@ control_gizmo_items = [("none", "", "disable_gizmo"),
 gizmo_sets = {
     # ALL includes only the modes in this list
     "ALL": {
-        "undoredo", "is_enabled", "show_fullscreen", "region_quadviews",
+        "undoredo", "show_fullscreen", "region_quadviews",
         "snap_view", "n_panel", "lock_rotation"
     },
     "SCULPT": {

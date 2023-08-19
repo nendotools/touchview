@@ -123,11 +123,11 @@ class OverlaySettings(AddonPreferences):
         default=20.0,
         precision=2,
         step=1,
-        min=20.0,
+        min=0.0,
         max=100.0
     )
-    gizmo_scale: FloatProperty(
-        name='Gizmo Scale', default=1.0, precision=2, step=1, min=0.5, max=2.0
+    gizmo_padding: FloatProperty(
+        name='Gizmo Padding', default=1.0, precision=2, step=1, min=1, max=10.0
     )
     menu_position: FloatVectorProperty(
         name='Menu Position',
@@ -264,7 +264,8 @@ class OverlaySettings(AddonPreferences):
             if self.menu_style == 'fixed.bar':
                 main.prop_menu_enum(self, 'gizmo_position')
             main.prop(self, 'menu_spacing', slider=True)
-            main.prop(self, 'gizmo_scale', slider=True)
+            if self.menu_style == 'float.radial':
+                main.prop(self, 'gizmo_padding', slider=True)
 
             main.separator()
             main.label(text='Input Options')

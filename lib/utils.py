@@ -35,7 +35,7 @@ def panel(type) -> tuple:
 # returns dpi scale factor for UI
 def dpi_factor() -> float:
     retinaFactor = getattr(bpy.context.preferences.system, "pixel_size", 1)
-    return int(bpy.context.preferences.system.dpi * retinaFactor) / 72
+    return int(bpy.context.preferences.system.dpi * retinaFactor) / 72.0
 
 
 # returns a tuple (bottom-left, top-right)
