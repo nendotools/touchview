@@ -186,6 +186,7 @@ Select it and click `Install Add-on`.
 <details open><summary><b>v2.9.0</b></summary><br>
 
 - `UPDATED` : additional changes to gizmo spacing
+- `UPDATED` : fixed bug preventing custom actions being assigned for radial menu
 
 </details>
 

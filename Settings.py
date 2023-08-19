@@ -203,7 +203,7 @@ class OverlaySettings(AddonPreferences):
         name='Double Click Mode',
         default='wm.window_fullscreen_toggle'
     )
-    menu_sets: CollectionProperty(type=MenuModeGroup)
+    menu_sets: CollectionProperty(type=MenuModeGroup, options={'LIBRARY_EDITABLE'})
 
     ##
     # UI Panel Controls
@@ -323,10 +323,10 @@ class OverlaySettings(AddonPreferences):
                 m = opts
         if m is None:
             m = self.menu_sets.add()
-        m.mode = mode
-        ops = menu_defaults[mode]
-        for i, o in enumerate(ops):
-            setattr(m, 'menu_slot_' + str(i + 1), o)
+            m.mode = mode
+            ops = menu_defaults[mode]
+            for i, o in enumerate(ops):
+                setattr(m, 'menu_slot_' + str(i + 1), o)
         return m
 
     def getGizmoSet(self, mode: str | int):
