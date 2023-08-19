@@ -183,6 +183,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.9.0</b></summary><br>
+
+- `UPDATED` : additional changes to gizmo spacing
+
+</details>
+
 <details open><summary><b>v2.8.0</b></summary><br>
 
 - `UPDATED` : fixed issues with menu bar spacing
