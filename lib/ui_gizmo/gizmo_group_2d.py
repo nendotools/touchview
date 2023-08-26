@@ -96,7 +96,6 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         settings = get_settings()
         origin = self.origin
         scalar = 22 * dpi_factor()
-        padding = (scalar * 0.8) * get_settings().gizmo_padding
         count = len(visible_gizmos)
         safe_area = buildSafeArea()
         origin = Vector(((safe_area[0].x + safe_area[1].x) / 2,
@@ -129,8 +128,8 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         settings = get_settings()
         # calculate minimum radius to prevent overlapping buttons
         gui_scale = dpi_factor() * 3
-        radial_size = (gui_scale + settings.menu_spacing) * 3
-        spacing = radial_size + gui_scale * settings.gizmo_padding
+        radial_size = (gui_scale + settings.menu_spacing + (gui_scale * settings.gizmo_scale))
+        spacing = radial_size + settings.gizmo_padding
 
         count = len(visible_gizmos)
         # reposition Gizmos to origin

@@ -107,6 +107,7 @@ class VIEW3D_PT_GizmoBar(VIEW3D_PT_NendoPanel, Panel):
         group.prop(settings, "menu_spacing", slider=True)
         if settings.menu_style == 'float.radial':
             group.prop(settings, "gizmo_padding", slider=True)
+        group.prop(settings, "gizmo_scale", slider=True)
 
 
 class VIEW3D_PT_ToolSettings(VIEW3D_PT_NendoPanel, Panel):

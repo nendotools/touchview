@@ -186,6 +186,7 @@ Select it and click `Install Add-on`.
 <details open><summary><b>v2.9.1</b></summary><br>
 
 - `UPDATED` : add support for Weylus (\*nix) sending 0.0 for pressure on touch events
+- `ADDED` : additional fine-tuning controls for gizmo spacing
 
 </details>
 
