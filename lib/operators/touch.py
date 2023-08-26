@@ -34,9 +34,9 @@ class VIEW3D_OT_RightClick_Action(Operator):
             return PASSTHROUGH
         if event.type not in [RMOUSE]:
             return PASSTHROUGH
-        if event.pressure == 1.0 and settings.right_click_source == "pen":
+        if [0.0,1.0].__contains__(event.pressure) and settings.right_click_source == "pen":
             return PASSTHROUGH
-        if event.pressure != 1.0 and settings.right_click_source == "mouse":
+        if not [0.0,1.0].__contains__(event.pressure) and settings.right_click_source == "mouse":
             return PASSTHROUGH
         if event.value == "DOUBLE_CLICK":
             return PASSTHROUGH
@@ -66,7 +66,7 @@ class VIEW3D_OT_Doubletap_Action(Operator):
     def invoke(self, context: Context, event: Event):
         if event.type not in [PEN, LMOUSE]:
             return PASSTHROUGH
-        if event.pressure != 1.0:
+        if not [0.0,1.0].__contains__(event.pressure):
             return PASSTHROUGH
         if event.value != "DOUBLE_CLICK":
             return PASSTHROUGH
@@ -117,7 +117,7 @@ class VIEW2D_OT_TouchInput(Operator):
             return PASSTHROUGH
         if (
             settings.input_mode == 'both'
-            and (event.type == PEN or event.pressure != 1.0)
+            and (event.type == PEN or not [0.0, 1.0].__contains__(event.pressure))
         ):
             return PASSTHROUGH
 
@@ -194,7 +194,7 @@ class VIEW3D_OT_TouchInput(Operator):
             return PASSTHROUGH
         if (
             settings.input_mode == 'full'
-            and (event.type == PEN or event.pressure != 1.0)
+            and (event.type == PEN or not [0.0,1.0].__contains__(event.pressure))
         ):
             return PASSTHROUGH
 
