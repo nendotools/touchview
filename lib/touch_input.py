@@ -20,7 +20,7 @@ def assign_keymaps():
     # add global default action
     km = wm.keyconfigs.addon.keymaps.new(name="3D View", space_type='VIEW_3D')
     kmi = km.keymap_items.new(
-        'view3d.toggle_touch',
+        'nendo.toggle_touch',
         type='T',
         value=PRESS,
         alt=True
@@ -40,16 +40,16 @@ def assign_keymaps():
                                              region_type=kmap.region_type)
         if kmap.name in top_level_names:
             if kmap.name in flat_modes:
-                main_action = "view2d.view_ops"
+                main_action = "nendo.view_ops_2d"
             else:
-                main_action = "view3d.view_ops"
+                main_action = "nendo.view_ops_3d"
             kmi = km.keymap_items.new(main_action, LMOUSE, PRESS)
             modified_keymaps.append((km, kmi))
 
-            kmi = km.keymap_items.new('view3d.dt_action', LMOUSE, DCLICK)
+            kmi = km.keymap_items.new('nendo.dt_action', LMOUSE, DCLICK)
             modified_keymaps.append((km, kmi))
 
-            kmi = km.keymap_items.new('view3d.rc_action', RMOUSE, PRESS)
+            kmi = km.keymap_items.new('nendo.rc_action', RMOUSE, PRESS)
             modified_keymaps.append((km, kmi))
 
 

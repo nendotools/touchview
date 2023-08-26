@@ -66,7 +66,7 @@ menu_defaults = {
 }
 
 double_click_items = [("object.transfer_mode", "Transfer Mode", ""),
-                      ("view3d.toggle_touch", "Toggle Touch View", ""),
+                      ("nendo.toggle_touch", "Toggle Touch View", ""),
                       ("view3d.localview", "Toggle Local View", ""),
                       ("wm.window_fullscreen_toggle", "Toggle Full Screen", "")]
 

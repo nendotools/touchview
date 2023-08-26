@@ -57,7 +57,7 @@ class VIEW3D_OT_NextPivotMode(Operator):
 
 class VIEW3D_OT_ToggleTouchControls(Operator):
     """ Toggle Touch Controls """
-    bl_idname = "view3d.toggle_touch"
+    bl_idname = "nendo.toggle_touch"
     bl_label = "Toggle Touch Controls"
 
     def execute(self, context: Context):
@@ -69,7 +69,7 @@ class VIEW3D_OT_ToggleTouchControls(Operator):
 
 class VIEW3D_OT_ToggleNPanel(Operator):
     """ Toggle Settings Panel """
-    bl_idname = "view3d.toggle_n_panel"
+    bl_idname = "nendo.toggle_n_panel"
     bl_label = "Display settings Panel"
 
     def execute(self, context: Context):
@@ -98,7 +98,7 @@ class VIEW3D_OT_ToggleFloatingMenu(Operator):
 
 class VIEW3D_OT_ViewportRecenter(Operator):
     """ Recenter Viewport and Cursor on Selected Object """
-    bl_idname = "view3d.viewport_recenter"
+    bl_idname = "nendo.viewport_recenter"
     bl_label = "Recenter Viewport and Cursor on Selected"
 
     def execute(self, context: Context):
@@ -113,7 +113,7 @@ class VIEW3D_OT_ViewportRecenter(Operator):
 
 class VIEW3D_OT_ViewportLock(Operator):
     """ Toggle Viewport Rotation """
-    bl_idname = "view3d.viewport_lock"
+    bl_idname = "nendo.viewport_lock"
     bl_label = "Viewport rotation lock toggle"
 
     region_ids = []
@@ -145,7 +145,7 @@ class VIEW3D_OT_ViewportLock(Operator):
 
 class VIEW3D_OT_BrushResize(Operator):
     """ Brush Resize """
-    bl_idname = "view3d.brush_resize"
+    bl_idname = "nendo.brush_resize"
     bl_label = "Brush Size Adjust"
 
     # activate radial_control to change sculpt brush size
@@ -198,7 +198,7 @@ class VIEW3D_OT_BrushResize(Operator):
 
 class VIEW3D_OT_BrushStrength(Operator):
     """ Brush Strength """
-    bl_idname = "view3d.brush_strength"
+    bl_idname = "nendo.brush_strength"
     bl_label = "Brush Strength Adjust"
 
     # activate radial_control to change sculpt brush size
@@ -256,7 +256,7 @@ class VIEW3D_OT_BrushStrength(Operator):
 
 class VIEW3D_OT_IncreaseMultires(Operator):
     """ Increment Multires by 1 or add subdivision """
-    bl_idname = "object.increment_multires"
+    bl_idname = "nendo.increment_multires"
     bl_label = "Increment Multires modifier by 1 or add subdivision level"
 
     def execute(self, context: Context):
@@ -291,7 +291,7 @@ class VIEW3D_OT_IncreaseMultires(Operator):
 
 class VIEW3D_OT_DecreaseMultires(Operator):
     """ Decrement Multires by 1 """
-    bl_idname = "object.decrement_multires"
+    bl_idname = "nendo.decrement_multires"
     bl_label = "decrement Multires modifier by 1"
 
     def execute(self, context: Context):

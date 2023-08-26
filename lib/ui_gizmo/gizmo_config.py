@@ -16,7 +16,7 @@ controllerConfig = {
         "location": "",
         "name": "menu_controller"
     },
-    "command": "view3d.controller",
+    "command": "nendo.move_float_menu",
     "icon": "BLANK1",
     "use_grab_cursor": True
 }
@@ -27,7 +27,7 @@ floatingConfig = {
         "location": "prefs",
         "name": "float_menu"
     },
-    "command": "view3d.move_float_menu",
+    "command": "nendo.move_action_menu",
     "icon": "SETTINGS",
     "use_grab_cursor": True
 }
@@ -38,7 +38,7 @@ floatingToggleConfig = {
         "location": "",
         "name": "float_toggle"
     },
-    "command": "view3d.handle_toggle",
+    "command": "nendo.move_toggle_button",
     "icon": "BLANK1",
     "use_grab_cursor": True
 }
@@ -70,7 +70,7 @@ touchViewConfig = {
         "location": "prefs",
         "name": "is_enabled",
     },
-    "command": "view3d.toggle_touch",
+    "command": "nendo.toggle_touch",
     "icon": "VIEW_PAN"
 }
 
@@ -80,7 +80,7 @@ controlGizmoConfig = {
         "location": "prefs",
         "name": "control_gizmo",
     },
-    "command": "view3d.cycle_control_gizmo",
+    "command": "nendo.cycle_control_gizmo",
     "icon": "ORIENTATION_LOCAL"
 }
 
@@ -90,7 +90,7 @@ snapViewConfig = {
         "location": "prefs",
         "name": "snap_view"
     },
-    "command": "view3d.viewport_recenter",
+    "command": "nendo.viewport_recenter",
     "icon": "CURSOR"
 }
 
@@ -100,7 +100,7 @@ nPanelConfig = {
         "location": "prefs",
         "name": "n_panel"
     },
-    "command": "view3d.toggle_n_panel",
+    "command": "nendo.toggle_n_panel",
     "icon": "EVENT_N"
 }
 
@@ -176,7 +176,7 @@ subdivConfig = {
         }
     },
     "has_dependent": True,
-    "command": "object.increment_multires",
+    "command": "nendo.increment_multires",
     "icon": "TRIA_UP"
 }
 
@@ -191,7 +191,7 @@ unsubdivConfig = {
             "state": True
         }
     },
-    "command": "object.decrement_multires",
+    "command": "nendo.decrement_multires",
     "icon": "TRIA_DOWN"
 }
 
@@ -201,7 +201,7 @@ brushResizeConfig = {
         "location": "prefs",
         "name": "brush_dynamics"
     },
-    "command": "view3d.brush_resize",
+    "command": "nendo.brush_resize",
     "icon": "ANTIALIASED"
 }
 
@@ -211,7 +211,7 @@ brushStrengthConfig = {
         "location": "prefs",
         "name": "brush_dynamics"
     },
-    "command": "view3d.brush_strength",
+    "command": "nendo.brush_strength",
     "icon": "SMOOTHCURVE"
 }
 
@@ -244,7 +244,7 @@ rotLocToggleConfig = {
         "location": "region_data",
         "name": "lock_rotation"
     },
-    "command": "view3d.viewport_lock",
+    "command": "nendo.viewport_lock",
     "onIcon": "LOCKED",
     "offIcon": "UNLOCKED"
 }

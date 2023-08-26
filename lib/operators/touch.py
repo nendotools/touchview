@@ -17,7 +17,7 @@ def isTouch(event: Event):
 
 class VIEW3D_OT_RightClick_Action(Operator):
     """ Viewport right-click shortcut """
-    bl_idname = "view3d.rc_action"
+    bl_idname = "nendo.rc_action"
     bl_label = "Viewport right-click shortcut"
 
     def execute(self, context: Context):
@@ -50,7 +50,7 @@ class VIEW3D_OT_RightClick_Action(Operator):
 
 class VIEW3D_OT_Doubletap_Action(Operator):
     """ Viewport double-tap shortcut """
-    bl_idname = "view3d.dt_action"
+    bl_idname = "nendo.dt_action"
     bl_label = "Viewport double-tap shortcut"
 
     def execute(self, context: Context):
@@ -86,7 +86,7 @@ class VIEW3D_OT_Doubletap_Action(Operator):
 
 class VIEW2D_OT_TouchInput(Operator):
     """ Active Viewport control zones """
-    bl_idname = "view2d.view_ops"
+    bl_idname = "nendo.view_ops_2d"
     bl_label = "2D Viewport Control Regions"
 
     delta: tuple[float, float]
@@ -163,7 +163,7 @@ class VIEW2D_OT_TouchInput(Operator):
 
 class VIEW3D_OT_TouchInput(Operator):
     """ Active Viewport control zones """
-    bl_idname = "view3d.view_ops"
+    bl_idname = "nendo.view_ops_3d"
     bl_label = "Viewport Control Regions"
 
     delta: tuple[float, float]

@@ -7,7 +7,7 @@ from ..utils import buildSafeArea, get_settings
 
 
 class VIEW3D_OT_MoveFloatMenu(Operator):
-    bl_idname = "view3d.controller"
+    bl_idname = "nendo.move_float_menu"
     bl_label = "Relocate Gizmo Menu"
 
     def execute(self, _: Context):
@@ -74,7 +74,7 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
 
 
 class VIEW3D_OT_MenuController(Operator):
-    bl_idname = "view3d.move_float_menu"
+    bl_idname = "nendo.move_action_menu"
     bl_label = "Relocate Action Menu"
 
     def execute(self, _: Context):
@@ -144,7 +144,7 @@ class VIEW3D_OT_MenuController(Operator):
 
 
 class VIEW3D_OT_CycleControlGizmo(Operator):
-    bl_idname = "view3d.cycle_control_gizmo"
+    bl_idname = "nendo.cycle_control_gizmo"
     bl_label = "switch object control gizmo"
 
     def execute(self, context: Context):
@@ -183,7 +183,7 @@ class VIEW3D_OT_CycleControlGizmo(Operator):
 
 
 class VIEW3D_OT_FloatController(Operator):
-    bl_idname = "view3d.handle_toggle"
+    bl_idname = "nendo.move_toggle_button"
     bl_label = "Relocate Toggle Button"
 
     def execute(self, _: Context):
