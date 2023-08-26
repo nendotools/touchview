@@ -124,10 +124,10 @@ class OverlaySettings(AddonPreferences):
         precision=2,
         step=1,
         min=0.0,
-        max=100.0
+        max=200.0
     )
     gizmo_padding: FloatProperty(
-        name='Gizmo Padding', default=10, precision=1, step=1, min=1, max=100
+        name='Gizmo Padding', default=10, precision=1, step=1, min=1, max=200
     )
     gizmo_scale: FloatProperty(
         name='Gizmo Scale', default=4.0, precision=2, step=1, min=1, max=10.0

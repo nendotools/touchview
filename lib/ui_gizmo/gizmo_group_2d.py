@@ -128,8 +128,8 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         settings = get_settings()
         # calculate minimum radius to prevent overlapping buttons
         gui_scale = dpi_factor() * 3
-        radial_size = (gui_scale + settings.menu_spacing + (gui_scale * settings.gizmo_scale))
-        spacing = radial_size + settings.gizmo_padding
+        radial_size = (gui_scale + settings.menu_spacing)
+        spacing = radial_size + (gui_scale * settings.gizmo_scale) + settings.gizmo_padding
 
         count = len(visible_gizmos)
         # reposition Gizmos to origin
