@@ -33,13 +33,14 @@ floatingConfig = {
 }
 
 floatingToggleConfig = {
-    "type": "default",
+    "type": "boolean",
     "binding": {
         "location": "",
         "name": "float_toggle"
     },
     "command": "nendo.move_toggle_button",
-    "icon": "BLANK1",
+    "onIcon": "OUTLINER_DATA_CAMERA",
+    "offIcon": "GREASEPENCIL",
     "use_grab_cursor": True
 }
 

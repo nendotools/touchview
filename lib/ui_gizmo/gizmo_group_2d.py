@@ -65,7 +65,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         self.controller.setup(self, controllerConfig)
         self.action_menu = GizmoSet()
         self.action_menu.setup(self, floatingConfig)
-        self.toggle = GizmoSet()
+        self.toggle = GizmoSetBoolean()
         self.toggle.setup(self, floatingToggleConfig)
 
     def draw_prepare(self, context: Context):

@@ -40,8 +40,6 @@ class GizmoSet:
         self.__updatevisible()
 
         gui_scale = dpi_factor() * 3
-        if self.binding['name'] == 'float_toggle':
-            self.primary.hide = settings.input_mode == 'full'
         if self.binding['name'] == 'float_menu':
             self.primary.hide = not settings.show_float_menu
         if self.binding['name'] in ['menu_controller']:
@@ -50,14 +48,10 @@ class GizmoSet:
             )
         if self.binding['name'] in [
             'menu_controller',
-            'float_menu',
-            'float_toggle'
         ]:
             self.primary.scale_basis = gui_scale + settings.menu_spacing
         else:
             self.primary.scale_basis = gui_scale * settings.gizmo_scale
-        if self.binding['name'] == 'float_toggle':
-            self.__setToggleColors(self.primary)
 
     def move(self, position: Vector):
         self.primary.matrix_basis = Matrix.Translation(position)
@@ -136,13 +130,6 @@ class GizmoSet:
         gizmo.alpha = gizmo_colors["active"]["alpha"]
         gizmo.alpha_highlight = gizmo_colors["active"]["alpha_highlight"]
 
-    def __setToggleColors(self, gizmo: Gizmo):
-        mode = 'active' if get_settings().is_enabled else 'inactive'
-        gizmo.color = toggle_colors[mode]["color"]
-        gizmo.color_highlight = toggle_colors[mode]["color_highlight"]
-        gizmo.alpha = toggle_colors[mode]["alpha"]
-        gizmo.alpha_highlight = toggle_colors[mode]["alpha_highlight"]
-
 
 class GizmoSetBoolean(GizmoSet):
 
@@ -177,28 +164,45 @@ class GizmoSetBoolean(GizmoSet):
         self.__updatevisible()
         gui_scale = dpi_factor() * 3
         self.primary.scale_basis = gui_scale * settings.gizmo_scale
+        if self.binding['name'] == 'float_toggle':
+            self.__setToggleColors(self.primary)
 
     def __updatevisible(self):
+        settings = get_settings()
+        bind = self.binding
         if not get_settings().show_menu and (
-            self.binding['name'] not in ['float_menu']
+            bind['name'] not in ['float_menu']
         ):
             self.visible = False
             self.primary.hide = True
             return
-        self.visible = getattr(
-            get_settings(),
-            'show_' + self.binding['name'])
+        if bind['name'] == 'float_toggle':
+            self.visible = settings.input_mode == 'full'
+        else:
+            self.visible = getattr(
+                get_settings(),
+                'show_' + self.binding['name'])
+
         if self.visible:
             self.visible = self._GizmoSet__visibilityLock(  # type: ignore
             ) and not self._GizmoSet__checkAttributeBind()  # type: ignore
 
-        bind = self.binding
-        self.__setActiveGizmo(
-            self._GizmoSet__findAttribute(  # type: ignore
-                bind['location'], bind['name']
+        if bind['name'] == 'float_toggle':
+            self.__setActiveGizmo(settings.is_enabled)
+        else:
+            self.__setActiveGizmo(
+                self._GizmoSet__findAttribute(  # type: ignore
+                    bind['location'], bind['name']
+                )
             )
-        )
         self.primary.hide = not self.visible
+
+    def __setToggleColors(self, gizmo: Gizmo):
+        mode = 'active' if get_settings().is_enabled else 'inactive'
+        gizmo.color = toggle_colors[mode]["color"]
+        gizmo.color_highlight = toggle_colors[mode]["color_highlight"]
+        gizmo.alpha = toggle_colors[mode]["alpha"]
+        gizmo.alpha_highlight = toggle_colors[mode]["alpha_highlight"]
 
 
 class GizmoSetEnum(GizmoSet):

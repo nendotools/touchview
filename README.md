@@ -187,6 +187,8 @@ Select it and click `Install Add-on`.
 
 - `UPDATED` : add support for Weylus (\*nix) sending 0.0 for pressure on touch events
 - `UPDATED` : changed all new operator namespaces to `nendo` for easier identification
+- `ADDED` : control mode icon when using signle-input mode
+- `UPDATED` : control mode toggle and floating action button now use same sizing as gizmos
 - `ADDED` : additional fine-tuning controls for gizmo spacing
 
 </details>
