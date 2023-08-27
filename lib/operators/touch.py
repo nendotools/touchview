@@ -197,27 +197,27 @@ class VIEW3D_OT_TouchInput(Operator):
 
         # experimental passthrough in drawing mode
         if (settings.lazy_mode
-            and brush_modes.__contains__(context.mode)
             and not settings.is_enabled
-            and not self.check_under_mouse(context, event)):
-            return False 
+            and brush_modes.__contains__(context.mode)
+            and self.mouseTarget(context, event) != context.active_object):
+            return False
 
         if not settings.is_enabled:
-            return PASSTHROUGH
+            return True 
         if (
             settings.input_mode == 'full'
             and (event.type == PEN or not isTouch(event))
         ):
-            return PASSTHROUGH
+            return True 
 
         if event.value != PRESS:
-            return PASSTHROUGH
+            return True 
         return False
 
     def invoke(self, context: Context, event: Event):
         settings = get_settings()
         passcheck = self.should_pass(context, event)
-        if passcheck: return passcheck
+        if passcheck: return PASSTHROUGH
 
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
@@ -264,7 +264,7 @@ class VIEW3D_OT_TouchInput(Operator):
         self.execute(context)
         return FINISHED
 
-    def check_under_mouse(self, context:Context, event: Event):
+    def mouseTarget(self, context:Context, event: Event):
         # get the context arguments
         region = context.region
         rv3d = context.region_data
@@ -275,11 +275,9 @@ class VIEW3D_OT_TouchInput(Operator):
         self.ray_origin = view3d_utils.region_2d_to_origin_3d(region, rv3d, coord)
 
         self.ray_target = self.ray_origin + view_vector
-        return self.evaluateOjects(context)
+        return self.isCurrentObject(context)
 
     def visible_objects_and_duplis(self, context:Context):
-        """Loop over (object, matrix) pairs (mesh only)"""
-
         depsgraph = context.evaluated_depsgraph_get()
         for dup in depsgraph.object_instances:
             if dup.is_instance:  # Real dupli instance
@@ -290,8 +288,6 @@ class VIEW3D_OT_TouchInput(Operator):
                 yield (obj, obj.matrix_world.copy()) # type: ignore
 
     def obj_ray_cast(self, obj, matrix):
-        """Wrapper for ray casting that moves the ray into object space"""
-
         # get the ray relative to the object
         matrix_inv = matrix.inverted()
         ray_origin_obj = matrix_inv @ self.ray_origin
@@ -306,7 +302,7 @@ class VIEW3D_OT_TouchInput(Operator):
         else:
             return None, None, None
 
-    def evaluateOjects(self, context:Context):
+    def isCurrentObject(self, context:Context):
         # cast rays and find the closest object
         best_length_squared = -1.0
         best_obj = None
@@ -321,10 +317,7 @@ class VIEW3D_OT_TouchInput(Operator):
                         best_length_squared = length_squared
                         best_obj = obj
 
-        if best_obj is not None:
-            if best_obj.original == context.active_object:
-                return True
-        return False
+        return best_obj.original if best_obj is not None else None
 
     @classmethod
     def poll(cls, context: Context):
