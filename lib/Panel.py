@@ -43,6 +43,7 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
             box.label(text="mouse/touch only input", icon="VIEW_PAN")
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
+        box.prop(settings, 'lazy_mode', toggle=1)
         box.prop(settings, "is_enabled", toggle=1)
 
         col.prop(settings, "swap_panrotate")

@@ -183,8 +183,9 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
-<details open><summary><b>v2.9.1</b></summary><br>
+<details open><summary><b>v2.10.0</b></summary><br>
 
+- `ADDED` : lazy camera control toggle in sculpt mode
 - `UPDATED` : add support for Weylus (\*nix) sending 0.0 for pressure on touch events
 - `UPDATED` : changed all new operator namespaces to `nendo` for easier identification
 - `ADDED` : control mode icon when using signle-input mode

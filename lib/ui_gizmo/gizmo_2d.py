@@ -177,7 +177,7 @@ class GizmoSetBoolean(GizmoSet):
             self.primary.hide = True
             return
         if bind['name'] == 'float_toggle':
-            self.visible = settings.input_mode == 'full'
+            self.visible = settings.input_mode != 'full'
         else:
             self.visible = getattr(
                 get_settings(),

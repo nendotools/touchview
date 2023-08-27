@@ -31,6 +31,11 @@ class OverlaySettings(AddonPreferences):
 # Viewport Control Options
 ##
     is_enabled: BoolProperty(name='Enable Controls', default=True)
+    lazy_mode: BoolProperty(
+        name='Lazy Mode',
+        default=False,
+        description='always control camera when not touching selected object'
+    )
     toggle_position: FloatVectorProperty(
         name='Toggle Position',
         subtype='XYZ',
@@ -231,6 +236,7 @@ class OverlaySettings(AddonPreferences):
             col.label(text='mouse/touch only input', icon='VIEW_PAN')
         tabs = col.column_flow(columns=3, align=True)
         tabs.prop_tabs_enum(self, 'input_mode')
+        col.prop(self, 'lazy_mode', toggle=1)
 
         # main settings
         row = self.layout.split(factor=0.4)

@@ -1,6 +1,8 @@
 import math
 
 import bpy
+from bpy_extras import view3d_utils
+
 from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
@@ -191,8 +193,15 @@ class VIEW3D_OT_TouchInput(Operator):
             bpy.ops.view3d.move('INVOKE_DEFAULT')  # type: ignore
         return FINISHED
 
-    def invoke(self, context: Context, event: Event):
+    def should_pass(self, context: Context, event: Event):
         settings = get_settings()
+
+        # experimental passthrough in drawing mode
+        if (settings.lazy_mode
+            and context.mode == 'SCULPT'
+            and not settings.is_enabled
+            and not self.check_under_mouse(context, event)):
+            return False 
 
         if not settings.is_enabled:
             return PASSTHROUGH
@@ -204,6 +213,13 @@ class VIEW3D_OT_TouchInput(Operator):
 
         if event.value != PRESS:
             return PASSTHROUGH
+        return False
+
+    def invoke(self, context: Context, event: Event):
+        settings = get_settings()
+        passcheck = self.should_pass(context, event)
+        if passcheck: return passcheck
+
         self.delta = (event.mouse_region_x, event.mouse_region_y)
 
         mid_point = Vector(
@@ -248,6 +264,76 @@ class VIEW3D_OT_TouchInput(Operator):
             bpy.ops.sculpt.set_pivot_position(mode=settings.pivot_mode)
         self.execute(context)
         return FINISHED
+
+    def check_under_mouse(self, context:Context, event: Event):
+        # get the context arguments
+        region = context.region
+        rv3d = context.region_data
+        coord = Vector((event.mouse_region_x, event.mouse_region_y))
+
+        # get the ray from the viewport and mouse
+        view_vector = view3d_utils.region_2d_to_vector_3d(region, rv3d, coord)
+        self.ray_origin = view3d_utils.region_2d_to_origin_3d(region, rv3d, coord)
+
+        self.ray_target = self.ray_origin + view_vector
+        return self.evaluateOjects(context)
+
+    def visible_objects_and_duplis(self, context:Context):
+        """Loop over (object, matrix) pairs (mesh only)"""
+
+        depsgraph = context.evaluated_depsgraph_get()
+        for dup in depsgraph.object_instances:
+            if dup.is_instance:  # Real dupli instance
+                obj = dup.instance_object
+                yield (obj, dup.matrix_world.copy()) # type: ignore
+            else:  # Usual object
+                obj = dup.object
+                yield (obj, obj.matrix_world.copy()) # type: ignore
+
+    def obj_ray_cast(self, obj, matrix):
+        """Wrapper for ray casting that moves the ray into object space"""
+
+        # get the ray relative to the object
+        matrix_inv = matrix.inverted()
+        ray_origin_obj = matrix_inv @ self.ray_origin
+        ray_target_obj = matrix_inv @ self.ray_target
+        ray_direction_obj = ray_target_obj - ray_origin_obj
+
+        # cast the ray
+        success, location, normal, face_index = obj.ray_cast(ray_origin_obj, ray_direction_obj)
+
+        if success:
+            return location, normal, face_index
+        else:
+            return None, None, None
+
+    def evaluateOjects(self, context:Context):
+        # cast rays and find the closest object
+        best_length_squared = -1.0
+        best_obj = None
+
+        for obj, matrix in self.visible_objects_and_duplis(context):
+            if obj.type == 'MESH':
+                hit, normal, face_index = self.obj_ray_cast(obj, matrix)
+                if hit is not None:
+                    hit_world = matrix @ hit
+                    length_squared = (hit_world - self.ray_origin).length_squared
+                    if best_obj is None or length_squared < best_length_squared:
+                        best_length_squared = length_squared
+                        best_obj = obj
+
+        # now we have the object under the mouse cursor,
+        # we could do lots of stuff but for the example just select.
+        if best_obj is not None:
+            # for selection etc. we need the original object,
+            # evaluated objects are not in viewlayer
+            best_original = best_obj.original
+            print("best_obj:", best_original.name)
+            print('active obj:', context.active_object.name)
+            if best_obj.original == context.active_object:
+                print("same object")
+                return True
+        return False
 
     @classmethod
     def poll(cls, context: Context):
