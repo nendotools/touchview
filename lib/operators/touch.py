@@ -1,15 +1,14 @@
 import math
 
 import bpy
-from bpy_extras import view3d_utils
-
 from bpy import ops
 from bpy.props import EnumProperty
 from bpy.types import Context, Event, Operator
+from bpy_extras import view3d_utils
 from mathutils import Vector
 
 from ..constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE,
-                         input_mode_items, brush_modes)
+                         brush_modes, input_mode_items)
 from ..utils import get_settings
 
 
