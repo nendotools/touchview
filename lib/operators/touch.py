@@ -9,7 +9,7 @@ from bpy.types import Context, Event, Operator
 from mathutils import Vector
 
 from ..constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE,
-                         input_mode_items)
+                         input_mode_items, brush_modes)
 from ..utils import get_settings
 
 
@@ -198,7 +198,7 @@ class VIEW3D_OT_TouchInput(Operator):
 
         # experimental passthrough in drawing mode
         if (settings.lazy_mode
-            and context.mode == 'SCULPT'
+            and brush_modes.__contains__(context.mode)
             and not settings.is_enabled
             and not self.check_under_mouse(context, event)):
             return False 

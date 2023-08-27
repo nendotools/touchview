@@ -49,7 +49,9 @@ pivot_icon_items = [("BORDER", "PIVOT_BOUNDBOX"), ("ORIGIN", "PIVOT_CURSOR"),
                     ("UNMASKED", "CLIPUV_HLT"), ("ACTIVE", "PIVOT_ACTIVE"),
                     ("SURFACE", "PIVOT_MEDIAN")]
 
-edit_modes = [("OBJECT", "Object Mode", ""), ("EDIT_MESH", "Edit Mode", ""),
+brush_modes = ['SCULPT','PAINT_VERTEX','PAINT_WEIGHT','PAINT_TEXTURE','PAINT_GPENCIL']
+edit_modes = [("OBJECT", "Object Mode", ""),
+              ("EDIT_MESH", "Edit Mode", ""),
               ("SCULPT", "Sculpt Mode", ""),
               ("PAINT_VERTEX", "Vertex Paint Mode", ""),
               ("PAINT_WEIGHT", "Weight Paint Mode", ""),
