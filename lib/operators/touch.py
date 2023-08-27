@@ -314,7 +314,7 @@ class VIEW3D_OT_TouchInput(Operator):
 
         for obj, matrix in self.visible_objects_and_duplis(context):
             if obj.type == 'MESH':
-                hit, normal, face_index = self.obj_ray_cast(obj, matrix)
+                hit, _, _= self.obj_ray_cast(obj, matrix)
                 if hit is not None:
                     hit_world = matrix @ hit
                     length_squared = (hit_world - self.ray_origin).length_squared
@@ -322,16 +322,8 @@ class VIEW3D_OT_TouchInput(Operator):
                         best_length_squared = length_squared
                         best_obj = obj
 
-        # now we have the object under the mouse cursor,
-        # we could do lots of stuff but for the example just select.
         if best_obj is not None:
-            # for selection etc. we need the original object,
-            # evaluated objects are not in viewlayer
-            best_original = best_obj.original
-            print("best_obj:", best_original.name)
-            print('active obj:', context.active_object.name)
             if best_obj.original == context.active_object:
-                print("same object")
                 return True
         return False
 
