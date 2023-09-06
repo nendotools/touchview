@@ -176,9 +176,10 @@ class PIE_MT_Floating_Menu(Menu):
 
 
 # UI panel to append Gizmo menu
-class VIEW3D_PT_gizmo_panel(VIEW3D_PT_gizmo_display):
+class VIEW3D_PT_Gizmo_Panel(bpy.types.Panel):
     bl_label = "Gizmo display control"
-    bl_idname = "VIEW3D_PT_gizmo_display"
+    bl_idname = "VIEW3D_PT_Gizmo_Panel"
+    bl_parent_id = "VIEW3D_PT_gizmo_display"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'HEADER'
     bl_label = "Gizmos"
@@ -186,65 +187,26 @@ class VIEW3D_PT_gizmo_panel(VIEW3D_PT_gizmo_display):
 
     def draw(self, context: Context):
         layout = self.layout
-        scene = context.scene
-        view = context.space_data
 
-        split = layout.split(factor=0.5)
-        left_col = split.column()
-        left_col.label(text="Touch Gizmos")
+        col = layout.column()
+        col.label(text="Touch Gizmos")
         settings = get_settings()
         available_gizmos = settings.getGizmoSet(context.object.mode)
 
-        col = left_col.column(align=True)
+        col = col.column(align=True)
         col.active = context.space_data.show_gizmo
         col.prop(settings, "show_menu")
-        col = left_col.column()
+        col = col.column()
         col.active = settings.show_menu
         for toggle in available_gizmos:
             col.prop(settings, 'show_' + toggle)
-
-        right_col = split.column()
-        right_col.label(text="Viewport Gizmos")
-        right_col.separator()
-
-        col = right_col.column()
-        col.active = view.show_gizmo
-        colsub = col.column()
-        colsub.prop(view, "show_gizmo_navigate", text="Navigate")
-        colsub.prop(view, "show_gizmo_tool", text="Active Tools")
-        colsub.prop(view, "show_gizmo_context", text="Active Object")
-
-        right_col.separator()
-
-        col = right_col.column()
-        col.active = view.show_gizmo and view.show_gizmo_context
-        col.label(text="Object Gizmos")
-        col.prop(scene.transform_orientation_slots[1], "type", text="")
-        col.prop(view, "show_gizmo_object_translate", text="Move")
-        col.prop(view, "show_gizmo_object_rotate", text="Rotate")
-        col.prop(view, "show_gizmo_object_scale", text="Scale")
-
-        right_col.separator()
-
-        # Match order of object type visibility
-        col = right_col.column()
-        col.active = view.show_gizmo
-        col.label(text="Empty")
-        col.prop(view, "show_gizmo_empty_image", text="Image")
-        col.prop(view, "show_gizmo_empty_force_field", text="Force Field")
-        col.label(text="Light")
-        col.prop(view, "show_gizmo_light_size", text="Size")
-        col.prop(view, "show_gizmo_light_look_at", text="Look At")
-        col.label(text="Camera")
-        col.prop(view, "show_gizmo_camera_lens", text="Lens")
-        col.prop(view, "show_gizmo_camera_dof_distance", text="Focus Distance")
 
 
 __classes__ = (PIE_MT_Floating_Menu, VIEW3D_PT_NendoViewport,
                VIEW3D_PT_ControlZones, VIEW3D_PT_ViewportOptions,
                VIEW3D_PT_RightClick_Menu, VIEW3D_PT_DoubleClick_Menu,
                VIEW3D_PT_GizmoBar, VIEW3D_PT_ToolSettings,
-               VIEW3D_PT_gizmo_panel)
+               VIEW3D_PT_Gizmo_Panel)
 
 
 def register():
