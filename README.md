@@ -183,7 +183,7 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
-<details open><summary><b>v2.10.1</b></summary><br>
+<details open><summary><b>v2.11.0</b></summary><br>
 
 - `UPDATED` : added various GPENCIL modes to edit mode list
 - `UPDATED` : updated viewport gizmo panel to support v3.6 changes
