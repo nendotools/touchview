@@ -99,5 +99,9 @@ gizmo_sets = {
     "PAINT_TEXTURE": {"brush_dynamics"},
     "PAINT_VERTEX": {"brush_dynamics"},
     "PAINT_WEIGHT": {"brush_dynamics"},
-    "PAINT_GPENCIL": {"brush_dynamics"}
+    "WEIGHT_GPENCIL": {"brush_dynamics"},
+    "VERTEX_GPENCIL": {"brush_dynamics"},
+    "SCULPT_GPENCIL": {"brush_dynamics"},
+    "PAINT_GPENCIL": {"brush_dynamics"},
+    "EDIT_GPENCIL": {"brush_dynamics"}
 }

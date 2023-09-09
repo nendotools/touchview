@@ -183,6 +183,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.11.0</b></summary><br>
+
+- `UPDATED` : added various GPENCIL modes to edit mode list
+- `UPDATED` : updated viewport gizmo panel to support v3.6 changes
+
+</details>
+
 <details open><summary><b>v2.10.0</b></summary><br>
 
 - `ADDED` : lazy camera control toggle in sculpt mode
@@ -231,27 +238,27 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v2.5.0</b></summary><br>
+<details><summary><b>v2.5.0</b></summary><br>
 
 - `ADDED` : Gizmo size control
 - `UPDATED` : moved operators into folder
 
 </details>
 
-<details open><summary><b>v2.4.0</b></summary><br>
+<details><summary><b>v2.4.0</b></summary><br>
 
 - `UPDATED` : preferences access simplified with utility function
 - `ADDED` : single-input mode now activates large floating toggle button
 
 </details>
 
-<details open><summary><b>v2.3.0</b></summary><br>
+<details><summary><b>v2.3.0</b></summary><br>
 
 - `ADDED` : Input Mode selection (for devices with only touch or pen support)
 
 </details>
 
-<details open><summary><b>v2.2.0</b></summary><br>
+<details><summary><b>v2.2.0</b></summary><br>
 
 - `ADDED` : Toggle control gizmo (translate, rotate, scale, none)
 - `UPDATED` : Added Brush dynamics (from sculpt mode) to paint modes
@@ -259,14 +266,14 @@ Select it and click `Install Add-on`.
 
 </details>
 
-<details open><summary><b>v2.1.0</b></summary><br>
+<details><summary><b>v2.1.0</b></summary><br>
 
 - `ADDED` : Right Click Actions
 - `UPDATED` : Preferences and N-Panel restructure
 
 </details>
 
-<details open><summary><b>v2.0.0</b></summary><br>
+<details><summary><b>v2.0.0</b></summary><br>
 
 - `UPDATED` : Gizmos-related code simplified and reorganized for easier management
 - `ADDED` : floating gizmo bar and floating gizmo radial menu modes
