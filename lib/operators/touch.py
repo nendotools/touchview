@@ -13,7 +13,7 @@ from ..utils import get_settings
 
 
 def isTouch(event: Event):
-    return [0.0,1.0].__contains__(event.pressure)
+    return event.pressure in [0.0,1.0]
 
 
 class VIEW3D_OT_RightClick_Action(Operator):
@@ -75,8 +75,7 @@ class VIEW3D_OT_Doubletap_Action(Operator):
             return PASSTHROUGH
         if event.value != "DOUBLE_CLICK":
             return PASSTHROUGH
-        self.execute(context)
-        return FINISHED
+        return self.execute(context)
 
     @classmethod
     def poll(cls, context: Context):
@@ -203,7 +202,8 @@ class VIEW3D_OT_TouchInput(Operator):
             return False
 
         if not settings.is_enabled:
-            return True 
+            return True
+
         if (
             settings.input_mode == 'full'
             and (event.type == PEN or not isTouch(event))

@@ -160,6 +160,25 @@ class VIEW3D_OT_BrushResize(Operator):
                 context.window.cursor_warp(
                     self.mousex, math.floor(context.region.height / 2)
                 )
+        if context.mode in ['PAINT_GPENCIL', 'EDIT_GPENCIL','SCULPT_GPENCIL','WEIGHT_GPENCIL','VERTEX_GPENCIL']:
+            return self.resize2d(context)
+        return self.resize3d(context)
+
+    def resize2d(self, context: Context):
+        data_path = "tool_settings.gpencil_paint.brush.size"
+        if context.mode == 'SCULPT_GPENCIL':
+            data_path = "tool_settings.gpencil_sculpt_paint.brush.size"
+        if context.mode == 'WEIGHT_GPENCIL':
+            data_path = "tool_settings.gpencil_weight_paint.brush.size"
+        if context.mode == 'VERTEX_GPENCIL':
+            data_path = "tool_settings.gpencil_vertex_paint.brush.size"
+        bpy.ops.wm.radial_control(
+            'INVOKE_DEFAULT',  # type: ignore
+            data_path_primary=data_path,
+        )
+        return FINISHED
+
+    def resize3d(self, context: Context):
         data_path = "tool_settings.sculpt.brush.size"
         if context.mode == 'PAINT_VERTEX':
             data_path = "tool_settings.vertex_paint.brush.size"
@@ -169,12 +188,6 @@ class VIEW3D_OT_BrushResize(Operator):
             data_path = "tool_settings.image_paint.brush.size"
         if context.mode == 'PAINT_TEXTURE':
             data_path = "tool_settings.image_paint.brush.size"
-        if context.mode == 'PAINT_GPENCIL':
-            bpy.ops.wm.radial_control(
-                'INVOKE_DEFAULT',  # type: ignore
-                data_path_primary="tool_settings.gpencil_paint.brush.size",
-            )
-            return FINISHED
         bpy.ops.wm.radial_control(
             'INVOKE_DEFAULT',  # type: ignore
             data_path_primary=data_path,
@@ -186,7 +199,6 @@ class VIEW3D_OT_BrushResize(Operator):
             color_path="tool_settings.sculpt.brush.cursor_color_add",
             image_id="tool_settings.sculpt.brush",
         )
-
         return FINISHED
 
     def invoke(self, context: Context, event: Event):
@@ -213,20 +225,30 @@ class VIEW3D_OT_BrushStrength(Operator):
                 context.window.cursor_warp(
                     self.mousex, math.floor(context.region.height / 2)
                 )
+        if context.mode in ['PAINT_GPENCIL', 'EDIT_GPENCIL','SCULPT_GPENCIL','WEIGHT_GPENCIL','VERTEX_GPENCIL']:
+            return self.resize2d(context)
+        return self.resize3d(context)
+
+    def resize2d(self, context: Context):
+        data_path = "tool_settings.gpencil_paint.brush.gpencil_settings.pen_strength"
+        if context.mode == 'SCULPT_GPENCIL':
+            data_path = "tool_settings.gpencil_sculpt_paint.brush.strength"
+        if context.mode == 'WEIGHT_GPENCIL':
+            data_path = "tool_settings.gpencil_weight_paint.brush.strength"
+        if context.mode == 'VERTEX_GPENCIL':
+            data_path = "tool_settings.gpencil_vertex_paint.brush.gpencil_settings.pen_strength"
+        bpy.ops.wm.radial_control(
+            'INVOKE_DEFAULT',  # type: ignore
+            data_path_primary=data_path,
+        )
+        return FINISHED
+
+    def resize3d(self, context: Context):
         data_path = "tool_settings.sculpt.brush.strength"
         if context.mode == 'PAINT_VERTEX':
             data_path = "tool_settings.vertex_paint.brush.strength"
         if context.mode == 'PAINT_WEIGHT':
             data_path = "tool_settings.weight_paint.brush.strength"
-        if context.mode == 'PAINT_GPENCIL':
-            bpy.ops.wm.radial_control(
-                'INVOKE_DEFAULT',  # type: ignore
-                data_path_primary=(
-                    "tool_settings.gpencil_paint"  # NOTE: should concat fine
-                    ".brush.gpencil_settings.pen_strength"
-                )
-            )
-            return FINISHED
         if context.mode == 'PAINT_IMAGE':
             data_path = "tool_settings.image_paint.brush.strength"
         if context.mode == 'PAINT_TEXTURE':
@@ -244,7 +266,6 @@ class VIEW3D_OT_BrushStrength(Operator):
             color_path="tool_settings.sculpt.brush.cursor_color_add",
             image_id="tool_settings.sculpt.brush",
         )
-
         return FINISHED
 
     def invoke(self, context: Context, event: Event):

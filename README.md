@@ -183,6 +183,14 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v2.12.0</b></summary><br>
+
+- `UPDATED` : fixed bug with unindexed modes breaking gizmo menus
+- `UPDATED` : updated resize and change strength for 2D views
+- `UPDATED` : improved support for multi-mode devices
+
+</details>
+
 <details open><summary><b>v2.11.0</b></summary><br>
 
 - `UPDATED` : added various GPENCIL modes to edit mode list

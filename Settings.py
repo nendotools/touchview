@@ -342,7 +342,7 @@ class OverlaySettings(AddonPreferences):
     def getGizmoSet(self, mode: str | int):
         available = list(gizmo_sets['ALL'])
 
-        if not gizmo_sets[mode]:
+        if mode not in list(gizmo_sets):
             return available
         return available + list(gizmo_sets[mode])
 
