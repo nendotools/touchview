@@ -10,7 +10,7 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
     bl_idname = "nendo.move_float_menu"
     bl_label = "Relocate Gizmo Menu"
 
-    def execute(self, _: Context):
+    def execute(self, context: Context):
         settings = get_settings()
         fence = buildSafeArea()
         span = Vector((
@@ -77,7 +77,7 @@ class VIEW3D_OT_MenuController(Operator):
     bl_idname = "nendo.move_action_menu"
     bl_label = "Relocate Action Menu"
 
-    def execute(self, _: Context):
+    def execute(self, context: Context):
         settings = get_settings()
         fence = buildSafeArea()
         span = Vector((
@@ -186,7 +186,7 @@ class VIEW3D_OT_FloatController(Operator):
     bl_idname = "nendo.move_toggle_button"
     bl_label = "Relocate Toggle Button"
 
-    def execute(self, _: Context):
+    def execute(self, context: Context):
         settings = get_settings()
         fence = buildSafeArea()
         span = Vector((

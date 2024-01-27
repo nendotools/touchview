@@ -14,10 +14,13 @@ class VIEW3D_OT_FlipTools(Operator):
 
     def execute(self, context: Context):
         override: Context = context.copy()  # type: ignore
+        override["area"] = context.area
+        override["region"] = context.region
         for r in context.area.regions:
             if r.type == 'TOOLS':
                 override["region"] = r
-        bpy.ops.screen.region_flip(override)
+        with context.temp_override(region=override["region"]):
+            bpy.ops.screen.region_flip()
         return FINISHED
 
     @classmethod
@@ -90,7 +93,7 @@ class VIEW3D_OT_ToggleFloatingMenu(Operator):
     bl_idname = "view3d.toggle_floating_menu"
     bl_label = "Toggle Floating Menu"
 
-    def execute(self, _: Context):
+    def execute(self, context: Context):
         settings = get_settings()
         settings.show_float_menu = not settings.show_float_menu
         return FINISHED
