@@ -1,11 +1,7 @@
-# type: ignore
-# NOTE: ignoring types here due to lack of compatibility in lower-level access
-# and issues calling a class method without a proper reference to 'self'
 import math
 
 import bpy
 import gpu
-import bgl
 from bpy.types import Region, SpaceView3D
 from gpu_extras.batch import batch_for_shader
 from mathutils import Vector
@@ -31,7 +27,7 @@ class Overlay():
 
     def __getColors(self, type: str):
         settings = get_settings()
-        if not settings.is_enabled:
+        if not settings.is_enabled and not settings.lazy_mode:
             return (0.0, 0.0, 0.0, 0.0)
         if type == 'main' or not settings.use_multiple_colors:
             return settings.overlay_main_color
@@ -106,7 +102,7 @@ class Overlay():
                                                       float]):
         settings = get_settings()
         mid = self.__getMidpoint(view)
-        radius = math.dist((0, 0), mid) * (settings.getRadius() * 0.5)
+        radius = math.dist((0, 0), mid) * (settings.getRadius() * 0.5) # type: ignore
         self.__drawCircle(mid, radius, color)
 
     def __drawCircle(self, mid: Vector, radius: float, color: tuple):
