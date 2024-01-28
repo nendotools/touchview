@@ -206,6 +206,12 @@ class VIEW3D_OT_FloatController(Operator):
 
     def modal(self, context: Context, event: Event):
         settings = get_settings()
+        if(event.mouse_region_x<0
+           or event.mouse_region_y<0
+           or event.mouse_region_x>context.area.width 
+           or event.mouse_region_y>context.area.height):
+            # mouse out of region area broken in Blender 4.x, exit early
+            return FINISHED
         if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
             context.region.tag_redraw()
             self.x = event.mouse_region_x
