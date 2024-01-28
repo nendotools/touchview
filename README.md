@@ -184,7 +184,7 @@ Select it and click `Install Add-on`.
 # Changelog
 
 <details open><summary><b>v4.0.0</b></summary><br>
-Compatbility update for Blender 4.0
+Compatibility update for Blender 4.0
 
 - `UPDATED` : replace bgl module refs with gpu module implementation
 - `UPDATED` : Swap Control Regions fixed context override implementation
