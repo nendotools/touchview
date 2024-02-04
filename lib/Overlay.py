@@ -79,14 +79,7 @@ class Overlay():
         vertices = ((a.x, a.y), (b.x, a.y), (a.x, b.y), (b.x, b.y))
         indices = ((0, 1, 2), (2, 3, 1))
 
-        shader = gpu.shader.from_builtin('UNIFORM_COLOR')
-        batch = batch_for_shader(shader,
-                                 'TRIS', {"pos": vertices},
-                                 indices=indices)
-        shader.bind()
-        gpu.state.blend_set('ALPHA')
-        shader.uniform_float("color", color)
-        batch.draw(shader)
+        self.__drawGeometry(vertices, indices, color, 'TRIS')
 
     def __renderCircle(self):
         settings = get_settings()
@@ -126,10 +119,11 @@ class Overlay():
                 indices.append((0, p - 1, p))
         indices.append((0, 1, p))
 
-        shader = gpu.shader.from_builtin('UNIFORM_COLOR')
-        batch = batch_for_shader(shader,
-                                 'TRIS', {"pos": vertices},
-                                 indices=indices)
+        self.__drawGeometry(vertices, indices, color, 'TRIS')
+
+    def __drawGeometry(self, vertices, indices, color, type):
+        shader = gpu.shader.from_builtin('3D_UNIFORM_COLOR')
+        batch = batch_for_shader(shader, type, {"pos": vertices}, indices=indices)
         shader.bind()
         gpu.state.blend_set('ALPHA')
         shader.uniform_float("color", color)
