@@ -197,6 +197,7 @@ class VIEW3D_OT_TouchInput(Operator):
         # experimental passthrough in drawing mode
         if (settings.lazy_mode
             and not settings.is_enabled
+            and event.value == PRESS
             and brush_modes.__contains__(context.mode)
             and self.mouseTarget(context, event) != context.active_object):
             return False
