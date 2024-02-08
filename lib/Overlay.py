@@ -122,7 +122,7 @@ class Overlay():
         self.__drawGeometry(vertices, indices, color, 'TRIS')
 
     def __drawGeometry(self, vertices, indices, color, type):
-        shader = gpu.shader.from_builtin('3D_UNIFORM_COLOR')
+        shader = gpu.shader.from_builtin('UNIFORM_COLOR')
         batch = batch_for_shader(shader, type, {"pos": vertices}, indices=indices)
         shader.bind()
         gpu.state.blend_set('ALPHA')
