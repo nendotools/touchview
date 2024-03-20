@@ -1,4 +1,6 @@
 # type: ignore
+import json
+from os import path
 from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
                        FloatProperty, FloatVectorProperty, IntProperty,
                        StringProperty)
@@ -22,6 +24,30 @@ class MenuModeGroup(PropertyGroup):
     menu_slot_6: StringProperty(name='Menu Item', default='')
     menu_slot_7: StringProperty(name='Menu Item', default='')
     menu_slot_8: StringProperty(name='Menu Item', default='')
+
+    def to_dict(self):
+        return {
+            "mode": self.mode,
+            "menu_slot_1": self.menu_slot_1,
+            "menu_slot_2": self.menu_slot_2,
+            "menu_slot_3": self.menu_slot_3,
+            "menu_slot_4": self.menu_slot_4,
+            "menu_slot_5": self.menu_slot_5,
+            "menu_slot_6": self.menu_slot_6,
+            "menu_slot_7": self.menu_slot_7,
+            "menu_slot_8": self.menu_slot_8
+        }
+
+    def from_dict(self, data: dict):
+        self.mode = data.get('mode', 'OBJECT')
+        self.menu_slot_1 = data.get('menu_slot_1', '')
+        self.menu_slot_2 = data.get('menu_slot_2', '')
+        self.menu_slot_3 = data.get('menu_slot_3', '')
+        self.menu_slot_4 = data.get('menu_slot_4', '')
+        self.menu_slot_5 = data.get('menu_slot_5', '')
+        self.menu_slot_6 = data.get('menu_slot_6', '')
+        self.menu_slot_7 = data.get('menu_slot_7', '')
+        self.menu_slot_8 = data.get('menu_slot_8', '')
 
 
 class OverlaySettings(AddonPreferences):
@@ -221,6 +247,131 @@ class OverlaySettings(AddonPreferences):
         ('MENU', 'Gizmo Menu', '', 0),
         ('ACTIONS', 'Action Menu', '', 1)
     ], default='MENU')
+
+    def to_dict(self):
+        return {
+            "is_enabled": self.is_enabled,
+            "lazy_mode": self.lazy_mode,
+            "toggle_position": list(self.toggle_position),
+            "toggle_color": list(self.toggle_color),
+            "is_visible": self.isVisible,
+            "input_mode": self.input_mode,
+            "enable_double_click": self.enable_double_click,
+            "double_click_mode": self.double_click_mode,
+            "enable_right_click": self.enable_right_click,
+            "right_click_mode": self.right_click_mode,
+            "right_click_source": self.right_click_source,
+            "swap_panrotate": self.swap_panrotate,
+            "width": self.width,
+            "radius": self.radius,
+            "use_multiple_colors": self.use_multiple_colors,
+            "overlay_main_color": list(self.overlay_main_color),
+            "overlay_secondary_color": list(self.overlay_secondary_color),
+            "show_menu": self.show_menu,
+            "show_gizmos": self.show_gizmos,
+            "menu_style": self.menu_style,
+            "menu_orientation": self.menu_orientation,
+            "menu_spacing": self.menu_spacing,
+            "gizmo_padding": self.gizmo_padding,
+            "gizmo_scale": self.gizmo_scale,
+            "menu_position": list(self.menu_position),
+            "show_undoredo": self.show_undoredo,
+            "show_is_enabled": self.show_is_enabled,
+            "show_control_gizmo": self.show_control_gizmo,
+            "show_show_fullscreen": self.show_show_fullscreen,
+            "show_region_quadviews": self.show_region_quadviews,
+            "show_pivot_mode": self.show_pivot_mode,
+            "show_snap_view": self.show_snap_view,
+            "show_n_panel": self.show_n_panel,
+            "show_lock_rotation": self.show_lock_rotation,
+            "show_multires": self.show_multires,
+            "show_voxel_remesh": self.show_voxel_remesh,
+            "show_brush_dynamics": self.show_brush_dynamics,
+            "gizmo_position": self.gizmo_position,
+            "subdivision_limit": self.subdivision_limit,
+            "pivot_mode": self.pivot_mode,
+            "topology_mode": self.topology_mode,
+            "show_float_menu": self.show_float_menu,
+            "floating_position": list(self.floating_position),
+            "double_click_mode": self.double_click_mode,
+            "active_menu": self.active_menu,
+            "gizmo_tabs": self.gizmo_tabs,
+            "menu_sets": [m.to_dict() for m in self.menu_sets]
+        }
+
+    # get addon preferences from dict, assert type for non-string values, missing keys will be set to default
+    def from_dict(self, data: dict):
+        self.is_enabled = data.get('is_enabled', True)
+        self.lazy_mode = data.get('lazy_mode', False)
+        self.toggle_position = data.get('toggle_position', (0.5, 0.5, 0.0))
+        self.toggle_color = data.get('toggle_color', (0.1, 0.1, 0.2, 0.5))
+        self.isVisible = data.get('is_visible', False)
+        self.input_mode = data.get('input_mode', 'full')
+        self.enable_double_click = data.get('enable_double_click', True)
+        self.double_click_mode = data.get('double_click_mode', 'screen.screen_full_area')
+        self.enable_right_click = data.get('enable_right_click', True)
+        self.right_click_mode = data.get('right_click_mode', 'wm.window_fullscreen_toggle')
+        self.right_click_source = data.get('right_click_source', 'mouse')
+        self.swap_panrotate = data.get('swap_panrotate', False)
+        self.width = data.get('width', 40.0)
+        self.radius = data.get('radius', 35.0)
+        self.use_multiple_colors = data.get('use_multiple_colors', False)
+        self.overlay_main_color = data.get('overlay_main_color', (1.0, 1.0, 1.0, 0.01))
+        self.overlay_secondary_color = data.get('overlay_secondary_color', (1.0, 1.0, 1.0, 0.01))
+        self.show_menu = data.get('show_menu', True)
+        self.show_gizmos = data.get('show_gizmos', True)
+        self.menu_style = data.get('menu_style', 'float.radial')
+        self.menu_orientation = data.get('menu_orientation', 'HORIZONTAL')
+        self.menu_spacing = data.get('menu_spacing', 20.0)
+        self.gizmo_padding = data.get('gizmo_padding', 10)
+        self.gizmo_scale = data.get('gizmo_scale', 4.0)
+        self.menu_position = data.get('menu_position', (95.00, 5.00))
+        self.show_undoredo = data.get('show_undoredo', True)
+        self.show_is_enabled = data.get('show_is_enabled', True)
+        self.show_control_gizmo = data.get('show_control_gizmo', True)
+        self.show_show_fullscreen = data.get('show_show_fullscreen', True)
+        self.show_region_quadviews = data.get('show_region_quadviews', True)
+        self.show_pivot_mode = data.get('show_pivot_mode', True)
+        self.show_snap_view = data.get('show_snap_view', True)
+        self.show_n_panel = data.get('show_n_panel', True)
+        self.show_lock_rotation = data.get('show_lock_rotation', True)
+        self.show_multires = data.get('show_multires', True)
+        self.show_voxel_remesh = data.get('show_voxel_remesh', True)
+        self.show_brush_dynamics = data.get('show_brush_dynamics', True)
+        self.gizmo_position = data.get('gizmo_position', 'RIGHT')
+        self.subdivision_limit = data.get('subdivision_limit', 4)
+        self.pivot_mode = data.get('pivot_mode', 'SURFACE')
+        self.topology_mode = data.get('topology_mode', 'MANUAL')
+        self.show_float_menu = data.get('show_float_menu', False)
+        self.floating_position = data.get('floating_position', (95.00, 5.00))
+        self.double_click_mode = data.get('double_click_mode', 'wm.window_fullscreen_toggle')
+        self.active_menu = data.get('active_menu', 'VIEW3D')
+        self.gizmo_tabs = data.get('gizmo_tabs', 'MENU')
+        self.menu_sets = [MenuModeGroup().from_dict(m) for m in data.get('menu_sets', [])]
+
+    def load(self):
+        # read addon preferences from json file
+        # if file does not exist, return
+        # if file exists, load data into addon preferences
+        filename = path.abspath(path.dirname(__file__) + '/settings.json')
+        if not path.exists(filename):
+            return None
+
+        data = {}
+        try:
+            with open(filename, 'r') as file:
+                data = json.load(file)
+                self.from_dict(data)
+        except:
+            return None
+
+    def save(self):
+        # write addon preferences to json file
+        # if file does not exist, create it
+        # if file exists, overwrite it
+        filename = path.abspath(path.dirname(__file__) + '/settings.json')
+        with open(filename, 'w') as file:
+            json.dump(self.to_dict(), file)
 
     # set up addon preferences UI
     def draw(self, _: Context):

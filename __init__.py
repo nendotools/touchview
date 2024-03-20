@@ -36,13 +36,16 @@ bl_info = {
 }
 
 
+has_run = False
 def register():
     bpy.utils.register_class(MenuModeGroup)
     bpy.utils.register_class(OverlaySettings)
+    bpy.context.preferences.addons[__package__.split('.')[0]].preferences.load()
     lib.register()
 
 
 def unregister():
     lib.unregister()
+    bpy.context.preferences.addons[__package__.split('.')[0]].preferences.save()
     bpy.utils.unregister_class(OverlaySettings)
     bpy.utils.unregister_class(MenuModeGroup)
