@@ -1,6 +1,7 @@
 # type: ignore
 import json
 from os import path
+
 from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
                        FloatProperty, FloatVectorProperty, IntProperty,
                        StringProperty)
