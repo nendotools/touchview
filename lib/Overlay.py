@@ -1,11 +1,7 @@
-# type: ignore
-# NOTE: ignoring types here due to lack of compatibility in lower-level access
-# and issues calling a class method without a proper reference to 'self'
 import math
 
 import bpy
 import gpu
-from bgl import GL_BLEND, glDisable, glEnable
 from bpy.types import Region, SpaceView3D
 from gpu_extras.batch import batch_for_shader
 from mathutils import Vector
@@ -31,7 +27,7 @@ class Overlay():
 
     def __getColors(self, type: str):
         settings = get_settings()
-        if not settings or not settings.is_enabled:
+        if not settings.is_enabled and not settings.lazy_mode:
             return (0.0, 0.0, 0.0, 0.0)
         if type == 'main' or not settings.use_multiple_colors:
             return settings.overlay_main_color
@@ -83,15 +79,7 @@ class Overlay():
         vertices = ((a.x, a.y), (b.x, a.y), (a.x, b.y), (b.x, b.y))
         indices = ((0, 1, 2), (2, 3, 1))
 
-        shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-        batch = batch_for_shader(shader,
-                                 'TRIS', {"pos": vertices},
-                                 indices=indices)
-        glEnable(GL_BLEND)
-        shader.bind()
-        shader.uniform_float("color", color)
-        batch.draw(shader)
-        glDisable(GL_BLEND)
+        self.__drawGeometry(vertices, indices, color, 'TRIS')
 
     def __renderCircle(self):
         settings = get_settings()
@@ -107,7 +95,7 @@ class Overlay():
                                                       float]):
         settings = get_settings()
         mid = self.__getMidpoint(view)
-        radius = math.dist((0, 0), mid) * (settings.getRadius() * 0.5)
+        radius = math.dist((0, 0), mid) * (settings.getRadius() * 0.5) # type: ignore
         self.__drawCircle(mid, radius, color)
 
     def __drawCircle(self, mid: Vector, radius: float, color: tuple):
@@ -131,12 +119,12 @@ class Overlay():
                 indices.append((0, p - 1, p))
         indices.append((0, 1, p))
 
-        shader = gpu.shader.from_builtin('2D_UNIFORM_COLOR')
-        batch = batch_for_shader(shader,
-                                 'TRIS', {"pos": vertices},
-                                 indices=indices)
-        glEnable(GL_BLEND)
+        self.__drawGeometry(vertices, indices, color, 'TRIS')
+
+    def __drawGeometry(self, vertices, indices, color, type):
+        shader = gpu.shader.from_builtin('UNIFORM_COLOR')
+        batch = batch_for_shader(shader, type, {"pos": vertices}, indices=indices)
         shader.bind()
+        gpu.state.blend_set('ALPHA')
         shader.uniform_float("color", color)
         batch.draw(shader)
-        glDisable(GL_BLEND)

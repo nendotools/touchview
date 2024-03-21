@@ -183,6 +183,18 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v4.0.0</b></summary><br>
+Compatibility update for Blender 4.0
+
+- `ADDED` : support for Blender 4.0
+  - `ADDED` : auto-save/load preferences
+- `UPDATED` : replace bgl module refs with gpu module implementation
+- `UPDATED` : Swap Control Regions fixed context override implementation
+- `UPDATED` : early exit when dragging gizmo near edge of viewport to prevent negative overflow
+- `REMOVED` : argument renaming to disregard unused args (currently breaking CI/CD)
+
+</details>
+
 <details open><summary><b>v2.12.0</b></summary><br>
 
 - `UPDATED` : fixed bug with unindexed modes breaking gizmo menus

@@ -6,7 +6,7 @@ from ..Settings import OverlaySettings
 
 def get_settings() -> OverlaySettings:
     prefs = (
-        bpy.context.preferences.addons[__package__.split('.')[0]].preferences
+        bpy.context.preferences.addons[__package__.split('.')[0]].preferences # type: ignore
     )
     if isinstance(prefs, OverlaySettings):
         return prefs
@@ -65,4 +65,4 @@ def buildSafeArea() -> tuple[Vector, Vector]:
         min.y = panel('TOOL_HEADER')[1]
     if (panel('TOOL_HEADER')[2] == 'TOP'):
         max.y -= panel('TOOL_HEADER')[1]
-    return (min, max)
+    return (min, max) 
