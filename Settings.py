@@ -299,7 +299,6 @@ class OverlaySettings(AddonPreferences):
             "menu_sets": [m.to_dict() for m in self.menu_sets]
         }
 
-    # get addon preferences from dict, assert type for non-string values, missing keys will be set to default
     def from_dict(self, data: dict):
         self.is_enabled = data.get('is_enabled', True)
         self.lazy_mode = data.get('lazy_mode', False)
@@ -350,9 +349,6 @@ class OverlaySettings(AddonPreferences):
         self.menu_sets = [MenuModeGroup().from_dict(m) for m in data.get('menu_sets', [])]
 
     def load(self):
-        # read addon preferences from json file
-        # if file does not exist, return
-        # if file exists, load data into addon preferences
         filename = path.abspath(path.dirname(__file__) + '/settings.json')
         if not path.exists(filename):
             return None
@@ -366,9 +362,6 @@ class OverlaySettings(AddonPreferences):
             return None
 
     def save(self):
-        # write addon preferences to json file
-        # if file does not exist, create it
-        # if file exists, overwrite it
         filename = path.abspath(path.dirname(__file__) + '/settings.json')
         with open(filename, 'w') as file:
             json.dump(self.to_dict(), file)
