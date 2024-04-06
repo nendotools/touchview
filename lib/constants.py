@@ -96,6 +96,7 @@ gizmo_sets = {
     "OBJECT": {"control_gizmo", "multires"},
     "EDIT_MESH": {"control_gizmo"},
     "POSE": {},
+    "NODE_EDITOR": {"control_gizmo"},
     "PAINT_TEXTURE": {"brush_dynamics"},
     "PAINT_VERTEX": {"brush_dynamics"},
     "PAINT_WEIGHT": {"brush_dynamics"},

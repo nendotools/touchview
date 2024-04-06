@@ -3,9 +3,63 @@
 # but the current implementation of the AnyType[T] used as input for prop()
 # doesn't get enforced as the native: any[T]
 import bpy
-from bpy.types import Context, Menu, Panel, VIEW3D_PT_gizmo_display
+from bpy.types import Context, Menu, Panel
 
 from .utils import get_settings
+
+class IMAGE_PT_NendoPanel:
+    bl_space_type = 'IMAGE_EDITOR'
+    bl_region_type = 'UI'
+    bl_category = "NENDO"
+
+class IMAGE_PT_NendoViewport(IMAGE_PT_NendoPanel, Panel):
+    bl_idname = "IMAGE_PT_NendoViewport"
+    bl_label = "Touchview Settings"
+
+    def draw(self, _: Context):
+        settings = get_settings()
+        col = self.layout.column()
+        col.label(text="Input Mode")
+        box = col.box()
+        if settings.input_mode == 'full':
+            box.label(
+                text="pen, mouse, and touch input",
+                icon="CON_CAMERASOLVER"
+            )
+        if settings.input_mode == 'pen':
+            box.label(text="pen-only input", icon="STYLUS_PRESSURE")
+        if settings.input_mode == 'touch':
+            box.label(text="mouse/touch only input", icon="VIEW_PAN")
+        r = box.row()
+        r.prop(settings, "input_mode", expand=True)
+        box.prop(settings, "is_enabled", toggle=1)
+
+class NODE_PT_NendoPanel:
+    bl_space_type = 'NODE_EDITOR'
+    bl_region_type = 'UI'
+    bl_category = "NENDO"
+
+class NODE_PT_NendoViewport(NODE_PT_NendoPanel, Panel):
+    bl_idname = "NODE_PT_NendoViewport"
+    bl_label = "Touchview Settings"
+
+    def draw(self, _: Context):
+        settings = get_settings()
+        col = self.layout.column()
+        col.label(text="Input Mode")
+        box = col.box()
+        if settings.input_mode == 'full':
+            box.label(
+                text="pen, mouse, and touch input",
+                icon="CON_CAMERASOLVER"
+            )
+        if settings.input_mode == 'pen':
+            box.label(text="pen-only input", icon="STYLUS_PRESSURE")
+        if settings.input_mode == 'touch':
+            box.label(text="mouse/touch only input", icon="VIEW_PAN")
+        r = box.row()
+        r.prop(settings, "input_mode", expand=True)
+        box.prop(settings, "is_enabled", toggle=1)
 
 
 class VIEW3D_PT_NendoPanel:
@@ -206,7 +260,8 @@ __classes__ = (PIE_MT_Floating_Menu, VIEW3D_PT_NendoViewport,
                VIEW3D_PT_ControlZones, VIEW3D_PT_ViewportOptions,
                VIEW3D_PT_RightClick_Menu, VIEW3D_PT_DoubleClick_Menu,
                VIEW3D_PT_GizmoBar, VIEW3D_PT_ToolSettings,
-               VIEW3D_PT_Gizmo_Panel)
+               VIEW3D_PT_Gizmo_Panel,
+               IMAGE_PT_NendoViewport, NODE_PT_NendoViewport)
 
 
 def register():

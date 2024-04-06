@@ -11,7 +11,6 @@ from ..constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE,
                          brush_modes, input_mode_items)
 from ..utils import get_settings
 
-
 def isTouch(event: Event):
     return event.pressure in [0.0,1.0]
 
@@ -47,6 +46,12 @@ class VIEW3D_OT_RightClick_Action(Operator):
             return PASSTHROUGH
         self.execute(context)
         return FINISHED
+
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type in [
+            'VIEW_2D', 'VIEW_3D'
+        ] and context.region.type == 'WINDOW'
 
 
 class VIEW3D_OT_Doubletap_Action(Operator):

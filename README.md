@@ -183,6 +183,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v4.0.2</b></summary><br>
+
+- `ADDED` : Nendo Tools Menu (limited options) for Image Editor and Node Editor
+- `REMOVED` : Right-Click Action for Image Editor and Node Editor
+
+</details>
+
 <details open><summary><b>v4.0.0</b></summary><br>
 Compatibility update for Blender 4.0
 
