@@ -7,6 +7,7 @@ from bpy.types import Context, Menu, Panel
 
 from .utils import get_settings
 
+
 class IMAGE_PT_NendoPanel:
     bl_space_type = 'IMAGE_EDITOR'
     bl_region_type = 'UI'

@@ -11,6 +11,7 @@ from ..constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE,
                          brush_modes, input_mode_items)
 from ..utils import get_settings
 
+
 def isTouch(event: Event):
     return event.pressure in [0.0,1.0]
 
