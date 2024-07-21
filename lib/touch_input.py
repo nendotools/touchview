@@ -9,7 +9,8 @@ modified_keymaps = []
 
 # added timer to ensure Blender keyconfig is fully populated before running
 def register_keymaps():
-    bpy.app.timers.register(assign_keymaps, first_interval=0.2)
+    assign_keymaps()
+#    bpy.app.timers.register(assign_keymaps, first_interval=0.2)
 
 
 # two main goals: preserve action from MOUSE to PEN,

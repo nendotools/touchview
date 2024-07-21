@@ -183,6 +183,12 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v4.0.3</b></summary><br>
+
+- `UPDATED` : fixed bug where hotkeys aren't assigned when opening Blender directly by file
+
+</details>
+
 <details open><summary><b>v4.0.2</b></summary><br>
 
 - `ADDED` : Nendo Tools Menu (limited options) for Image Editor and Node Editor
