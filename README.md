@@ -183,6 +183,13 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
+<details open><summary><b>v4.0.4</b></summary><br>
+
+- `ADDED` : optional enable floating toggle for touch controls in mixed mode
+- `ADDED` : toggle touch controls button in node editor and image editor headers
+
+</details>
+
 <details open><summary><b>v4.0.3</b></summary><br>
 
 - `UPDATED` : fixed bug where hotkeys aren't assigned when opening Blender directly by file
