@@ -9,9 +9,10 @@ from .utils import get_settings
 
 
 class IMAGE_PT_NendoPanel:
-    bl_space_type = 'IMAGE_EDITOR'
-    bl_region_type = 'UI'
+    bl_space_type = "IMAGE_EDITOR"
+    bl_region_type = "UI"
     bl_category = "NENDO"
+
 
 class IMAGE_PT_NendoViewport(IMAGE_PT_NendoPanel, Panel):
     bl_idname = "IMAGE_PT_NendoViewport"
@@ -22,23 +23,24 @@ class IMAGE_PT_NendoViewport(IMAGE_PT_NendoPanel, Panel):
         col = self.layout.column()
         col.label(text="Input Mode")
         box = col.box()
-        if settings.input_mode == 'full':
-            box.label(
-                text="pen, mouse, and touch input",
-                icon="CON_CAMERASOLVER"
-            )
-        if settings.input_mode == 'pen':
+        if settings.input_mode == "full":
+            box.label(text="pen, mouse, and touch input", icon="CON_CAMERASOLVER")
+        if settings.input_mode == "pen":
             box.label(text="pen-only input", icon="STYLUS_PRESSURE")
-        if settings.input_mode == 'touch':
+        if settings.input_mode == "touch":
             box.label(text="mouse/touch only input", icon="VIEW_PAN")
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
         box.prop(settings, "is_enabled", toggle=1)
+        if settings.input_mode == "full":
+            box.prop(settings, "enable_floating_toggle", toggle=1)
+
 
 class NODE_PT_NendoPanel:
-    bl_space_type = 'NODE_EDITOR'
-    bl_region_type = 'UI'
+    bl_space_type = "NODE_EDITOR"
+    bl_region_type = "UI"
     bl_category = "NENDO"
+
 
 class NODE_PT_NendoViewport(NODE_PT_NendoPanel, Panel):
     bl_idname = "NODE_PT_NendoViewport"
@@ -49,14 +51,11 @@ class NODE_PT_NendoViewport(NODE_PT_NendoPanel, Panel):
         col = self.layout.column()
         col.label(text="Input Mode")
         box = col.box()
-        if settings.input_mode == 'full':
-            box.label(
-                text="pen, mouse, and touch input",
-                icon="CON_CAMERASOLVER"
-            )
-        if settings.input_mode == 'pen':
+        if settings.input_mode == "full":
+            box.label(text="pen, mouse, and touch input", icon="CON_CAMERASOLVER")
+        if settings.input_mode == "pen":
             box.label(text="pen-only input", icon="STYLUS_PRESSURE")
-        if settings.input_mode == 'touch':
+        if settings.input_mode == "touch":
             box.label(text="mouse/touch only input", icon="VIEW_PAN")
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
@@ -64,8 +63,8 @@ class NODE_PT_NendoViewport(NODE_PT_NendoPanel, Panel):
 
 
 class VIEW3D_PT_NendoPanel:
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
     bl_category = "NENDO"
 
 
@@ -87,18 +86,15 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
         col = self.layout.column()
         col.label(text="Input Mode")
         box = col.box()
-        if settings.input_mode == 'full':
-            box.label(
-                text="pen, mouse, and touch input",
-                icon="CON_CAMERASOLVER"
-            )
-        if settings.input_mode == 'pen':
+        if settings.input_mode == "full":
+            box.label(text="pen, mouse, and touch input", icon="CON_CAMERASOLVER")
+        if settings.input_mode == "pen":
             box.label(text="pen-only input", icon="STYLUS_PRESSURE")
-        if settings.input_mode == 'touch':
+        if settings.input_mode == "touch":
             box.label(text="mouse/touch only input", icon="VIEW_PAN")
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
-        box.prop(settings, 'lazy_mode', toggle=1)
+        box.prop(settings, "lazy_mode", toggle=1)
         box.prop(settings, "is_enabled", toggle=1)
 
         col.prop(settings, "swap_panrotate")
@@ -106,9 +102,7 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
         col.prop(settings, "use_multiple_colors")
         col.prop(settings, "overlay_main_color", text="Main Color")
         if settings.use_multiple_colors:
-            col.prop(settings,
-                     "overlay_secondary_color",
-                     text="Secondary Color")
+            col.prop(settings, "overlay_secondary_color", text="Secondary Color")
         col.prop(settings, "width")
         col.prop(settings, "radius")
         col.separator()
@@ -158,10 +152,10 @@ class VIEW3D_PT_GizmoBar(VIEW3D_PT_NendoPanel, Panel):
         group.label(text="Menu Style")
         r = group.row()
         r.prop(settings, "menu_style", expand=True)
-        if settings.menu_style == 'fixed.bar':
+        if settings.menu_style == "fixed.bar":
             group.prop_menu_enum(settings, "gizmo_position")
         group.prop(settings, "menu_spacing", slider=True)
-        if settings.menu_style == 'float.radial':
+        if settings.menu_style == "float.radial":
             group.prop(settings, "gizmo_padding", slider=True)
         group.prop(settings, "gizmo_scale", slider=True)
 
@@ -197,7 +191,8 @@ class VIEW3D_PT_ViewportOptions(VIEW3D_PT_NendoPanel, Panel):
 
 
 class PIE_MT_Floating_Menu(Menu):
-    """ Open a custom menu """
+    """Open a custom menu"""
+
     bl_idname = "PIE_MT_Floating_Menu"
     bl_label = "Floating Menu"
     bl_description = "Customized Floating Menu"
@@ -235,8 +230,8 @@ class VIEW3D_PT_Gizmo_Panel(bpy.types.Panel):
     bl_label = "Gizmo display control"
     bl_idname = "VIEW3D_PT_Gizmo_Panel"
     bl_parent_id = "VIEW3D_PT_gizmo_display"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'HEADER'
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "HEADER"
     bl_label = "Gizmos"
     bl_ui_units_x = 16
 
@@ -254,25 +249,44 @@ class VIEW3D_PT_Gizmo_Panel(bpy.types.Panel):
         col = col.column()
         col.active = settings.show_menu
         for toggle in available_gizmos:
-            col.prop(settings, 'show_' + toggle)
+            col.prop(settings, "show_" + toggle)
 
 
-__classes__ = (PIE_MT_Floating_Menu, VIEW3D_PT_NendoViewport,
-               VIEW3D_PT_ControlZones, VIEW3D_PT_ViewportOptions,
-               VIEW3D_PT_RightClick_Menu, VIEW3D_PT_DoubleClick_Menu,
-               VIEW3D_PT_GizmoBar, VIEW3D_PT_ToolSettings,
-               VIEW3D_PT_Gizmo_Panel,
-               IMAGE_PT_NendoViewport, NODE_PT_NendoViewport)
+def NODE_HT_nendo_header(self, context):
+    settings = get_settings()
+    layout = self.layout
+    layout.separator()
+    layout.prop(settings, "is_enabled", toggle=1)
+
+
+__classes__ = (
+    PIE_MT_Floating_Menu,
+    VIEW3D_PT_NendoViewport,
+    VIEW3D_PT_ControlZones,
+    VIEW3D_PT_ViewportOptions,
+    VIEW3D_PT_RightClick_Menu,
+    VIEW3D_PT_DoubleClick_Menu,
+    VIEW3D_PT_GizmoBar,
+    VIEW3D_PT_ToolSettings,
+    VIEW3D_PT_Gizmo_Panel,
+    IMAGE_PT_NendoViewport,
+    NODE_PT_NendoViewport,
+)
 
 
 def register():
     from bpy.utils import register_class
+
     for cls in __classes__:
         register_class(cls)
+    bpy.types.NODE_HT_header.append(NODE_HT_nendo_header)
+    bpy.types.IMAGE_HT_header.append(NODE_HT_nendo_header)
 
 
 def unregister():
     from bpy.utils import unregister_class
 
+    bpy.types.NODE_HT_header.remove(NODE_HT_nendo_header)
+    bpy.types.IMAGE_HT_header.remove(NODE_HT_nendo_header)
     for cls in reversed(__classes__):
         unregister_class(cls)
