@@ -5,6 +5,7 @@ from mathutils import Matrix, Vector
 from ..utils import dpi_factor, get_settings
 from .gizmo_config import gizmo_colors, toggle_colors
 
+
 ##
 # GizmoSet
 #   - single-state
@@ -17,6 +18,25 @@ from .gizmo_config import gizmo_colors, toggle_colors
 #     - 2 actions (or 1 action for both icons)
 #
 ##
+def show_enum_values(obj, prop_name):
+    print([item.identifier for item in obj.bl_rna.properties[prop_name].enum_items])
+
+
+def get_enum_index(current, path, prop_name, state):
+    names = path.split(".")
+    items = []
+    for i, prop in enumerate(names):
+        current = getattr(current, prop)
+        if current is None:
+            return -1
+        if i == len(names) - 1:
+            items = current.bl_rna.properties[prop_name].enum_items
+    if getattr(current, prop_name) == "DEFAULT":
+        return -1
+    for i, item in enumerate(items):
+        if item.identifier == state:
+            return i
+    return -1
 
 
 class GizmoSet:
@@ -29,9 +49,7 @@ class GizmoSet:
         self.group = group
         self.scale = config["scale"] if ("scale" in config) else 14
         self.binding = config["binding"]
-        self.has_attribute_bind = (
-            self.binding["attribute"] if "attribute" in self.binding else False
-        )
+        self.has_attribute_bind = True if "attribute" in self.binding else False
         self.primary = self.__buildGizmo(config["command"], config["icon"])
 
     def draw_prepare(self):
@@ -81,7 +99,16 @@ class GizmoSet:
         if not self.has_attribute_bind:
             return False
         bind = self.binding["attribute"]
-        state = self.__findAttribute(bind["path"], bind["value"]) == bind["state"]
+        state = False
+        if "mode" in bind:
+            opt = get_enum_index(bpy.context, bind["path"], bind["value"], bind["state"])  # type: ignore
+            return (
+                False
+                if opt == -1
+                else self.__findAttribute(bind["path"], bind["value"]) != bind["state"]
+            )
+        if "state" in bind:
+            state = self.__findAttribute(bind["path"], bind["value"]) == bind["state"]
         return not state
 
     # search for attribute, value through context.
@@ -134,9 +161,7 @@ class GizmoSetBoolean(GizmoSet):
         self.group = group
         self.scale = config["scale"] if ("scale" in config) else 14
         self.binding = config["binding"]
-        self.has_attribute_bind = (
-            self.binding["attribute"] if "attribute" in self.binding else False
-        )
+        self.has_attribute_bind = True if "attribute" in self.binding else False
         self.onGizmo = self._GizmoSet__buildGizmo(  # type: ignore
             config["command"], config["onIcon"]
         )
@@ -173,12 +198,14 @@ class GizmoSetBoolean(GizmoSet):
             )
         else:
             self.visible = getattr(get_settings(), "show_" + self.binding["name"])
+        if self.visible and self.has_attribute_bind and "mode" in bind["attribute"]:
+            self.visible = self._GizmoSet__findAttribute(  # type: ignore
+                bind["attribute"]["path"],
+                bind["attribute"]["value"],
+            ) in ("ADD", "SUBTRACT")
 
         if self.visible:
-            self.visible = (
-                self._GizmoSet__visibilityLock()  # type: ignore
-                and not self._GizmoSet__checkAttributeBind()
-            )  # type: ignore
+            self.visible = self._GizmoSet__visibilityLock()  # type: ignore
 
         if bind["name"] == "float_toggle":
             self.__setActiveGizmo(settings.is_enabled)
@@ -187,6 +214,8 @@ class GizmoSetBoolean(GizmoSet):
                 self._GizmoSet__findAttribute(  # type: ignore
                     bind["location"], bind["name"]
                 )
+                if not self.has_attribute_bind
+                else not self._GizmoSet__checkAttributeBind()  # type: ignore
             )
         self.primary.hide = not self.visible
 

@@ -25,16 +25,19 @@ __classes__ = (
     VIEW3D_OT_DecreaseMultires,
     VIEW3D_OT_DensityUp,
     VIEW3D_OT_DensityDown,
+    VIEW3D_OT_ToggleSculptAddSub,
 )
 
 
 def register():
     from bpy.utils import register_class
+
     for cls in __classes__:
         register_class(cls)
 
 
 def unregister():
     from bpy.utils import unregister_class
+
     for cls in reversed(__classes__):
         unregister_class(cls)
