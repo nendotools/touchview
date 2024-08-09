@@ -8,30 +8,30 @@ from ..utils import get_settings
 
 
 class VIEW3D_OT_FlipTools(Operator):
-    """ Relocate Tools panel between left and right """
+    """Relocate Tools panel between left and right"""
+
     bl_idname = "view3d.tools_region_flip"
     bl_label = "Tools Region Swap"
 
     def execute(self, context: Context):
-        override: Context = context.copy() 
+        override: Context = context.copy()
         override["area"] = context.area
         override["region"] = context.region
         for r in context.area.regions:
-            if r.type == 'TOOLS':
+            if r.type == "TOOLS":
                 override["region"] = r
-        with context.temp_override(region=override["region"]): # type: ignore
+        with context.temp_override(region=override["region"]):  # type: ignore
             bpy.ops.screen.region_flip()
         return FINISHED
 
     @classmethod
     def poll(cls, context: Context):
-        return (
-            context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
-        )
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
 
 
 class VIEW3D_OT_NextPivotMode(Operator):
-    """ Step through Pivot modes """
+    """Step through Pivot modes"""
+
     bl_idname = "view3d.step_pivot_mode"
     bl_label = "Use next Pivot mode"
 
@@ -53,13 +53,12 @@ class VIEW3D_OT_NextPivotMode(Operator):
 
     @classmethod
     def poll(cls, context: Context):
-        return (
-            context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
-        )
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
 
 
 class VIEW3D_OT_ToggleTouchControls(Operator):
-    """ Toggle Touch Controls """
+    """Toggle Touch Controls"""
+
     bl_idname = "nendo.toggle_touch"
     bl_label = "Toggle Touch Controls"
 
@@ -71,7 +70,8 @@ class VIEW3D_OT_ToggleTouchControls(Operator):
 
 
 class VIEW3D_OT_ToggleNPanel(Operator):
-    """ Toggle Settings Panel """
+    """Toggle Settings Panel"""
+
     bl_idname = "nendo.toggle_n_panel"
     bl_label = "Display settings Panel"
 
@@ -83,13 +83,12 @@ class VIEW3D_OT_ToggleNPanel(Operator):
 
     @classmethod
     def poll(cls, context: Context):
-        return (
-            context.area.type == 'VIEW_3D' and context.region.type == 'WINDOW'
-        )
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
 
 
 class VIEW3D_OT_ToggleFloatingMenu(Operator):
-    """ Toggle Floating Menu """
+    """Toggle Floating Menu"""
+
     bl_idname = "view3d.toggle_floating_menu"
     bl_label = "Toggle Floating Menu"
 
@@ -100,7 +99,8 @@ class VIEW3D_OT_ToggleFloatingMenu(Operator):
 
 
 class VIEW3D_OT_ViewportRecenter(Operator):
-    """ Recenter Viewport and Cursor on Selected Object """
+    """Recenter Viewport and Cursor on Selected Object"""
+
     bl_idname = "nendo.viewport_recenter"
     bl_label = "Recenter Viewport and Cursor on Selected"
 
@@ -115,7 +115,8 @@ class VIEW3D_OT_ViewportRecenter(Operator):
 
 
 class VIEW3D_OT_ViewportLock(Operator):
-    """ Toggle Viewport Rotation """
+    """Toggle Viewport Rotation"""
+
     bl_idname = "nendo.viewport_lock"
     bl_label = "Viewport rotation lock toggle"
 
@@ -147,14 +148,15 @@ class VIEW3D_OT_ViewportLock(Operator):
 
 
 class VIEW3D_OT_BrushResize(Operator):
-    """ Brush Resize """
+    """Brush Resize"""
+
     bl_idname = "nendo.brush_resize"
     bl_label = "Brush Size Adjust"
 
     # activate radial_control to change sculpt brush size
     def execute(self, context: Context):
         settings = get_settings()
-        if settings.menu_style in ['fixed.bar']:
+        if settings.menu_style in ["fixed.bar"]:
             if settings.gizmo_position in ["LEFT", "RIGHT"]:
                 context.window.cursor_warp(
                     math.floor(context.region.width / 2), self.mousey
@@ -163,41 +165,45 @@ class VIEW3D_OT_BrushResize(Operator):
                 context.window.cursor_warp(
                     self.mousex, math.floor(context.region.height / 2)
                 )
-        if context.mode in ['PAINT_GPENCIL', 'EDIT_GPENCIL','SCULPT_GPENCIL','WEIGHT_GPENCIL','VERTEX_GPENCIL']:
+        if context.mode in [
+            "PAINT_GPENCIL",
+            "EDIT_GPENCIL",
+            "SCULPT_GPENCIL",
+            "WEIGHT_GPENCIL",
+            "VERTEX_GPENCIL",
+        ]:
             return self.resize2d(context)
         return self.resize3d(context)
 
     def resize2d(self, context: Context):
         data_path = "tool_settings.gpencil_paint.brush.size"
-        if context.mode == 'SCULPT_GPENCIL':
+        if context.mode == "SCULPT_GPENCIL":
             data_path = "tool_settings.gpencil_sculpt_paint.brush.size"
-        if context.mode == 'WEIGHT_GPENCIL':
+        if context.mode == "WEIGHT_GPENCIL":
             data_path = "tool_settings.gpencil_weight_paint.brush.size"
-        if context.mode == 'VERTEX_GPENCIL':
+        if context.mode == "VERTEX_GPENCIL":
             data_path = "tool_settings.gpencil_vertex_paint.brush.size"
         bpy.ops.wm.radial_control(
-            'INVOKE_DEFAULT',  # type: ignore
+            "INVOKE_DEFAULT",  # type: ignore
             data_path_primary=data_path,
         )
         return FINISHED
 
     def resize3d(self, context: Context):
         data_path = "tool_settings.sculpt.brush.size"
-        if context.mode == 'PAINT_VERTEX':
+        if context.mode == "PAINT_VERTEX":
             data_path = "tool_settings.vertex_paint.brush.size"
-        if context.mode == 'PAINT_WEIGHT':
+        if context.mode == "PAINT_WEIGHT":
             data_path = "tool_settings.weight_paint.brush.size"
-        if context.mode == 'PAINT_IMAGE':
+        if context.mode == "PAINT_IMAGE":
             data_path = "tool_settings.image_paint.brush.size"
-        if context.mode == 'PAINT_TEXTURE':
+        if context.mode == "PAINT_TEXTURE":
             data_path = "tool_settings.image_paint.brush.size"
         bpy.ops.wm.radial_control(
-            'INVOKE_DEFAULT',  # type: ignore
+            "INVOKE_DEFAULT",  # type: ignore
             data_path_primary=data_path,
             data_path_secondary="tool_settings.unified_paint_settings.size",
-            use_secondary=(
-                "tool_settings.unified_paint_settings.use_unified_size"
-            ),
+            use_secondary=("tool_settings.unified_paint_settings.use_unified_size"),
             rotation_path="tool_settings.sculpt.brush.texture_slot.angle",
             color_path="tool_settings.sculpt.brush.cursor_color_add",
             image_id="tool_settings.sculpt.brush",
@@ -212,14 +218,15 @@ class VIEW3D_OT_BrushResize(Operator):
 
 
 class VIEW3D_OT_BrushStrength(Operator):
-    """ Brush Strength """
+    """Brush Strength"""
+
     bl_idname = "nendo.brush_strength"
     bl_label = "Brush Strength Adjust"
 
     # activate radial_control to change sculpt brush size
     def execute(self, context: Context):
         settings = get_settings()
-        if settings.menu_style in ['fixed.bar']:
+        if settings.menu_style in ["fixed.bar"]:
             if settings.gizmo_position in ["LEFT", "RIGHT"]:
                 context.window.cursor_warp(
                     math.floor(context.region.width / 2), self.mousey
@@ -228,43 +235,47 @@ class VIEW3D_OT_BrushStrength(Operator):
                 context.window.cursor_warp(
                     self.mousex, math.floor(context.region.height / 2)
                 )
-        if context.mode in ['PAINT_GPENCIL', 'EDIT_GPENCIL','SCULPT_GPENCIL','WEIGHT_GPENCIL','VERTEX_GPENCIL']:
+        if context.mode in [
+            "PAINT_GPENCIL",
+            "EDIT_GPENCIL",
+            "SCULPT_GPENCIL",
+            "WEIGHT_GPENCIL",
+            "VERTEX_GPENCIL",
+        ]:
             return self.resize2d(context)
         return self.resize3d(context)
 
     def resize2d(self, context: Context):
         data_path = "tool_settings.gpencil_paint.brush.gpencil_settings.pen_strength"
-        if context.mode == 'SCULPT_GPENCIL':
+        if context.mode == "SCULPT_GPENCIL":
             data_path = "tool_settings.gpencil_sculpt_paint.brush.strength"
-        if context.mode == 'WEIGHT_GPENCIL':
+        if context.mode == "WEIGHT_GPENCIL":
             data_path = "tool_settings.gpencil_weight_paint.brush.strength"
-        if context.mode == 'VERTEX_GPENCIL':
-            data_path = "tool_settings.gpencil_vertex_paint.brush.gpencil_settings.pen_strength"
+        if context.mode == "VERTEX_GPENCIL":
+            data_path = (
+                "tool_settings.gpencil_vertex_paint.brush.gpencil_settings.pen_strength"
+            )
         bpy.ops.wm.radial_control(
-            'INVOKE_DEFAULT',  # type: ignore
+            "INVOKE_DEFAULT",  # type: ignore
             data_path_primary=data_path,
         )
         return FINISHED
 
     def resize3d(self, context: Context):
         data_path = "tool_settings.sculpt.brush.strength"
-        if context.mode == 'PAINT_VERTEX':
+        if context.mode == "PAINT_VERTEX":
             data_path = "tool_settings.vertex_paint.brush.strength"
-        if context.mode == 'PAINT_WEIGHT':
+        if context.mode == "PAINT_WEIGHT":
             data_path = "tool_settings.weight_paint.brush.strength"
-        if context.mode == 'PAINT_IMAGE':
+        if context.mode == "PAINT_IMAGE":
             data_path = "tool_settings.image_paint.brush.strength"
-        if context.mode == 'PAINT_TEXTURE':
+        if context.mode == "PAINT_TEXTURE":
             data_path = "tool_settings.image_paint.brush.strength"
         bpy.ops.wm.radial_control(
-            'INVOKE_DEFAULT',  # type: ignore
+            "INVOKE_DEFAULT",  # type: ignore
             data_path_primary=data_path,
-            data_path_secondary=(
-                "tool_settings.unified_paint_settings.strength"
-            ),
-            use_secondary=(
-                "tool_settings.unified_paint_settings.use_unified_strength"
-            ),
+            data_path_secondary=("tool_settings.unified_paint_settings.strength"),
+            use_secondary=("tool_settings.unified_paint_settings.use_unified_strength"),
             rotation_path="tool_settings.sculpt.brush.texture_slot.angle",
             color_path="tool_settings.sculpt.brush.cursor_color_add",
             image_id="tool_settings.sculpt.brush",
@@ -279,34 +290,28 @@ class VIEW3D_OT_BrushStrength(Operator):
 
 
 class VIEW3D_OT_IncreaseMultires(Operator):
-    """ Increment Multires by 1 or add subdivision """
+    """Increment Multires by 1 or add subdivision"""
+
     bl_idname = "nendo.increment_multires"
     bl_label = "Increment Multires modifier by 1 or add subdivision level"
 
     def execute(self, context: Context):
         settings = get_settings()
-        if (
-            not context.active_object
-            or not len(context.active_object.modifiers)
-        ):
+        if not context.active_object or not len(context.active_object.modifiers):
             return CANCEL
         for mod in context.active_object.modifiers:
             # if mod is type of MultiresModifier
             if isinstance(mod, MultiresModifier):
-                if context.mode == 'SCULPT':
+                if context.mode == "SCULPT":
                     if mod.sculpt_levels == mod.total_levels:
                         if mod.sculpt_levels < settings.subdivision_limit:
-                            bpy.ops.object.multires_subdivide(
-                                modifier=mod.name
-                            )
+                            bpy.ops.object.multires_subdivide(modifier=mod.name)
                     else:
                         mod.sculpt_levels += 1
                 else:
                     if mod.levels == mod.total_levels:
                         if mod.levels < settings.subdivision_limit:
-                            bpy.ops.object.multires_subdivide(
-                                modifier=mod.name
-                            )
+                            bpy.ops.object.multires_subdivide(modifier=mod.name)
                     else:
                         mod.levels += 1
                 return FINISHED
@@ -314,20 +319,18 @@ class VIEW3D_OT_IncreaseMultires(Operator):
 
 
 class VIEW3D_OT_DecreaseMultires(Operator):
-    """ Decrement Multires by 1 """
+    """Decrement Multires by 1"""
+
     bl_idname = "nendo.decrement_multires"
     bl_label = "decrement Multires modifier by 1"
 
     def execute(self, context: Context):
-        if (
-            not context.active_object
-            or not len(context.active_object.modifiers)
-        ):
+        if not context.active_object or not len(context.active_object.modifiers):
             return CANCEL
         for mod in context.active_object.modifiers:
             if not isinstance(mod, MultiresModifier):
                 return FINISHED
-            if context.mode == 'SCULPT':
+            if context.mode == "SCULPT":
                 if mod.sculpt_levels == 0:
                     bpy.ops.object.multires_unsubdivide(modifier=mod.name)
                 else:
@@ -342,12 +345,13 @@ class VIEW3D_OT_DecreaseMultires(Operator):
 
 
 class VIEW3D_OT_DensityUp(Operator):
-    """ Increase voxel density """
+    """Increase voxel density"""
+
     bl_idname = "nendo.density_up"
     bl_label = "Increase voxel density and remesh"
 
     def execute(self, context: Context):
-        if (not context.active_object):
+        if not context.active_object:
             return CANCEL
         for mod in context.active_object.modifiers:
             if isinstance(mod, MultiresModifier):
@@ -359,12 +363,13 @@ class VIEW3D_OT_DensityUp(Operator):
 
 
 class VIEW3D_OT_DensityDown(Operator):
-    """ Decrease voxel density """
+    """Decrease voxel density"""
+
     bl_idname = "nendo.density_down"
     bl_label = "Decrease voxel density and remesh"
 
     def execute(self, context: Context):
-        if (not context.active_object):
+        if not context.active_object:
             return CANCEL
         for mod in context.active_object.modifiers:
             if isinstance(mod, MultiresModifier):
@@ -373,3 +378,22 @@ class VIEW3D_OT_DensityDown(Operator):
         mesh.remesh_voxel_size /= 0.8
         bpy.ops.object.voxel_remesh()
         return FINISHED
+
+
+class VIEW3D_OT_ToggleSculptAddSub(Operator):
+    """Toggle Sculpt Add/Sub"""
+
+    bl_idname = "nendo.toggle_sculpt_add_sub"
+    bl_label = "Toggle Sculpt Add/Sub"
+
+    def execute(self, context: Context):
+        context.tool_settings.sculpt.brush.direction = (
+            "ADD"
+            if context.tool_settings.sculpt.brush.direction == "SUBTRACT"
+            else "SUBTRACT"
+        )
+        return FINISHED
+
+    @classmethod
+    def poll(cls, context: Context):
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"

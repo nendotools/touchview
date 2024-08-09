@@ -180,6 +180,7 @@ class OverlaySettings(AddonPreferences):
     show_multires: BoolProperty(name="Multires", default=True)
     show_voxel_remesh: BoolProperty(name="Voxel Remesh", default=True)
     show_brush_dynamics: BoolProperty(name="Brush Dynamics", default=True)
+    show_direction: BoolProperty(name="Brush Direction", default=True)
     gizmo_position: EnumProperty(
         items=position_items, name="Gizmo Position", default="RIGHT"
     )

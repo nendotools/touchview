@@ -187,6 +187,7 @@ Select it and click `Install Add-on`.
 
 - `ADDED` : optional enable floating toggle for touch controls in mixed mode
 - `ADDED` : toggle touch controls button in node editor and image editor headers
+- `ADDED` : toggle sculpt direction gizmo
 
 </details>
 
@@ -215,7 +216,7 @@ Compatibility update for Blender 4.0
 
 </details>
 
-<details open><summary><b>v2.12.0</b></summary><br>
+<details><summary><b>v2.12.0</b></summary><br>
 
 - `UPDATED` : fixed bug with unindexed modes breaking gizmo menus
 - `UPDATED` : updated resize and change strength for 2D views
@@ -223,14 +224,14 @@ Compatibility update for Blender 4.0
 
 </details>
 
-<details open><summary><b>v2.11.0</b></summary><br>
+<details><summary><b>v2.11.0</b></summary><br>
 
 - `UPDATED` : added various GPENCIL modes to edit mode list
 - `UPDATED` : updated viewport gizmo panel to support v3.6 changes
 
 </details>
 
-<details open><summary><b>v2.10.0</b></summary><br>
+<details><summary><b>v2.10.0</b></summary><br>
 
 - `ADDED` : lazy camera control toggle in sculpt mode
 - `UPDATED` : add support for Weylus (\*nix) sending 0.0 for pressure on touch events
@@ -241,34 +242,34 @@ Compatibility update for Blender 4.0
 
 </details>
 
-<details open><summary><b>v2.9.0</b></summary><br>
+<details><summary><b>v2.9.0</b></summary><br>
 
 - `UPDATED` : additional changes to gizmo spacing
 - `UPDATED` : fixed bug preventing custom actions being assigned for radial menu
 
 </details>
 
-<details open><summary><b>v2.8.0</b></summary><br>
+<details><summary><b>v2.8.0</b></summary><br>
 
 - `UPDATED` : fixed issues with menu bar spacing
 - `REMOVED` : floating menu bar
 
 </details>
 
-<details open><summary><b>v2.7.1</b></summary><br>
+<details><summary><b>v2.7.1</b></summary><br>
 
 - `UPDATED` : replaced region_full_area with window_fullscreen
 
 </details>
 
-<details open><summary><b>v2.7.0</b></summary><br>
+<details><summary><b>v2.7.0</b></summary><br>
 
 - `ADDED` : relative remesh
 - `UPDATED` : fixed error when disabling add-on
 
 </details>
 
-<details open><summary><b>v2.6.0</b></summary><br>
+<details><summary><b>v2.6.0</b></summary><br>
 
 - `UPDATED` : code spec now based on flake8
 - `UPDATED` : added alternative action for TransferMode when used in OBJECT mode
