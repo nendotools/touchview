@@ -6,24 +6,24 @@ from ..Settings import OverlaySettings
 
 def get_settings() -> OverlaySettings:
     prefs = (
-        bpy.context.preferences.addons[__package__.split('.')[0]].preferences # type: ignore
+        bpy.context.preferences.addons[__package__.split(".")[0]].preferences  # type: ignore
     )
     if isinstance(prefs, OverlaySettings):
         return prefs
-    raise RuntimeWarning('Invalid Preferences')
+    raise RuntimeWarning("Invalid Preferences")
 
 
 def panel(type) -> tuple:
-    ''' Panel in the region.
+    """Panel in the region.
 
     type (enum in ['WINDOW', 'HEADER', 'CHANNELS', 'TEMPORARY', 'UI', 'TOOLS',
                    'TOOL_PROPS', 'PREVIEW', 'HUD', 'NAVIGATION_BAR', 'EXECUTE',
                    'FOOTER', 'TOOL_HEADER', 'XR']) - Type of the region.
     return (tuple) - Dimension of the region.
-    '''
+    """
     width = 0
     height = 0
-    alignment = 'NONE'
+    alignment = "NONE"
     for region in bpy.context.area.regions:
         if region.type == type:
             width = region.width
@@ -43,26 +43,28 @@ def dpi_factor() -> float:
 def buildSafeArea() -> tuple[Vector, Vector]:
     buffer = 30 * dpi_factor()
     min = Vector((buffer, buffer))
-    max = Vector((bpy.context.region.width - buffer,
-                  bpy.context.region.height - buffer))
+    max = Vector((
+        bpy.context.region.width - buffer,
+        bpy.context.region.height - buffer,
+    ))
 
-    if (panel('TOOLS')[2] == 'LEFT'):
-        min.x += 22.0 * dpi_factor() + panel('TOOLS')[0]
-    if (panel('TOOLS')[2] == 'RIGHT'):
-        max.x -= 22.0 * dpi_factor() + panel('TOOLS')[0]
+    if panel("TOOLS")[2] == "LEFT":
+        min.x += 22.0 * dpi_factor() + panel("TOOLS")[0]
+    if panel("TOOLS")[2] == "RIGHT":
+        max.x -= 22.0 * dpi_factor() + panel("TOOLS")[0]
 
-    if (panel('UI')[2] == 'LEFT'):
-        min.x += 22.0 * dpi_factor() + panel('UI')[0]
-    if (panel('UI')[2] == 'RIGHT'):
-        max.x -= 22.0 * dpi_factor() + panel('UI')[0]
+    if panel("UI")[2] == "LEFT":
+        min.x += 22.0 * dpi_factor() + panel("UI")[0]
+    if panel("UI")[2] == "RIGHT":
+        max.x -= 22.0 * dpi_factor() + panel("UI")[0]
 
-    if (panel('HEADER')[2] == 'BOTTOM'):
-        min.y = panel('HEADER')[1]
-    if (panel('HEADER')[2] == 'TOP'):
-        max.y -= panel('HEADER')[1]
+    if panel("HEADER")[2] == "BOTTOM":
+        min.y = panel("HEADER")[1]
+    if panel("HEADER")[2] == "TOP":
+        max.y -= panel("HEADER")[1]
 
-    if (panel('TOOL_HEADER')[2] == 'BOTTOM'):
-        min.y = panel('TOOL_HEADER')[1]
-    if (panel('TOOL_HEADER')[2] == 'TOP'):
-        max.y -= panel('TOOL_HEADER')[1]
-    return (min, max) 
+    if panel("TOOL_HEADER")[2] == "BOTTOM":
+        min.y = panel("TOOL_HEADER")[1]
+    if panel("TOOL_HEADER")[2] == "TOP":
+        max.y -= panel("TOOL_HEADER")[1]
+    return (min, max)

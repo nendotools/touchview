@@ -13,29 +13,24 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
     def execute(self, context: Context):
         settings = get_settings()
         fence = buildSafeArea()
-        span = Vector((
-            fence[1].x - fence[0].x,
-            fence[1].y - fence[0].y
-        ))
+        span = Vector((fence[1].x - fence[0].x, fence[1].y - fence[0].y))
 
         settings.menu_position[0] = min(
-            max((self.x - fence[0].x + self.offset.x) / (span.x) * 100.0, 0.0),
-            100.0
+            max((self.x - fence[0].x + self.offset.x) / (span.x) * 100.0, 0.0), 100.0
         )
         settings.menu_position[1] = min(
-            max((self.y - fence[0].y + self.offset.y) / (span.y) * 100.0, 0.0),
-            100.0
+            max((self.y - fence[0].y + self.offset.y) / (span.y) * 100.0, 0.0), 100.0
         )
         return FINISHED
 
     def modal(self, context: Context, event: Event):
         settings = get_settings()
-        if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
+        if event.type == "MOUSEMOVE" and event.value != "RELEASE":  # Apply
             context.region.tag_redraw()
             self.x = event.mouse_region_x
             self.y = event.mouse_region_y
             self.execute(context)
-        elif event.value == 'RELEASE':  # Confirm
+        elif event.value == "RELEASE":  # Confirm
             if not self.__hasMoved():
                 settings.menu_position[0] = self.init_x
                 settings.menu_position[1] = self.init_y
@@ -55,17 +50,14 @@ class VIEW3D_OT_MoveFloatMenu(Operator):
         self.has_moved = False
         settings = get_settings()
         fence = buildSafeArea()
-        span = Vector((
-            fence[1].x - fence[0].x,
-            fence[1].y - fence[0].y
-        ))
+        span = Vector((fence[1].x - fence[0].x, fence[1].y - fence[0].y))
         self.init_x = settings.menu_position[0]
         self.init_y = settings.menu_position[1]
         self.mouse_init_x = self.x = event.mouse_region_x
         self.mouse_init_y = self.y = event.mouse_region_y
         self.offset = Vector((
             (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
-            (span.y * self.init_y * 0.01 + fence[0].y) - self.y
+            (span.y * self.init_y * 0.01 + fence[0].y) - self.y,
         ))
         self.execute(context)
 
@@ -80,35 +72,30 @@ class VIEW3D_OT_MenuController(Operator):
     def execute(self, context: Context):
         settings = get_settings()
         fence = buildSafeArea()
-        span = Vector((
-            fence[1].x - fence[0].x,
-            fence[1].y - fence[0].y
-        ))
+        span = Vector((fence[1].x - fence[0].x, fence[1].y - fence[0].y))
 
         settings.floating_position[0] = min(
-            max((self.x - fence[0].x + self.offset.x) / (span.x) * 100.0, 0.0),
-            100.0
+            max((self.x - fence[0].x + self.offset.x) / (span.x) * 100.0, 0.0), 100.0
         )
         settings.floating_position[1] = min(
-            max((self.y - fence[0].y + self.offset.y) / (span.y) * 100.0, 0.0),
-            100.0
+            max((self.y - fence[0].y + self.offset.y) / (span.y) * 100.0, 0.0), 100.0
         )
         return FINISHED
 
     def modal(self, context: Context, event: Event):
         settings = get_settings()
-        if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
+        if event.type == "MOUSEMOVE" and event.value != "RELEASE":  # Apply
             context.region.tag_redraw()
             self.x = event.mouse_region_x
             self.y = event.mouse_region_y
             self.execute(context)
-        elif event.value == 'RELEASE':  # Confirm
+        elif event.value == "RELEASE":  # Confirm
             if not self.__hasMoved():
                 settings.floating_position[0] = self.init_x
                 settings.floating_position[1] = self.init_y
                 bpy.ops.wm.call_menu_pie(
                     "INVOKE_DEFAULT",  # type: ignore
-                    name="PIE_MT_Floating_Menu"
+                    name="PIE_MT_Floating_Menu",
                 )
             return FINISHED
         return MODAL
@@ -125,17 +112,14 @@ class VIEW3D_OT_MenuController(Operator):
         self.has_moved = False
         settings = get_settings()
         fence = buildSafeArea()
-        span = Vector((
-            fence[1].x - fence[0].x,
-            fence[1].y - fence[0].y
-        ))
+        span = Vector((fence[1].x - fence[0].x, fence[1].y - fence[0].y))
         self.init_x = settings.floating_position[0]
         self.init_y = settings.floating_position[1]
         self.mouse_init_x = self.x = event.mouse_region_x
         self.mouse_init_y = self.y = event.mouse_region_y
         self.offset = Vector((
             (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
-            (span.y * self.init_y * 0.01 + fence[0].y) - self.y
+            (span.y * self.init_y * 0.01 + fence[0].y) - self.y,
         ))
         self.execute(context)
 
@@ -153,22 +137,22 @@ class VIEW3D_OT_CycleControlGizmo(Operator):
             return CANCEL
         mode = self.getMode(space)
         self.clearControls(space)
-        if mode == 'none':
+        if mode == "none":
             space.show_gizmo_object_translate = True
-        if mode == 'translate':
+        if mode == "translate":
             space.show_gizmo_object_rotate = True
-        if mode == 'rotate':
+        if mode == "rotate":
             space.show_gizmo_object_scale = True
         return FINISHED
 
     def getMode(self, space: SpaceView3D):
         if space.show_gizmo_object_translate:
-            return 'translate'
+            return "translate"
         if space.show_gizmo_object_rotate:
-            return 'rotate'
+            return "rotate"
         if space.show_gizmo_object_scale:
-            return 'scale'
-        return 'none'
+            return "scale"
+        return "none"
 
     def clearControls(self, space: SpaceView3D):
         space.show_gizmo_object_translate = False
@@ -177,9 +161,10 @@ class VIEW3D_OT_CycleControlGizmo(Operator):
 
     @classmethod
     def poll(cls, context: Context):
-        return context.area.type in [
-            'VIEW_2D', 'VIEW_3D'
-        ] and context.region.type == 'WINDOW'
+        return (
+            context.area.type in ["VIEW_2D", "VIEW_3D"]
+            and context.region.type == "WINDOW"
+        )
 
 
 class VIEW3D_OT_FloatController(Operator):
@@ -189,35 +174,32 @@ class VIEW3D_OT_FloatController(Operator):
     def execute(self, context: Context):
         settings = get_settings()
         fence = buildSafeArea()
-        span = Vector((
-            fence[1].x - fence[0].x,
-            fence[1].y - fence[0].y
-        ))
+        span = Vector((fence[1].x - fence[0].x, fence[1].y - fence[0].y))
 
         settings.toggle_position[0] = min(
-            max((self.x - fence[0].x + self.offset.x) / (span.x) * 100.0, 0.0),
-            100.0
+            max((self.x - fence[0].x + self.offset.x) / (span.x) * 100.0, 0.0), 100.0
         )
         settings.toggle_position[1] = min(
-            max((self.y - fence[0].y + self.offset.y) / (span.y) * 100.0, 0.0),
-            100.0
+            max((self.y - fence[0].y + self.offset.y) / (span.y) * 100.0, 0.0), 100.0
         )
         return FINISHED
 
     def modal(self, context: Context, event: Event):
         settings = get_settings()
-        if(event.mouse_region_x<0
-           or event.mouse_region_y<0
-           or event.mouse_region_x>context.area.width 
-           or event.mouse_region_y>context.area.height):
+        if (
+            event.mouse_region_x < 0
+            or event.mouse_region_y < 0
+            or event.mouse_region_x > context.area.width
+            or event.mouse_region_y > context.area.height
+        ):
             # mouse out of region area broken in Blender 4.x, exit early
             return FINISHED
-        if event.type == 'MOUSEMOVE' and event.value != 'RELEASE':  # Apply
+        if event.type == "MOUSEMOVE" and event.value != "RELEASE":  # Apply
             context.region.tag_redraw()
             self.x = event.mouse_region_x
             self.y = event.mouse_region_y
             self.execute(context)
-        elif event.value == 'RELEASE':  # Confirm
+        elif event.value == "RELEASE":  # Confirm
             if not self.__hasMoved():
                 settings.toggle_position[0] = self.init_x
                 settings.toggle_position[1] = self.init_y
@@ -237,17 +219,14 @@ class VIEW3D_OT_FloatController(Operator):
         self.has_moved = False
         settings = get_settings()
         fence = buildSafeArea()
-        span = Vector((
-            fence[1].x - fence[0].x,
-            fence[1].y - fence[0].y
-        ))
+        span = Vector((fence[1].x - fence[0].x, fence[1].y - fence[0].y))
         self.init_x = settings.toggle_position[0]
         self.init_y = settings.toggle_position[1]
         self.mouse_init_x = self.x = event.mouse_region_x
         self.mouse_init_y = self.y = event.mouse_region_y
         self.offset = Vector((
             (span.x * self.init_x * 0.01 + fence[0].x) - self.x,
-            (span.y * self.init_y * 0.01 + fence[0].y) - self.y
+            (span.y * self.init_y * 0.01 + fence[0].y) - self.y,
         ))
         self.execute(context)
 

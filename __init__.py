@@ -22,11 +22,10 @@ from .Settings import MenuModeGroup, OverlaySettings
 
 bl_info = {
     "name": "Touch Viewport",
-    "description":
-        "Creates active touch zones over View 2D and 3D areas for"
-        "easier viewport navigation with touch screens and pen tablets.",
+    "description": "Creates active touch zones over View 2D and 3D areas for"
+    "easier viewport navigation with touch screens and pen tablets.",
     "author": "NENDO",
-    "version": (4, 0, 3),
+    "version": (4, 0, 5),
     "blender": (2, 93, 0),
     "location": "View3D > Tools > NENDO",
     "warning": "",
@@ -36,16 +35,15 @@ bl_info = {
 }
 
 
-has_run = False
 def register():
     bpy.utils.register_class(MenuModeGroup)
     bpy.utils.register_class(OverlaySettings)
-    bpy.context.preferences.addons[__package__.split('.')[0]].preferences.load() # type: ignore
+    bpy.context.preferences.addons[__package__.split(".")[0]].preferences.load()  # type: ignore
     lib.register()
 
 
 def unregister():
     lib.unregister()
-    bpy.context.preferences.addons[__package__.split('.')[0]].preferences.save() # type: ignore
+    bpy.context.preferences.addons[__package__.split(".")[0]].preferences.save()  # type: ignore
     bpy.utils.unregister_class(OverlaySettings)
     bpy.utils.unregister_class(MenuModeGroup)

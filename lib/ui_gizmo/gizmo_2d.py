@@ -126,7 +126,6 @@ class GizmoSet:
 
 
 class GizmoSetBoolean(GizmoSet):
-
     def setup(self, group: GizmoGroup, config: dict):
         self.visible = True
         self.config = config
@@ -177,7 +176,7 @@ class GizmoSetBoolean(GizmoSet):
         if self.visible:
             self.visible = (
                 self._GizmoSet__visibilityLock()  # type: ignore
-                and not self._GizmoSet__checkAttributeBind()
+                and not self._GizmoSet__checkAttributeBind()  # type: ignore
             )  # type: ignore
 
         if bind["name"] == "float_toggle":

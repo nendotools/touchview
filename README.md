@@ -185,6 +185,12 @@ Select it and click `Install Add-on`.
 
 <details open><summary><b>v4.0.4</b></summary><br>
 
+- `ADDED` : switch toggle UI position
+
+</details>
+
+<details open><summary><b>v4.0.4</b></summary><br>
+
 - `ADDED` : optional enable floating toggle for touch controls in mixed mode
 - `ADDED` : toggle touch controls button in node editor and image editor headers
 

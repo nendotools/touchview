@@ -2,14 +2,27 @@
 import json
 from os import path
 
-from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
-                       FloatProperty, FloatVectorProperty, IntProperty,
-                       StringProperty)
+from bpy.props import (
+    BoolProperty,
+    CollectionProperty,
+    EnumProperty,
+    FloatProperty,
+    FloatVectorProperty,
+    IntProperty,
+    StringProperty,
+)
 from bpy.types import AddonPreferences, Context, PropertyGroup
 
-from .lib.constants import (double_click_items, edit_modes, gizmo_sets,
-                            menu_defaults, menu_orientation_items,
-                            menu_style_items, pivot_items, position_items)
+from .lib.constants import (
+    double_click_items,
+    edit_modes,
+    gizmo_sets,
+    menu_defaults,
+    menu_orientation_items,
+    menu_style_items,
+    pivot_items,
+    position_items,
+)
 
 
 ##
@@ -58,6 +71,14 @@ class OverlaySettings(AddonPreferences):
     # Viewport Control Options
     ##
     is_enabled: BoolProperty(name="Enable Controls", default=True)
+    toggle_position: EnumProperty(
+        items=[
+            ("LEFT", "Left", "Toggle position on the left"),
+            ("RIGHT", "Right", "Toggle position on the right"),
+        ],
+        name="Toggle Position",
+        default="RIGHT",
+    )
     lazy_mode: BoolProperty(
         name="Lazy Mode",
         default=False,
@@ -282,7 +303,6 @@ class OverlaySettings(AddonPreferences):
             "topology_mode": self.topology_mode,
             "show_float_menu": self.show_float_menu,
             "floating_position": list(self.floating_position),
-            "double_click_mode": self.double_click_mode,
             "active_menu": self.active_menu,
             "gizmo_tabs": self.gizmo_tabs,
             "menu_sets": [m.to_dict() for m in self.menu_sets],
@@ -358,7 +378,7 @@ class OverlaySettings(AddonPreferences):
             with open(filename, "r") as file:
                 data = json.load(file)
                 self.from_dict(data)
-        except:
+        except Exception as _:
             return None
 
     def save(self):
