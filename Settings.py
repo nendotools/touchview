@@ -5,11 +5,31 @@ from os import path
 from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
                        FloatProperty, FloatVectorProperty, IntProperty,
                        StringProperty)
-from bpy.types import AddonPreferences, Context, PropertyGroup
+from bpy.types import (AddonPreferences, Context, IMAGE_HT_header,
+                       NODE_HT_header, PropertyGroup)
 
 from .lib.constants import (double_click_items, edit_modes, gizmo_sets,
                             menu_defaults, menu_orientation_items,
                             menu_style_items, pivot_items, position_items)
+
+
+def NODE_HT_nendo_header(s, c):
+    settings = c.preferences.addons[__package__.split(".")[0]].preferences
+    layout = s.layout
+    layout.separator()
+    layout.prop(settings, "is_enabled", toggle=1)
+
+
+def update_header_toggle_position(c):
+    settings = c.preferences.addons[__package__.split(".")[0]].preferences
+    NODE_HT_header.remove(NODE_HT_nendo_header)
+    IMAGE_HT_header.remove(NODE_HT_nendo_header)
+    if settings.header_toggle_position == "LEFT":
+        NODE_HT_header.prepend(NODE_HT_nendo_header)
+        IMAGE_HT_header.prepend(NODE_HT_nendo_header)
+    else:
+        NODE_HT_header.append(NODE_HT_nendo_header)
+        IMAGE_HT_header.append(NODE_HT_nendo_header)
 
 
 ##
@@ -58,6 +78,16 @@ class OverlaySettings(AddonPreferences):
     # Viewport Control Options
     ##
     is_enabled: BoolProperty(name="Enable Controls", default=True)
+    header_toggle_position: EnumProperty(
+        items=[
+            ("LEFT", "Left", "Toggle position on the left"),
+            ("RIGHT", "Right", "Toggle position on the right"),
+        ],
+        name="Header Toggle Position",
+        default="RIGHT",
+        update=lambda _, c: update_header_toggle_position(c),
+    )
+
     lazy_mode: BoolProperty(
         name="Lazy Mode",
         default=False,
@@ -239,6 +269,7 @@ class OverlaySettings(AddonPreferences):
     def to_dict(self):
         return {
             "is_enabled": self.is_enabled,
+            "header_toggle_position": self.header_toggle_position,
             "lazy_mode": self.lazy_mode,
             "enable_floating_toggle": self.enable_floating_toggle,
             "toggle_position": list(self.toggle_position),
@@ -282,7 +313,6 @@ class OverlaySettings(AddonPreferences):
             "topology_mode": self.topology_mode,
             "show_float_menu": self.show_float_menu,
             "floating_position": list(self.floating_position),
-            "double_click_mode": self.double_click_mode,
             "active_menu": self.active_menu,
             "gizmo_tabs": self.gizmo_tabs,
             "menu_sets": [m.to_dict() for m in self.menu_sets],
@@ -290,6 +320,7 @@ class OverlaySettings(AddonPreferences):
 
     def from_dict(self, data: dict):
         self.is_enabled = data.get("is_enabled", True)
+        self.header_toggle_position = data.get("header_toggle_position", "RIGHT")
         self.lazy_mode = data.get("lazy_mode", False)
         self.enable_floating_toggle = data.get("enable_floating_toggle", False)
         self.toggle_position = data.get("toggle_position", (0.5, 0.5, 0.0))
@@ -358,7 +389,7 @@ class OverlaySettings(AddonPreferences):
             with open(filename, "r") as file:
                 data = json.load(file)
                 self.from_dict(data)
-        except:
+        except Exception as _:
             return None
 
     def save(self):
@@ -393,6 +424,9 @@ class OverlaySettings(AddonPreferences):
         col.label(text="Control Zones")
         col.label(text="Input Mode")
         col.prop(self, "is_enabled", toggle=1)
+        col.label(text="2D Header Toggle Position")
+        tabs = col.column_flow(columns=2, align=True)
+        tabs.prop_tabs_enum(self, "header_toggle_position")
         col.prop(self, "swap_panrotate")
         col.prop(self, "isVisible", text="Show Overlay")
         col.prop(self, "use_multiple_colors")

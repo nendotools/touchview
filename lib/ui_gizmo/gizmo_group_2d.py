@@ -5,17 +5,37 @@ from mathutils import Vector
 
 from ..utils import buildSafeArea, dpi_factor, get_settings
 from .gizmo_2d import GizmoSet, GizmoSetBoolean
-from .gizmo_config import *
+from .gizmo_config import (brushResizeConfig, brushStrengthConfig,
+                           controlGizmoConfig, controllerConfig,
+                           floatingConfig, floatingToggleConfig,
+                           fullscreenToggleConfig, nPanelConfig,
+                           quadviewToggleConfig, redoConfig,
+                           rotLocToggleConfig, snapViewConfig, subdivConfig,
+                           touchViewConfig, undoConfig, unsubdivConfig,
+                           voxelRemeshConfig, voxelSizeConfig,
+                           voxelStepDownConfig, voxelStepUpConfig)
 
-__module__ = __name__.split('.')[0]
+__module__ = __name__.split(".")[0]
 
 
 configs = [
-    undoConfig, redoConfig, touchViewConfig, controlGizmoConfig,
-    snapViewConfig, fullscreenToggleConfig, quadviewToggleConfig,
-    rotLocToggleConfig, nPanelConfig, voxelSizeConfig, voxelRemeshConfig,
-    voxelStepDownConfig, voxelStepUpConfig,
-    subdivConfig, unsubdivConfig, brushResizeConfig, brushStrengthConfig
+    undoConfig,
+    redoConfig,
+    touchViewConfig,
+    controlGizmoConfig,
+    snapViewConfig,
+    fullscreenToggleConfig,
+    quadviewToggleConfig,
+    rotLocToggleConfig,
+    nPanelConfig,
+    voxelSizeConfig,
+    voxelRemeshConfig,
+    voxelStepDownConfig,
+    voxelStepUpConfig,
+    subdivConfig,
+    unsubdivConfig,
+    brushResizeConfig,
+    brushStrengthConfig,
 ]
 
 ###
@@ -41,9 +61,9 @@ configs = [
 class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
     bl_idname = "GIZMO_GT_touch_tools"
     bl_label = "Fast access tools for touch viewport"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'WINDOW'
-    bl_options = {'PERSISTENT', 'SCALE'}
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "WINDOW"
+    bl_options = {"PERSISTENT", "SCALE"}
 
     # set up gizmo collection
     def setup(self, context: Context):
@@ -52,7 +72,7 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         settings = get_settings()
         self.spacing = settings.menu_spacing
         for conf in configs:
-            if conf['type'] == "boolean":
+            if conf["type"] == "boolean":
                 gizmo = GizmoSetBoolean()
                 gizmo.setup(self, conf)
             else:  # assume Type = Default
@@ -87,9 +107,9 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
             if gizmo.visible:
                 visible_gizmos.append(gizmo)
 
-        if settings.menu_style == 'float.radial':
+        if settings.menu_style == "float.radial":
             self.__menuRadial(visible_gizmos)
-        if settings.menu_style == 'fixed.bar':
+        if settings.menu_style == "fixed.bar":
             self.__menuBar(visible_gizmos)
 
     def __menuBar(self, visible_gizmos: list[GizmoSet]):
@@ -98,38 +118,47 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         scalar = 22 * dpi_factor()
         count = len(visible_gizmos)
         safe_area = buildSafeArea()
-        origin = Vector(((safe_area[0].x + safe_area[1].x) / 2,
-                            (safe_area[0].y + safe_area[1].y) / 2, 0.0))
+        origin = Vector((
+            (safe_area[0].x + safe_area[1].x) / 2,
+            (safe_area[0].y + safe_area[1].y) / 2,
+            0.0,
+        ))
 
-        if settings.gizmo_position == 'TOP':
+        if settings.gizmo_position == "TOP":
             origin.y = safe_area[1].y
-        elif settings.gizmo_position == 'BOTTOM':
+        elif settings.gizmo_position == "BOTTOM":
             origin.y = safe_area[0].y
         else:
-            if settings.gizmo_position == 'LEFT':
+            if settings.gizmo_position == "LEFT":
                 origin.x = safe_area[0].x
-            elif settings.gizmo_position == 'RIGHT':
+            elif settings.gizmo_position == "RIGHT":
                 origin.x = safe_area[1].x
 
-        gizmo_spacing = (settings.menu_spacing + scalar)
-        if ((settings.gizmo_position in ['TOP', 'BOTTOM']
-            and settings.menu_style == 'fixed.bar')):
+        gizmo_spacing = settings.menu_spacing + scalar
+        if (
+            settings.gizmo_position in ["TOP", "BOTTOM"]
+            and settings.menu_style == "fixed.bar"
+        ):
             start = origin.x - ((count - 1) * gizmo_spacing) / 2
             for i, gizmo in enumerate(visible_gizmos):
                 self.__move_gizmo(
-                    gizmo, Vector((start + (i * gizmo_spacing), origin.y, 0.0)))
+                    gizmo, Vector((start + (i * gizmo_spacing), origin.y, 0.0))
+                )
         else:
             start = origin.y + (count * gizmo_spacing) / 2
             for i, gizmo in enumerate(visible_gizmos):
                 self.__move_gizmo(
-                    gizmo, Vector((origin.x, start - (i * gizmo_spacing), 0.0)))
+                    gizmo, Vector((origin.x, start - (i * gizmo_spacing), 0.0))
+                )
 
     def __menuRadial(self, visible_gizmos: list[GizmoSet]):
         settings = get_settings()
         # calculate minimum radius to prevent overlapping buttons
         gui_scale = dpi_factor() * 3
-        radial_size = (gui_scale + settings.menu_spacing)
-        spacing = radial_size + (gui_scale * settings.gizmo_scale) + settings.gizmo_padding
+        radial_size = gui_scale + settings.menu_spacing
+        spacing = (
+            radial_size + (gui_scale * settings.gizmo_scale) + settings.gizmo_padding
+        )
 
         count = len(visible_gizmos)
         # reposition Gizmos to origin
@@ -144,11 +173,13 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
             else:
                 self.__calcMove(gizmo, i, count, spacing)
 
-    def __calcMove(self, gizmo: GizmoSet, step: int, size: int,
-                   spacing: float):
+    def __calcMove(self, gizmo: GizmoSet, step: int, size: int, spacing: float):
         distance = step / size
-        offset = Vector(
-            (sin(radians(distance * 360)), cos(radians(distance * 360)), 0.0))
+        offset = Vector((
+            sin(radians(distance * 360)),
+            cos(radians(distance * 360)),
+            0.0,
+        ))
         self.__move_gizmo(gizmo, self.origin + offset * spacing)
 
     def __updateOrigin(self):
@@ -156,41 +187,51 @@ class GIZMO_GT_ViewportGizmoGroup(GizmoGroup):
         settings = get_settings()
 
         # distance across viewport between menus
-        span = Vector(
-            (safe_area[1].x - safe_area[0].x, safe_area[1].y - safe_area[0].y))
+        span = Vector((
+            safe_area[1].x - safe_area[0].x,
+            safe_area[1].y - safe_area[0].y,
+        ))
 
         # apply position ratio to safe area
-        self.origin = Vector(
-            (safe_area[0].x + span.x * settings.menu_position[0] * 0.01,
-             safe_area[0].y + span.y * settings.menu_position[1] * 0.01, 0.0))
+        self.origin = Vector((
+            safe_area[0].x + span.x * settings.menu_position[0] * 0.01,
+            safe_area[0].y + span.y * settings.menu_position[1] * 0.01,
+            0.0,
+        ))
 
     def __updateActionOrigin(self):
         safe_area = buildSafeArea()
         settings = get_settings()
 
         # distance across viewport between menus
-        span = Vector(
-            (safe_area[1].x - safe_area[0].x, safe_area[1].y - safe_area[0].y))
+        span = Vector((
+            safe_area[1].x - safe_area[0].x,
+            safe_area[1].y - safe_area[0].y,
+        ))
 
         # apply position ratio to safe area
-        self.action_origin = Vector(
-            (safe_area[0].x + span.x * settings.floating_position[0] * 0.01,
-             safe_area[0].y + span.y * settings.floating_position[1] * 0.01,
-             0.0))
+        self.action_origin = Vector((
+            safe_area[0].x + span.x * settings.floating_position[0] * 0.01,
+            safe_area[0].y + span.y * settings.floating_position[1] * 0.01,
+            0.0,
+        ))
 
     def __updateToggleOrigin(self):
         safe_area = buildSafeArea()
         settings = get_settings()
 
         # distance across viewport between menus
-        span = Vector(
-            (safe_area[1].x - safe_area[0].x, safe_area[1].y - safe_area[0].y))
+        span = Vector((
+            safe_area[1].x - safe_area[0].x,
+            safe_area[1].y - safe_area[0].y,
+        ))
 
         # apply position ratio to safe area
-        self.toggle_origin = Vector(
-            (safe_area[0].x + span.x * settings.toggle_position[0] * 0.01,
-             safe_area[0].y + span.y * settings.toggle_position[1] * 0.01,
-             0.0))
+        self.toggle_origin = Vector((
+            safe_area[0].x + span.x * settings.toggle_position[0] * 0.01,
+            safe_area[0].y + span.y * settings.toggle_position[1] * 0.01,
+            0.0,
+        ))
 
     def __move_gizmo(self, gizmo: GizmoSet, position: Vector):
         gizmo.move(position)

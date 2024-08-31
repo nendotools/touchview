@@ -12,57 +12,42 @@ from ..constants import pivot_icon_items
 # Simple 2D Gizmo
 controllerConfig = {
     "type": "default",
-    "binding": {
-        "location": "",
-        "name": "menu_controller"
-    },
+    "binding": {"location": "", "name": "menu_controller"},
     "command": "nendo.move_float_menu",
     "icon": "BLANK1",
-    "use_grab_cursor": True
+    "use_grab_cursor": True,
 }
 
 floatingConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "float_menu"
-    },
+    "binding": {"location": "prefs", "name": "float_menu"},
     "command": "nendo.move_action_menu",
     "icon": "SETTINGS",
-    "use_grab_cursor": True
+    "use_grab_cursor": True,
 }
 
 floatingToggleConfig = {
     "type": "boolean",
-    "binding": {
-        "location": "",
-        "name": "float_toggle"
-    },
+    "binding": {"location": "", "name": "float_toggle"},
     "command": "nendo.move_toggle_button",
     "onIcon": "OUTLINER_DATA_CAMERA",
     "offIcon": "GREASEPENCIL",
-    "use_grab_cursor": True
+    "use_grab_cursor": True,
 }
 
 undoConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "undoredo"
-    },
+    "binding": {"location": "prefs", "name": "undoredo"},
     "has_dependent": True,
     "command": "ed.undo",
-    "icon": "LOOP_BACK"
+    "icon": "LOOP_BACK",
 }
 
 redoConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "undoredo"
-    },
+    "binding": {"location": "prefs", "name": "undoredo"},
     "command": "ed.redo",
-    "icon": "LOOP_FORWARDS"
+    "icon": "LOOP_FORWARDS",
 }
 
 touchViewConfig = {
@@ -72,7 +57,7 @@ touchViewConfig = {
         "name": "is_enabled",
     },
     "command": "nendo.toggle_touch",
-    "icon": "VIEW_PAN"
+    "icon": "VIEW_PAN",
 }
 
 controlGizmoConfig = {
@@ -82,27 +67,21 @@ controlGizmoConfig = {
         "name": "control_gizmo",
     },
     "command": "nendo.cycle_control_gizmo",
-    "icon": "ORIENTATION_LOCAL"
+    "icon": "ORIENTATION_LOCAL",
 }
 
 snapViewConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "snap_view"
-    },
+    "binding": {"location": "prefs", "name": "snap_view"},
     "command": "nendo.viewport_recenter",
-    "icon": "CURSOR"
+    "icon": "CURSOR",
 }
 
 nPanelConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "n_panel"
-    },
+    "binding": {"location": "prefs", "name": "n_panel"},
     "command": "nendo.toggle_n_panel",
-    "icon": "EVENT_N"
+    "icon": "EVENT_N",
 }
 
 voxelSizeConfig = {
@@ -113,11 +92,11 @@ voxelSizeConfig = {
         "attribute": {
             "path": "active_object.modifiers.type",
             "value": "MULTIRES",
-            "state": False
-        }
+            "state": False,
+        },
     },
     "command": "object.voxel_size_edit",
-    "icon": "MESH_GRID"
+    "icon": "MESH_GRID",
 }
 
 voxelRemeshConfig = {
@@ -128,11 +107,11 @@ voxelRemeshConfig = {
         "attribute": {
             "path": "active_object.modifiers.type",
             "value": "MULTIRES",
-            "state": False
-        }
+            "state": False,
+        },
     },
     "command": "object.voxel_remesh",
-    "icon": "MOD_UVPROJECT"
+    "icon": "MOD_UVPROJECT",
 }
 
 voxelStepDownConfig = {
@@ -143,11 +122,11 @@ voxelStepDownConfig = {
         "attribute": {
             "path": "active_object.modifiers.type",
             "value": "MULTIRES",
-            "state": False
-        }
+            "state": False,
+        },
     },
     "command": "nendo.density_down",
-    "icon": "TRIA_DOWN"
+    "icon": "TRIA_DOWN",
 }
 
 voxelStepUpConfig = {
@@ -158,11 +137,11 @@ voxelStepUpConfig = {
         "attribute": {
             "path": "active_object.modifiers.type",
             "value": "MULTIRES",
-            "state": False
-        }
+            "state": False,
+        },
     },
     "command": "nendo.density_up",
-    "icon": "TRIA_UP"
+    "icon": "TRIA_UP",
 }
 
 subdivConfig = {
@@ -173,12 +152,12 @@ subdivConfig = {
         "attribute": {
             "path": "active_object.modifiers.type",
             "value": "MULTIRES",
-            "state": True
-        }
+            "state": True,
+        },
     },
     "has_dependent": True,
     "command": "nendo.increment_multires",
-    "icon": "TRIA_UP"
+    "icon": "TRIA_UP",
 }
 
 unsubdivConfig = {
@@ -189,31 +168,25 @@ unsubdivConfig = {
         "attribute": {
             "path": "active_object.modifiers.type",
             "value": "MULTIRES",
-            "state": True
-        }
+            "state": True,
+        },
     },
     "command": "nendo.decrement_multires",
-    "icon": "TRIA_DOWN"
+    "icon": "TRIA_DOWN",
 }
 
 brushResizeConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "brush_dynamics"
-    },
+    "binding": {"location": "prefs", "name": "brush_dynamics"},
     "command": "nendo.brush_resize",
-    "icon": "ANTIALIASED"
+    "icon": "ANTIALIASED",
 }
 
 brushStrengthConfig = {
     "type": "default",
-    "binding": {
-        "location": "prefs",
-        "name": "brush_dynamics"
-    },
+    "binding": {"location": "prefs", "name": "brush_dynamics"},
     "command": "nendo.brush_strength",
-    "icon": "SMOOTHCURVE"
+    "icon": "SMOOTHCURVE",
 }
 
 # Boolean 2D Gizmo
@@ -221,33 +194,27 @@ fullscreenToggleConfig = {
     "type": "boolean",
     "binding": {
         "location": "screen",
-        "name": "show_fullscreen"
+        "name": "show_fullscreen",
     },  # property location, watch-boolean
     "command": "screen.screen_full_area",
     "onIcon": "FULLSCREEN_EXIT",  # on-state
-    "offIcon": "FULLSCREEN_ENTER"  # off-state
+    "offIcon": "FULLSCREEN_ENTER",  # off-state
 }
 
 quadviewToggleConfig = {
     "type": "boolean",
-    "binding": {
-        "location": "space_data",
-        "name": "region_quadviews"
-    },
+    "binding": {"location": "space_data", "name": "region_quadviews"},
     "command": "screen.region_quadview",
     "onIcon": "IMGDISPLAY",
-    "offIcon": "MESH_PLANE"
+    "offIcon": "MESH_PLANE",
 }
 
 rotLocToggleConfig = {
     "type": "boolean",
-    "binding": {
-        "location": "region_data",
-        "name": "lock_rotation"
-    },
+    "binding": {"location": "region_data", "name": "lock_rotation"},
     "command": "nendo.viewport_lock",
     "onIcon": "LOCKED",
-    "offIcon": "UNLOCKED"
+    "offIcon": "UNLOCKED",
 }
 
 gizmo_colors = {
@@ -255,26 +222,26 @@ gizmo_colors = {
         "color": [0.0, 0.0, 0.0],
         "color_highlight": [0.0, 0.0, 0.0],
         "alpha": 0.3,
-        "alpha_highlight": 0.3
+        "alpha_highlight": 0.3,
     },
     "active": {
         "color": [0.0, 0.0, 0.0],
         "alpha": 0.5,
         "color_highlight": [0.5, 0.5, 0.5],
-        "alpha_highlight": 0.5
+        "alpha_highlight": 0.5,
     },
     "error": {
         "color": [0.3, 0.0, 0.0],
         "alpha": 0.15,
         "color_highlight": [1.0, 0.2, 0.2],
-        "alpha_highlight": 0.5
+        "alpha_highlight": 0.5,
     },
     "warn": {
         "color": [0.35, 0.3, 0.14],
         "alpha": 0.15,
         "color_highlight": [0.8, 0.7, 0.3],
-        "alpha_highlight": 0.3
-    }
+        "alpha_highlight": 0.3,
+    },
 }
 
 toggle_colors = {
@@ -282,14 +249,14 @@ toggle_colors = {
         "color": [0.1, 0.1, 0.2],
         "alpha": 0.5,
         "color_highlight": [0.15, 0.15, 0.3],
-        "alpha_highlight": 0.7
+        "alpha_highlight": 0.7,
     },
     "inactive": {
         "color": [0.0, 0.0, 0.0],
         "alpha": 0.5,
         "color_highlight": [0.05, 0.05, 0.05],
-        "alpha_highlight": 0.7
-    }
+        "alpha_highlight": 0.7,
+    },
 }
 
 # Enum 2D Gizmo
@@ -297,10 +264,7 @@ toggle_colors = {
 # not implemented yet
 pivotModeConfig = {
     "type": "enum",
-    "binding": {
-        "location": "prefs",
-        "name": "pivot_mode"
-    },
+    "binding": {"location": "prefs", "name": "pivot_mode"},
     "command": "",
-    "icons": pivot_icon_items
+    "icons": pivot_icon_items,
 }

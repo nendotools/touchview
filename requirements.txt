@@ -1,1 +1,2 @@
+ruff
 fake-bpy-module-latest

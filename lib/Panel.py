@@ -1,7 +1,4 @@
 # type: ignore
-# NOTE: generally, we don't want to ignore all type-enforcement in a file,
-# but the current implementation of the AnyType[T] used as input for prop()
-# doesn't get enforced as the native: any[T]
 import bpy
 from bpy.types import Context, Menu, Panel
 
@@ -32,8 +29,8 @@ class IMAGE_PT_NendoViewport(IMAGE_PT_NendoPanel, Panel):
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
         box.prop(settings, "is_enabled", toggle=1)
-        if settings.input_mode == "full":
-            box.prop(settings, "enable_floating_toggle", toggle=1)
+        box.label(text="2D Header Toggle Position")
+        box.row().prop(settings, "header_toggle_position", expand=True)
 
 
 class NODE_PT_NendoPanel:
@@ -60,6 +57,8 @@ class NODE_PT_NendoViewport(NODE_PT_NendoPanel, Panel):
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
         box.prop(settings, "is_enabled", toggle=1)
+        box.label(text="2D Header Toggle Position")
+        box.row().prop(settings, "header_toggle_position", expand=True)
 
 
 class VIEW3D_PT_NendoPanel:
@@ -96,6 +95,8 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
         r.prop(settings, "input_mode", expand=True)
         box.prop(settings, "lazy_mode", toggle=1)
         box.prop(settings, "is_enabled", toggle=1)
+        box.label(text="2D Header Toggle Position")
+        box.row().prop(settings, "header_toggle_position", expand=True)
 
         col.prop(settings, "swap_panrotate")
         col.prop(settings, "isVisible", text="Show Overlay")
@@ -220,7 +221,7 @@ class PIE_MT_Floating_Menu(Menu):
             for prop in names:
                 a = getattr(a, prop)
             a.__repr__()
-        except:
+        except Exception as _:
             return False
         return True
 
@@ -252,13 +253,6 @@ class VIEW3D_PT_Gizmo_Panel(bpy.types.Panel):
             col.prop(settings, "show_" + toggle)
 
 
-def NODE_HT_nendo_header(self, context):
-    settings = get_settings()
-    layout = self.layout
-    layout.separator()
-    layout.prop(settings, "is_enabled", toggle=1)
-
-
 __classes__ = (
     PIE_MT_Floating_Menu,
     VIEW3D_PT_NendoViewport,
@@ -279,14 +273,10 @@ def register():
 
     for cls in __classes__:
         register_class(cls)
-    bpy.types.NODE_HT_header.append(NODE_HT_nendo_header)
-    bpy.types.IMAGE_HT_header.append(NODE_HT_nendo_header)
 
 
 def unregister():
     from bpy.utils import unregister_class
 
-    bpy.types.NODE_HT_header.remove(NODE_HT_nendo_header)
-    bpy.types.IMAGE_HT_header.remove(NODE_HT_nendo_header)
     for cls in reversed(__classes__):
         unregister_class(cls)
