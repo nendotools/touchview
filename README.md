@@ -183,9 +183,9 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
-<details open><summary><b>v4.0.4</b></summary><br>
+<details open><summary><b>v4.0.5</b></summary><br>
 
-- `ADDED` : switch toggle UI position
+- `ADDED` : switch 2D header toggle UI position
 
 </details>
 
