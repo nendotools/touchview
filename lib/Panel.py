@@ -28,6 +28,7 @@ class IMAGE_PT_NendoViewport(IMAGE_PT_NendoPanel, Panel):
             box.label(text="mouse/touch only input", icon="VIEW_PAN")
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
+        col.prop(self, "header_toggle_position", text="2D Header Toggle Position")
         box.prop(settings, "is_enabled", toggle=1)
         if settings.input_mode == "full":
             box.prop(settings, "enable_floating_toggle", toggle=1)
@@ -249,13 +250,6 @@ class VIEW3D_PT_Gizmo_Panel(bpy.types.Panel):
             col.prop(settings, "show_" + toggle)
 
 
-def NODE_HT_nendo_header(self, context):
-    settings = get_settings()
-    layout = self.layout
-    layout.separator()
-    layout.prop(settings, "is_enabled", toggle=1)
-
-
 __classes__ = (
     PIE_MT_Floating_Menu,
     VIEW3D_PT_NendoViewport,
@@ -276,14 +270,10 @@ def register():
 
     for cls in __classes__:
         register_class(cls)
-    bpy.types.NODE_HT_header.append(NODE_HT_nendo_header)
-    bpy.types.IMAGE_HT_header.append(NODE_HT_nendo_header)
 
 
 def unregister():
     from bpy.utils import unregister_class
 
-    bpy.types.NODE_HT_header.remove(NODE_HT_nendo_header)
-    bpy.types.IMAGE_HT_header.remove(NODE_HT_nendo_header)
     for cls in reversed(__classes__):
         unregister_class(cls)
