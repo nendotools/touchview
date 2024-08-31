@@ -2,7 +2,6 @@
 import json
 from os import path
 
-from bpy.context import preferences
 from bpy.props import (
     BoolProperty,
     CollectionProperty,
@@ -12,7 +11,13 @@ from bpy.props import (
     IntProperty,
     StringProperty,
 )
-from bpy.types import AddonPreferences, Context, IMAGE_HT_header, NODE_HT_header, PropertyGroup
+from bpy.types import (
+    AddonPreferences,
+    Context,
+    IMAGE_HT_header,
+    NODE_HT_header,
+    PropertyGroup,
+)
 
 from .lib.constants import (
     double_click_items,
@@ -24,6 +29,25 @@ from .lib.constants import (
     pivot_items,
     position_items,
 )
+
+
+def NODE_HT_nendo_header(s, c):
+    settings = c.preferences.addons[__package__.split(".")[0]].preferences
+    layout = s.layout
+    layout.separator()
+    layout.prop(settings, "is_enabled", toggle=1)
+
+
+def update_header_toggle_position(c):
+    settings = c.preferences.addons[__package__.split(".")[0]].preferences
+    NODE_HT_header.remove(NODE_HT_nendo_header)
+    IMAGE_HT_header.remove(NODE_HT_nendo_header)
+    if settings.header_toggle_position == "LEFT":
+        NODE_HT_header.prepend(NODE_HT_nendo_header)
+        IMAGE_HT_header.prepend(NODE_HT_nendo_header)
+    else:
+        NODE_HT_header.append(NODE_HT_nendo_header)
+        IMAGE_HT_header.append(NODE_HT_nendo_header)
 
 
 ##
@@ -79,31 +103,17 @@ class OverlaySettings(AddonPreferences):
         ],
         name="Header Toggle Position",
         default="RIGHT",
-        update=lambda self, _: self.update_header_toggle_position(self),
+        update=lambda _, c: update_header_toggle_position(c),
     )
-
-    def NODE_HT_nendo_header(self):
-        settings = preferences.addons[__package__.split(".")[0]].preferences
-        layout = self.layout
-        layout.separator()
-        layout.prop(settings, "is_enabled", toggle=1)
-
-    def update_header_toggle_position(self):
-        NODE_HT_header.remove(self.NODE_HT_nendo_header)
-        IMAGE_HT_header.remove(self.NODE_HT_nendo_header)
-        if self.toggle_position == "LEFT":
-            NODE_HT_header.append(self.NODE_HT_nendo_header)
-            IMAGE_HT_header.append(self.NODE_HT_nendo_header)
-        else:
-            NODE_HT_header.prepend(self.NODE_HT_nendo_header)
-            IMAGE_HT_header.prepend(self.NODE_HT_nendo_header)
 
     lazy_mode: BoolProperty(
         name="Lazy Mode",
         default=False,
         description="always control camera when not touching selected object",
     )
-    toggle_position: FloatVectorProperty(name="Toggle Position", subtype="XYZ", default=(0.5, 0.5, 0.0))
+    toggle_position: FloatVectorProperty(
+        name="Toggle Position", subtype="XYZ", default=(0.5, 0.5, 0.0)
+    )
     toggle_color: FloatVectorProperty(
         name="Toggle Button Color",
         default=(0.1, 0.1, 0.2, 0.5),
@@ -181,11 +191,21 @@ class OverlaySettings(AddonPreferences):
     ##
     show_menu: BoolProperty(name="Toggle Menu Display", default=True)
     show_gizmos: BoolProperty(name="Toggle Gizmos on Menu", default=True)
-    menu_style: EnumProperty(name="Menu Style", default="float.radial", items=menu_style_items)
-    menu_orientation: EnumProperty(name="Menu Orientation", default="HORIZONTAL", items=menu_orientation_items)
-    menu_spacing: FloatProperty(name="Menu Size", default=20.0, precision=2, step=1, min=0.0, max=200.0)
-    gizmo_padding: FloatProperty(name="Gizmo Padding", default=10, precision=1, step=1, min=1, max=200)
-    gizmo_scale: FloatProperty(name="Gizmo Scale", default=4.0, precision=2, step=1, min=1, max=10.0)
+    menu_style: EnumProperty(
+        name="Menu Style", default="float.radial", items=menu_style_items
+    )
+    menu_orientation: EnumProperty(
+        name="Menu Orientation", default="HORIZONTAL", items=menu_orientation_items
+    )
+    menu_spacing: FloatProperty(
+        name="Menu Size", default=20.0, precision=2, step=1, min=0.0, max=200.0
+    )
+    gizmo_padding: FloatProperty(
+        name="Gizmo Padding", default=10, precision=1, step=1, min=1, max=200
+    )
+    gizmo_scale: FloatProperty(
+        name="Gizmo Scale", default=4.0, precision=2, step=1, min=1, max=10.0
+    )
     menu_position: FloatVectorProperty(
         name="Menu Position",
         default=(95.00, 5.00),
@@ -208,9 +228,13 @@ class OverlaySettings(AddonPreferences):
     show_multires: BoolProperty(name="Multires", default=True)
     show_voxel_remesh: BoolProperty(name="Voxel Remesh", default=True)
     show_brush_dynamics: BoolProperty(name="Brush Dynamics", default=True)
-    gizmo_position: EnumProperty(items=position_items, name="Gizmo Position", default="RIGHT")
+    gizmo_position: EnumProperty(
+        items=position_items, name="Gizmo Position", default="RIGHT"
+    )
     subdivision_limit: IntProperty(name="Subdivision Limit", default=4, min=1, max=7)
-    pivot_mode: EnumProperty(name="Sculpt Pivot Mode", items=pivot_items, default="SURFACE")
+    pivot_mode: EnumProperty(
+        name="Sculpt Pivot Mode", items=pivot_items, default="SURFACE"
+    )
 
     ##
     # Topology Control
@@ -322,16 +346,22 @@ class OverlaySettings(AddonPreferences):
         self.isVisible = data.get("is_visible", False)
         self.input_mode = data.get("input_mode", "full")
         self.enable_double_click = data.get("enable_double_click", True)
-        self.double_click_mode = data.get("double_click_mode", "screen.screen_full_area")
+        self.double_click_mode = data.get(
+            "double_click_mode", "screen.screen_full_area"
+        )
         self.enable_right_click = data.get("enable_right_click", True)
-        self.right_click_mode = data.get("right_click_mode", "wm.window_fullscreen_toggle")
+        self.right_click_mode = data.get(
+            "right_click_mode", "wm.window_fullscreen_toggle"
+        )
         self.right_click_source = data.get("right_click_source", "mouse")
         self.swap_panrotate = data.get("swap_panrotate", False)
         self.width = data.get("width", 40.0)
         self.radius = data.get("radius", 35.0)
         self.use_multiple_colors = data.get("use_multiple_colors", False)
         self.overlay_main_color = data.get("overlay_main_color", (1.0, 1.0, 1.0, 0.01))
-        self.overlay_secondary_color = data.get("overlay_secondary_color", (1.0, 1.0, 1.0, 0.01))
+        self.overlay_secondary_color = data.get(
+            "overlay_secondary_color", (1.0, 1.0, 1.0, 0.01)
+        )
         self.show_menu = data.get("show_menu", True)
         self.show_gizmos = data.get("show_gizmos", True)
         self.menu_style = data.get("menu_style", "float.radial")
@@ -358,10 +388,14 @@ class OverlaySettings(AddonPreferences):
         self.topology_mode = data.get("topology_mode", "MANUAL")
         self.show_float_menu = data.get("show_float_menu", False)
         self.floating_position = data.get("floating_position", (95.00, 5.00))
-        self.double_click_mode = data.get("double_click_mode", "wm.window_fullscreen_toggle")
+        self.double_click_mode = data.get(
+            "double_click_mode", "wm.window_fullscreen_toggle"
+        )
         self.active_menu = data.get("active_menu", "VIEW3D")
         self.gizmo_tabs = data.get("gizmo_tabs", "MENU")
-        self.menu_sets = [MenuModeGroup().from_dict(m) for m in data.get("menu_sets", [])]
+        self.menu_sets = [
+            MenuModeGroup().from_dict(m) for m in data.get("menu_sets", [])
+        ]
 
     def load(self):
         filename = path.abspath(path.dirname(__file__) + "/settings.json")
@@ -408,7 +442,9 @@ class OverlaySettings(AddonPreferences):
         col.label(text="Control Zones")
         col.label(text="Input Mode")
         col.prop(self, "is_enabled", toggle=1)
-        col.prop(self, "header_toggle_position", text="2D Header Toggle Position")
+        col.label(text="2D Header Toggle Position")
+        tabs = col.column_flow(columns=2, align=True)
+        tabs.prop_tabs_enum(self, "header_toggle_position")
         col.prop(self, "swap_panrotate")
         col.prop(self, "isVisible", text="Show Overlay")
         col.prop(self, "use_multiple_colors")
@@ -469,7 +505,9 @@ class OverlaySettings(AddonPreferences):
             if not self.show_float_menu:
                 main.operator("view3d.toggle_floating_menu", text="Show Action Menu")
             else:
-                main.operator("view3d.toggle_floating_menu", text="Hide Action Menu", depress=True)
+                main.operator(
+                    "view3d.toggle_floating_menu", text="Hide Action Menu", depress=True
+                )
                 box = main.box()
                 box.active = self.show_float_menu
                 main = box.column()

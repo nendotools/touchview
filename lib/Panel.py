@@ -28,10 +28,9 @@ class IMAGE_PT_NendoViewport(IMAGE_PT_NendoPanel, Panel):
             box.label(text="mouse/touch only input", icon="VIEW_PAN")
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
-        col.prop(self, "header_toggle_position", text="2D Header Toggle Position")
         box.prop(settings, "is_enabled", toggle=1)
-        if settings.input_mode == "full":
-            box.prop(settings, "enable_floating_toggle", toggle=1)
+        box.label(text="2D Header Toggle Position")
+        box.row().prop(settings, "header_toggle_position", expand=True)
 
 
 class NODE_PT_NendoPanel:
@@ -58,6 +57,8 @@ class NODE_PT_NendoViewport(NODE_PT_NendoPanel, Panel):
         r = box.row()
         r.prop(settings, "input_mode", expand=True)
         box.prop(settings, "is_enabled", toggle=1)
+        box.label(text="2D Header Toggle Position")
+        box.row().prop(settings, "header_toggle_position", expand=True)
 
 
 class VIEW3D_PT_NendoPanel:
@@ -94,6 +95,8 @@ class VIEW3D_PT_ControlZones(VIEW3D_PT_NendoPanel, Panel):
         r.prop(settings, "input_mode", expand=True)
         box.prop(settings, "lazy_mode", toggle=1)
         box.prop(settings, "is_enabled", toggle=1)
+        box.label(text="2D Header Toggle Position")
+        box.row().prop(settings, "header_toggle_position", expand=True)
 
         col.prop(settings, "swap_panrotate")
         col.prop(settings, "isVisible", text="Show Overlay")
