@@ -5,28 +5,15 @@ from mathutils import Vector
 
 from ..utils import buildSafeArea, dpi_factor, get_settings
 from .gizmo_2d import GizmoSet, GizmoSetBoolean
-from .gizmo_config import (
-    undoConfig,
-    redoConfig,
-    touchViewConfig,
-    controlGizmoConfig,
-    snapViewConfig,
-    fullscreenToggleConfig,
-    quadviewToggleConfig,
-    rotLocToggleConfig,
-    nPanelConfig,
-    voxelSizeConfig,
-    voxelRemeshConfig,
-    voxelStepDownConfig,
-    voxelStepUpConfig,
-    subdivConfig,
-    unsubdivConfig,
-    brushResizeConfig,
-    brushStrengthConfig,
-    controllerConfig,
-    floatingConfig,
-    floatingToggleConfig,
-)
+from .gizmo_config import (brushResizeConfig, brushStrengthConfig,
+                           controlGizmoConfig, controllerConfig,
+                           floatingConfig, floatingToggleConfig,
+                           fullscreenToggleConfig, nPanelConfig,
+                           quadviewToggleConfig, redoConfig,
+                           rotLocToggleConfig, snapViewConfig, subdivConfig,
+                           touchViewConfig, undoConfig, unsubdivConfig,
+                           voxelRemeshConfig, voxelSizeConfig,
+                           voxelStepDownConfig, voxelStepUpConfig)
 
 __module__ = __name__.split(".")[0]
 

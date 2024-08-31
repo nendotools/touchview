@@ -7,16 +7,8 @@ from bpy.types import Context, Event, Operator
 from bpy_extras import view3d_utils
 from mathutils import Vector
 
-from ..constants import (
-    FINISHED,
-    LMOUSE,
-    PASSTHROUGH,
-    PEN,
-    PRESS,
-    RMOUSE,
-    brush_modes,
-    input_mode_items,
-)
+from ..constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE,
+                         brush_modes, input_mode_items)
 from ..utils import get_settings
 
 

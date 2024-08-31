@@ -2,33 +2,15 @@
 import json
 from os import path
 
-from bpy.props import (
-    BoolProperty,
-    CollectionProperty,
-    EnumProperty,
-    FloatProperty,
-    FloatVectorProperty,
-    IntProperty,
-    StringProperty,
-)
-from bpy.types import (
-    AddonPreferences,
-    Context,
-    IMAGE_HT_header,
-    NODE_HT_header,
-    PropertyGroup,
-)
+from bpy.props import (BoolProperty, CollectionProperty, EnumProperty,
+                       FloatProperty, FloatVectorProperty, IntProperty,
+                       StringProperty)
+from bpy.types import (AddonPreferences, Context, IMAGE_HT_header,
+                       NODE_HT_header, PropertyGroup)
 
-from .lib.constants import (
-    double_click_items,
-    edit_modes,
-    gizmo_sets,
-    menu_defaults,
-    menu_orientation_items,
-    menu_style_items,
-    pivot_items,
-    position_items,
-)
+from .lib.constants import (double_click_items, edit_modes, gizmo_sets,
+                            menu_defaults, menu_orientation_items,
+                            menu_style_items, pivot_items, position_items)
 
 
 def NODE_HT_nendo_header(s, c):
