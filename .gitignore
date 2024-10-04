@@ -1,4 +1,4 @@
-settings.json
+preferences.json
 bin
 deploy.sh
 __pycache__/

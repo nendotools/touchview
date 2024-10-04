@@ -33,7 +33,7 @@ The viewport has be updated to use 3 interactive "hot regions" to control the ca
 
 If you are a pen tablet user; the pen will still draw, while your finger can be used to control the camera.
 
-If your tablet doesn't support touch; you can set the middle mouse button to activate the control regions in the add-on settings.
+If your tablet doesn't support touch; you can set the middle mouse button to activate the control regions in the add-on prefs.
 
 - Pan by dragging for the middle of the viewport
 - Zoom by dragging along the left or right edge of the viewport
@@ -123,7 +123,7 @@ This feature allows you to quickly access the UI for brush resizing and strength
 
 <img src="/docs/sample_menu.png" width="50%">
 
-This button allows you to assign up to 8 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the settings menu.
+This button allows you to assign up to 8 commands, unique to each edit mode (object, sculpt, texture paint, weight paint, etc) and reposition it where ever you want, to best fit your workspace. If you don't need it, simply disable it in the prefs menu.
 
 # Feature Roadmap
 
@@ -151,15 +151,15 @@ It will output the files to include and generate a new ZIP file:
 ```
 $ ./bundle.sh
   adding: touchview/ (stored 0%)
-  adding: touchview/lib/ (stored 0%)
-  adding: touchview/lib/Gizmos.py (deflated 77%)
-  adding: touchview/lib/items.py (deflated 68%)
-  adding: touchview/lib/Operators.py (deflated 80%)
-  adding: touchview/lib/Overlay.py (deflated 73%)
-  adding: touchview/lib/Panel.py (deflated 69%)
-  adding: touchview/lib/touch_input.py (deflated 69%)
-  adding: touchview/lib/__init__.py (deflated 70%)
-  adding: touchview/Settings.py (deflated 76%)
+  adding: touchview/source/ (stored 0%)
+  adding: touchview/source/gizmos.py (deflated 77%)
+  adding: touchview/source/items.py (deflated 68%)
+  adding: touchview/source/operators.py (deflated 80%)
+  adding: touchview/source/overlay.py (deflated 73%)
+  adding: touchview/source/panel.py (deflated 69%)
+  adding: touchview/source/touch_input.py (deflated 69%)
+  adding: touchview/source/__init__.py (deflated 70%)
+  adding: touchview/prefs.py (deflated 76%)
   adding: touchview/__init__.py (deflated 51%)
 ```
 
@@ -183,346 +183,360 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
-<details open><summary><b>v4.0.5</b></summary><br>
+<details open><summary><b>v4.2.0</b></summary><br>
 
-- `ADDED` : switch 2D header toggle UI position
-
-</details>
-
-<details open><summary><b>v4.0.4</b></summary><br>
-
-- `ADDED` : optional enable floating toggle for touch controls in mixed mode
-- `ADDED` : toggle touch controls button in node editor and image editor headers
-
-</details>
-
-<details open><summary><b>v4.0.3</b></summary><br>
-
-- `UPDATED` : fixed bug where hotkeys aren't assigned when opening Blender directly by file
+- `ADDED`: Support for Blender v4.2 (Extensions).
+- `FIXED`: Gizmo size and overlapping.
+- `FIXED`: Mouse position after moving the gizmo.
+- `CHANGED`: Class names, `register()`, and `unregister()` according to Blender conventions.
+- `CHANGED`: EnumProperty items according to Blender conventions.
+- `CHANGED`: Cursor type on hover over the gizmo.
+- `CHANGED`: Folder structure.
+- `IMPROVED`: Gizmo safe area.
+- `IMPROVED`: UI and tooltips.
 
 </details>
 
-<details open><summary><b>v4.0.2</b></summary><br>
+<details><summary><b>v4.0.5</b></summary><br>
 
-- `ADDED` : Nendo Tools Menu (limited options) for Image Editor and Node Editor
-- `REMOVED` : Right-Click Action for Image Editor and Node Editor
+- `ADDED`: switch 2D header toggle UI position
 
 </details>
 
-<details open><summary><b>v4.0.0</b></summary><br>
+<details><summary><b>v4.0.4</b></summary><br>
+
+- `ADDED`: optional enable floating toggle for touch controls in mixed mode
+- `ADDED`: toggle touch controls button in node editor and image editor headers
+
+</details>
+
+<details><summary><b>v4.0.3</b></summary><br>
+
+- `UPDATED`: fixed bug where hotkeys aren't assigned when opening Blender directly by file
+
+</details>
+
+<details><summary><b>v4.0.2</b></summary><br>
+
+- `ADDED`: Nendo Tools Menu (limited options) for Image Editor and Node Editor
+- `REMOVED`: Right-Click Action for Image Editor and Node Editor
+
+</details>
+
+<details><summary><b>v4.0.0</b></summary><br>
 Compatibility update for Blender 4.0
 
-- `ADDED` : support for Blender 4.0
-- `ADDED` : auto-save/load preferences
-- `UPDATED` : replace bgl module refs with gpu module implementation
-- `UPDATED` : Swap Control Regions fixed context override implementation
-- `UPDATED` : early exit when dragging gizmo near edge of viewport to prevent negative overflow
-- `REMOVED` : argument renaming to disregard unused args (currently breaking CI/CD)
+- `ADDED`: support for Blender 4.0
+- `ADDED`: auto-save/load preferences
+- `UPDATED`: replace bgl module refs with gpu module implementation
+- `UPDATED`: Swap Control Regions fixed context override implementation
+- `UPDATED`: early exit when dragging gizmo near edge of viewport to prevent negative overflow
+- `REMOVED`: argument renaming to disregard unused args (currently breaking CI/CD)
 
 </details>
 
-<details open><summary><b>v2.12.0</b></summary><br>
+<details><summary><b>v2.12.0</b></summary><br>
 
-- `UPDATED` : fixed bug with unindexed modes breaking gizmo menus
-- `UPDATED` : updated resize and change strength for 2D views
-- `UPDATED` : improved support for multi-mode devices
-
-</details>
-
-<details open><summary><b>v2.11.0</b></summary><br>
-
-- `UPDATED` : added various GPENCIL modes to edit mode list
-- `UPDATED` : updated viewport gizmo panel to support v3.6 changes
+- `UPDATED`: fixed bug with unindexed modes breaking gizmo menus
+- `UPDATED`: updated resize and change strength for 2D views
+- `UPDATED`: improved support for multi-mode devices
 
 </details>
 
-<details open><summary><b>v2.10.0</b></summary><br>
+<details><summary><b>v2.11.0</b></summary><br>
 
-- `ADDED` : lazy camera control toggle in sculpt mode
-- `UPDATED` : add support for Weylus (\*nix) sending 0.0 for pressure on touch events
-- `UPDATED` : changed all new operator namespaces to `nendo` for easier identification
-- `ADDED` : control mode icon when using signle-input mode
-- `UPDATED` : control mode toggle and floating action button now use same sizing as gizmos
-- `ADDED` : additional fine-tuning controls for gizmo spacing
+- `UPDATED`: added various GPENCIL modes to edit mode list
+- `UPDATED`: updated viewport gizmo panel to support v3.6 changes
 
 </details>
 
-<details open><summary><b>v2.9.0</b></summary><br>
+<details><summary><b>v2.10.0</b></summary><br>
 
-- `UPDATED` : additional changes to gizmo spacing
-- `UPDATED` : fixed bug preventing custom actions being assigned for radial menu
-
-</details>
-
-<details open><summary><b>v2.8.0</b></summary><br>
-
-- `UPDATED` : fixed issues with menu bar spacing
-- `REMOVED` : floating menu bar
+- `ADDED`: lazy camera control toggle in sculpt mode
+- `UPDATED`: add support for Weylus (\*nix) sending 0.0 for pressure on touch events
+- `UPDATED`: changed all new operator namespaces to `nendo` for easier identification
+- `ADDED`: control mode icon when using signle-input mode
+- `UPDATED`: control mode toggle and floating action button now use same sizing as gizmos
+- `ADDED`: additional fine-tuning controls for gizmo spacing
 
 </details>
 
-<details open><summary><b>v2.7.1</b></summary><br>
+<details><summary><b>v2.9.0</b></summary><br>
 
-- `UPDATED` : replaced region_full_area with window_fullscreen
-
-</details>
-
-<details open><summary><b>v2.7.0</b></summary><br>
-
-- `ADDED` : relative remesh
-- `UPDATED` : fixed error when disabling add-on
+- `UPDATED`: additional changes to gizmo spacing
+- `UPDATED`: fixed bug preventing custom actions being assigned for radial menu
 
 </details>
 
-<details open><summary><b>v2.6.0</b></summary><br>
+<details><summary><b>v2.8.0</b></summary><br>
 
-- `UPDATED` : code spec now based on flake8
-- `UPDATED` : added alternative action for TransferMode when used in OBJECT mode
-- `UPDATED` : fixed desktop scaling issue with radial gizmo menu
-- `UPDATED` : fixed toggle touch gizmo and RC/DC action
-- `UPDATED` : fixed error message when rotation locked and pan/rotate swapped
+- `UPDATED`: fixed issues with menu bar spacing
+- `REMOVED`: floating menu bar
+
+</details>
+
+<details><summary><b>v2.7.1</b></summary><br>
+
+- `UPDATED`: replaced region_full_area with window_fullscreen
+
+</details>
+
+<details><summary><b>v2.7.0</b></summary><br>
+
+- `ADDED`: relative remesh
+- `UPDATED`: fixed error when disabling add-on
+
+</details>
+
+<details><summary><b>v2.6.0</b></summary><br>
+
+- `UPDATED`: code spec now based on flake8
+- `UPDATED`: added alternative action for TransferMode when used in OBJECT mode
+- `UPDATED`: fixed desktop scaling issue with radial gizmo menu
+- `UPDATED`: fixed toggle touch gizmo and RC/DC action
+- `UPDATED`: fixed error message when rotation locked and pan/rotate swapped
 
 </details>
 
 <details><summary><b>v2.5.0</b></summary><br>
 
-- `ADDED` : Gizmo size control
-- `UPDATED` : moved operators into folder
+- `ADDED`: Gizmo size control
+- `UPDATED`: moved operators into folder
 
 </details>
 
 <details><summary><b>v2.4.0</b></summary><br>
 
-- `UPDATED` : preferences access simplified with utility function
-- `ADDED` : single-input mode now activates large floating toggle button
+- `UPDATED`: preferences access simplified with utility function
+- `ADDED`: single-input mode now activates large floating toggle button
 
 </details>
 
 <details><summary><b>v2.3.0</b></summary><br>
 
-- `ADDED` : Input Mode selection (for devices with only touch or pen support)
+- `ADDED`: Input Mode selection (for devices with only touch or pen support)
 
 </details>
 
 <details><summary><b>v2.2.0</b></summary><br>
 
-- `ADDED` : Toggle control gizmo (translate, rotate, scale, none)
-- `UPDATED` : Added Brush dynamics (from sculpt mode) to paint modes
+- `ADDED`: Toggle control gizmo (translate, rotate, scale, none)
+- `UPDATED`: Added Brush dynamics (from sculpt mode) to paint modes
   - <span style="font-size: 0.6em">NOTE: some paint/sculpt modes when in 2D/Draw canvas mode aren't yet hooked up to brush dynamics </span>
 
 </details>
 
 <details><summary><b>v2.1.0</b></summary><br>
 
-- `ADDED` : Right Click Actions
-- `UPDATED` : Preferences and N-Panel restructure
+- `ADDED`: Right Click Actions
+- `UPDATED`: Preferences and N-Panel restructure
 
 </details>
 
 <details><summary><b>v2.0.0</b></summary><br>
 
-- `UPDATED` : Gizmos-related code simplified and reorganized for easier management
-- `ADDED` : floating gizmo bar and floating gizmo radial menu modes
-- `ADDED` : customizable gizmo menu spacing
-- `UPDATED` : viewport safe area calculation
-- `UPDATED` : floating action menu to use same move/access functionality as floating radial menu
-- `ADDED` : 8th custom action for floating action menu
+- `UPDATED`: Gizmos-related code simplified and reorganized for easier management
+- `ADDED`: floating gizmo bar and floating gizmo radial menu modes
+- `ADDED`: customizable gizmo menu spacing
+- `UPDATED`: viewport safe area calculation
+- `UPDATED`: floating action menu to use same move/access functionality as floating radial menu
+- `ADDED`: 8th custom action for floating action menu
 
 </details>
 
 <details><summary><b>v1.2.4</b></summary><br>
 
-- `ADDED` : Toggle Double-tap action on/off
+- `ADDED`: Toggle Double-tap action on/off
 
 </details>
 
 <details><summary><b>v1.2.3</b></summary><br>
 
-- `ADDED` : Sculpt Brush Dynamics
-- `UPDATED` : Viewport rotation in sculpt mode automatically sets pivot to mesh under touch point
+- `ADDED`: Sculpt Brush Dynamics
+- `UPDATED`: Viewport rotation in sculpt mode automatically sets pivot to mesh under touch point
 
 </details>
 
 <details><summary><b>v1.2.2</b></summary><br>
 
-- `UPDATED` : Gizmo panel layout split
+- `UPDATED`: Gizmo panel layout split
 
 </details>
 
 <details><summary><b>v1.2.1</b></summary><br>
 
-- `REMOVED` : Middle Mouse keybind
-- `REMOVED` : viewport rotation lock when using the Grease Pencil
+- `REMOVED`: Middle Mouse keybind
+- `REMOVED`: viewport rotation lock when using the Grease Pencil
 
 </details>
 
 <details><summary><b>v1.2.0</b></summary><br>
 
 - `BREAKING`: This version requires previous version to be disabled before install
-- `UPDATED` : Improved Pen detection and simplified key configs
-- `ADDED` : Support for various 2D and 2D-like views (Image Editor, UV Editor, 2D Animation, Compositing, etc)
+- `UPDATED`: Improved Pen detection and simplified key configs
+- `ADDED`: Support for various 2D and 2D-like views (Image Editor, UV Editor, 2D Animation, Compositing, etc)
 
 </details>
 
 <details><summary><b>v1.1.2</b></summary><br>
 
-- `ADDED` : Support for Node Editor
+- `ADDED`: Support for Node Editor
 
 </details>
 
 <details><summary><b>v1.1.1</b></summary><br>
 
-- `ADDED` : minor fix to pen detection
+- `ADDED`: minor fix to pen detection
 
 </details>
 
 <details><summary><b>v1.1.0</b></summary><br>
 
-- `ADDED` : Independent toggle for entire gizmo bar
-- `ADDED` : Customizable double-tap actions
-- `ADDED` : Multi-resolution level limiter and gizmo status color
+- `ADDED`: Independent toggle for entire gizmo bar
+- `ADDED`: Customizable double-tap actions
+- `ADDED`: Multi-resolution level limiter and gizmo status color
 
 </details>
 
 <details><summary><b>v1.0.1</b></summary><br>
 
-- `ADDED` : Optional include for MIDDLEMOUSE when disabling/enabling touch controls
-- `FIXED` : Preferences bug preventing toggle of floating Gizmo
+- `ADDED`: Optional include for MIDDLEMOUSE when disabling/enabling touch controls
+- `FIXED`: Preferences bug preventing toggle of floating Gizmo
 
 </details>
 
 <details><summary><b>v1.0.0</b></summary><br>
 
-- `ADDED` : Toggle swap pan/rotate regions
-- `ADDED` : Toggle floating menu button to N Panel
-- `UPDATED` : Disabling touch controls no longer removes overlay (hot regions still work with custom keybinds and MIDDLEMOUSE)
-- `UPDATED` : Disabling touch controls restores default LEFTMOUSE functionality
+- `ADDED`: Toggle swap pan/rotate regions
+- `ADDED`: Toggle floating menu button to N Panel
+- `UPDATED`: Disabling touch controls no longer removes overlay (hot regions still work with custom keybinds and MIDDLEMOUSE)
+- `UPDATED`: Disabling touch controls restores default LEFTMOUSE functionality
 
 </details>
 
 <details><summary><b>v0.9.6</b></summary><br>
 
-- `ADDED` : undo/redo gizmo
-- `ADDED` : overlay color selection
-- `ADDED` : touch control toggle in settings
-- `ADDED` : Alt+T to toggle touch controls
-- `UPDATED` : N Panel now includes extra settings from addon menu
-- `UPDATED` : Lock Rotation now addresses quadview data replication bug
-- `UPDATED` : Limited floating gizmo to viewport area
-- `UPDATED` : code cleanup and additional structure tweaks
-- `REMOVED` : Gizmo Tooltips
+- `ADDED`: undo/redo gizmo
+- `ADDED`: overlay color selection
+- `ADDED`: touch control toggle in prefs
+- `ADDED`: Alt+T to toggle touch controls
+- `UPDATED`: N Panel now includes extra prefs from addon menu
+- `UPDATED`: Lock Rotation now addresses quadview data replication bug
+- `UPDATED`: Limited floating gizmo to viewport area
+- `UPDATED`: code cleanup and additional structure tweaks
+- `REMOVED`: Gizmo Tooltips
 
 </details>
 
 <details><summary><b>v0.9.5</b></summary><br>
 
-- `ADDED` : multires modifier support to gizmo bar (shows retopology tools when no modifier is present)
-- `FIXED` : Gizmos now properly follow mode visibility rules
-- `FIXED` : Double-tap selection now only runs in appropriate viewport modes
+- `ADDED`: multires modifier support to gizmo bar (shows retopology tools when no modifier is present)
+- `FIXED`: Gizmos now properly follow mode visibility rules
+- `FIXED`: Double-tap selection now only runs in appropriate viewport modes
 
 </details>
 
 <details><summary><b>v0.9.4</b></summary><br>
 
-- `ADDED` : Support for menus in floating gizmo
-- `ADDED` : Mode-specific options for floating gizmo
-- `UPDATED` : Dependence on active_object for mode detection
-- `UPDATED` : Classes to follow Blender naming conventions
-- `UPDATED` : Keymaps for touchview in all context
-- `UPDATED` : Keymaps for context action assigned to pen
+- `ADDED`: Support for menus in floating gizmo
+- `ADDED`: Mode-specific options for floating gizmo
+- `UPDATED`: Dependence on active_object for mode detection
+- `UPDATED`: Classes to follow Blender naming conventions
+- `UPDATED`: Keymaps for touchview in all context
+- `UPDATED`: Keymaps for context action assigned to pen
 
 </details>
 
 <details><summary><b>v0.9.3</b></summary><br>
 
-- `ADDED` : Sculpt pivot mode gizmo
-- `ADDED` : Customizable floating menu
+- `ADDED`: Sculpt pivot mode gizmo
+- `ADDED`: Customizable floating menu
 
 </details>
 
 <details><summary><b>v0.9.2</b></summary><br>
 
-- `FIXED` : Issue delaying overlay viewport binding
-- `FIXED` : Gizmo tools/panel overlap issue when "Region Overlap" enabled
-- `REMOVED` : Viewport manager class
-- `REMOVED` : Default keymap causing Move Operator to trigger when dragging over non-modal gizmos
+- `FIXED`: Issue delaying overlay viewport binding
+- `FIXED`: Gizmo tools/panel overlap issue when "Region Overlap" enabled
+- `REMOVED`: Viewport manager class
+- `REMOVED`: Default keymap causing Move Operator to trigger when dragging over non-modal gizmos
 
 </details>
 
 <details><summary><b>v0.9.1</b></summary><br>
 
-- `ADDED` : Tap for menu scroll
+- `ADDED`: Tap for menu scroll
 
 </details>
 
 <details><summary><b>v0.9</b></summary><br>
 
-- `ADDED` : N-Panel gizmo
-- `UPDATED` : Code restructure
-- `FIXED` : Dragging over gizmo moves selected object
+- `ADDED`: N-Panel gizmo
+- `UPDATED`: Code restructure
+- `FIXED`: Dragging over gizmo moves selected object
 
 </details>
 
 <details><summary><b>v0.8</b></summary><br>
 
-- `ADDED` : Gizmo to toggle fullscreen mode
-- `UPDATED` : Settings to addon preferences to save across projects and scenes
-- `FIXED` : Bugs impacting user experience
-- `FIXED` : Doubletap now selects/activates tapped object instead of triggering fullscreen
+- `ADDED`: Gizmo to toggle fullscreen mode
+- `UPDATED`: Settings to addon preferences to save across projects and scenes
+- `FIXED`: Bugs impacting user experience
+- `FIXED`: Doubletap now selects/activates tapped object instead of triggering fullscreen
 
 </details>
 
 <details><summary><b>v0.7</b></summary><br>
 
-- `ADDED` : Gizmos for key features
-- `ADDED` : Hide/show Gizmo and layout options
-- `ADDED` : Locked viewport rotation for isometric viewports in quadview to address lock/unlock inconsistencies
-- `FIXED` : Fullscreen Toggle no longer maximizes the window, only expands the View3D region
+- `ADDED`: Gizmos for key features
+- `ADDED`: Hide/show Gizmo and layout options
+- `ADDED`: Locked viewport rotation for isometric viewports in quadview to address lock/unlock inconsistencies
+- `FIXED`: Fullscreen Toggle no longer maximizes the window, only expands the View3D region
 
 </details>
 
 <details><summary><b>v0.6</b></summary><br>
 
-- `UPDATED` : Scale of viewport overlay settings for more precision
-- `FIXED` : Issues with determining locked state with quadviews
+- `UPDATED`: Scale of viewport overlay prefs for more precision
+- `FIXED`: Issues with determining locked state with quadviews
 
 </details>
 
 <details><summary><b>v0.5</b></summary><br>
 
-- `ADDED` : Camera rotation lock in N-panel
-- `FIXED` : Quad-view overlay compatibility
-- `FIXED` : Rotation with panning when rotation is locked
-- `FIXED` : Issue when locking view to Object or 3D Cursor
+- `ADDED`: Camera rotation lock in N-panel
+- `FIXED`: Quad-view overlay compatibility
+- `FIXED`: Rotation with panning when rotation is locked
+- `FIXED`: Issue when locking view to Object or 3D Cursor
 
 </details>
 
 <details><summary><b>v0.4</b></summary><br>
 
-- `ADDED` : Double-tap to toggle "focus" mode
-- `ADDED` : Toggle Tools LEFT/RIGHT in UI
+- `ADDED`: Double-tap to toggle "focus" mode
+- `ADDED`: Toggle Tools LEFT/RIGHT in UI
 
 </details>
 
 <details><summary><b>v0.3</b></summary><br>
 
-- `FIXED` : Incorrect viewport calculation when N-panel is open
-- `FIXED` : Refactored screen/area management code (additional major refactor needed)
+- `FIXED`: Incorrect viewport calculation when N-panel is open
+- `FIXED`: Refactored screen/area management code (additional major refactor needed)
 
 </details>
 
 <details><summary><b>v0.2</b></summary><br/>
 
-- `FIXED` : Minor bug fixes and code cleanup
+- `FIXED`: Minor bug fixes and code cleanup
 
 </details>
 
 <details><summary><b>v0.1</b></summary><br>
 
-- `ADDED` : Camera dolly on left and right of viewport
-- `ADDED` : Camera pan from center of viewport
-- `ADDED` : Camera rotate in any other area of viewport
-- `ADDED` : Toggleable overlay to simplify resizing controls
+- `ADDED`: Camera dolly on left and right of viewport
+- `ADDED`: Camera pan from center of viewport
+- `ADDED`: Camera rotate in any other area of viewport
+- `ADDED`: Toggleable overlay to simplify resizing controls
 
 </details>
 
