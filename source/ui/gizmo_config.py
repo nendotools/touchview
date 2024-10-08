@@ -1,4 +1,4 @@
-from ..constants import pivot_icon_items
+from ..utils.constants import pivot_icon_items
 
 ###
 #  Config Standard
@@ -13,7 +13,7 @@ from ..constants import pivot_icon_items
 controllerConfig = {
     "type": "default",
     "binding": {"location": "", "name": "menu_controller"},
-    "command": "nendo.move_float_menu",
+    "command": "touchview.move_float_menu",
     "icon": "BLANK1",
     "use_grab_cursor": True,
 }
@@ -21,7 +21,7 @@ controllerConfig = {
 floatingConfig = {
     "type": "default",
     "binding": {"location": "prefs", "name": "float_menu"},
-    "command": "nendo.move_action_menu",
+    "command": "touchview.move_action_menu",
     "icon": "SETTINGS",
     "use_grab_cursor": True,
 }
@@ -29,7 +29,7 @@ floatingConfig = {
 floatingToggleConfig = {
     "type": "boolean",
     "binding": {"location": "", "name": "float_toggle"},
-    "command": "nendo.move_toggle_button",
+    "command": "touchview.move_toggle_button",
     "onIcon": "OUTLINER_DATA_CAMERA",
     "offIcon": "GREASEPENCIL",
     "use_grab_cursor": True,
@@ -56,7 +56,7 @@ touchViewConfig = {
         "location": "prefs",
         "name": "is_enabled",
     },
-    "command": "nendo.toggle_touch",
+    "command": "touchview.toggle_touch",
     "icon": "VIEW_PAN",
 }
 
@@ -66,21 +66,21 @@ controlGizmoConfig = {
         "location": "prefs",
         "name": "control_gizmo",
     },
-    "command": "nendo.cycle_control_gizmo",
+    "command": "touchview.cycle_control_gizmo",
     "icon": "ORIENTATION_LOCAL",
 }
 
 snapViewConfig = {
     "type": "default",
     "binding": {"location": "prefs", "name": "snap_view"},
-    "command": "nendo.viewport_recenter",
+    "command": "touchview.viewport_recenter",
     "icon": "CURSOR",
 }
 
 nPanelConfig = {
     "type": "default",
     "binding": {"location": "prefs", "name": "n_panel"},
-    "command": "nendo.toggle_n_panel",
+    "command": "touchview.toggle_n_panel",
     "icon": "EVENT_N",
 }
 
@@ -125,7 +125,7 @@ voxelStepDownConfig = {
             "state": False,
         },
     },
-    "command": "nendo.density_down",
+    "command": "touchview.density_down",
     "icon": "TRIA_DOWN",
 }
 
@@ -140,7 +140,7 @@ voxelStepUpConfig = {
             "state": False,
         },
     },
-    "command": "nendo.density_up",
+    "command": "touchview.density_up",
     "icon": "TRIA_UP",
 }
 
@@ -156,7 +156,7 @@ subdivConfig = {
         },
     },
     "has_dependent": True,
-    "command": "nendo.increment_multires",
+    "command": "touchview.increment_multires",
     "icon": "TRIA_UP",
 }
 
@@ -171,21 +171,21 @@ unsubdivConfig = {
             "state": True,
         },
     },
-    "command": "nendo.decrement_multires",
+    "command": "touchview.decrement_multires",
     "icon": "TRIA_DOWN",
 }
 
 brushResizeConfig = {
     "type": "default",
     "binding": {"location": "prefs", "name": "brush_dynamics"},
-    "command": "nendo.brush_resize",
+    "command": "touchview.brush_resize",
     "icon": "ANTIALIASED",
 }
 
 brushStrengthConfig = {
     "type": "default",
     "binding": {"location": "prefs", "name": "brush_dynamics"},
-    "command": "nendo.brush_strength",
+    "command": "touchview.brush_strength",
     "icon": "SMOOTHCURVE",
 }
 
@@ -212,7 +212,7 @@ quadviewToggleConfig = {
 rotLocToggleConfig = {
     "type": "boolean",
     "binding": {"location": "region_data", "name": "lock_rotation"},
-    "command": "nendo.viewport_lock",
+    "command": "touchview.viewport_lock",
     "onIcon": "LOCKED",
     "offIcon": "UNLOCKED",
 }

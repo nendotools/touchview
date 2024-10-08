@@ -1,20 +1,24 @@
+import bpy
+from bpy.types import Operator
+
 import math
 
-import bpy
-from bpy.types import Context, Event, MultiresModifier, Operator, SpaceView3D
-
-from ..constants import CANCEL, FINISHED, pivot_items
-from ..utils import get_settings
+from ..utils.blender import preferences
+from ..utils.constants import CANCEL, FINISHED, pivot_items
 
 
-class VIEW3D_OT_FlipTools(Operator):
+class TOUCHVIEW_OT_flip_tools(Operator):
     """Relocate Tools panel between left and right"""
 
-    bl_idname = "view3d.tools_region_flip"
     bl_label = "Tools Region Swap"
+    bl_idname = "view3d.tools_region_flip"
 
-    def execute(self, context: Context):
-        override: Context = context.copy()
+    @classmethod
+    def poll(cls, context):
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
+
+    def execute(self, context):
+        override = context.copy()
         override["area"] = context.area
         override["region"] = context.region
         for r in context.area.regions:
@@ -24,87 +28,83 @@ class VIEW3D_OT_FlipTools(Operator):
             bpy.ops.screen.region_flip()
         return FINISHED
 
-    @classmethod
-    def poll(cls, context: Context):
-        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
 
-
-class VIEW3D_OT_NextPivotMode(Operator):
+class TOUCHVIEW_OT_next_pivot_mode(Operator):
     """Step through Pivot modes"""
 
-    bl_idname = "view3d.step_pivot_mode"
     bl_label = "Use next Pivot mode"
+    bl_idname = "view3d.step_pivot_mode"
 
-    def execute(self, context: Context):
-        settings = get_settings()
+    @classmethod
+    def poll(cls, context):
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
+
+    def execute(self, context):
+        prefs = preferences()
         count = 0
         for enum, _, _ in pivot_items:
-            if enum == settings.pivot_mode:
+            if enum == prefs.pivot_mode:
                 count += 1
                 if count == len(pivot_items):
                     count = 0
                 pivot = pivot_items[count][0]
                 bpy.ops.sculpt.set_pivot_position(mode=pivot)
-                settings.pivot_mode = pivot
+                prefs.pivot_mode = pivot
                 context.area.tag_redraw()
                 return FINISHED
             count += 1
         return FINISHED
 
-    @classmethod
-    def poll(cls, context: Context):
-        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
 
-
-class VIEW3D_OT_ToggleTouchControls(Operator):
+class TOUCHVIEW_OT_toggle_touch_controls(Operator):
     """Toggle Touch Controls"""
 
-    bl_idname = "nendo.toggle_touch"
     bl_label = "Toggle Touch Controls"
+    bl_idname = "touchview.toggle_touch"
 
-    def execute(self, context: Context):
-        settings = get_settings()
-        settings.is_enabled = not settings.is_enabled
+    def execute(self, context):
+        prefs = preferences()
+        prefs.is_enabled = not prefs.is_enabled
         context.area.tag_redraw()
         return FINISHED
 
 
-class VIEW3D_OT_ToggleNPanel(Operator):
+class TOUCHVIEW_OT_toggle_npanel(Operator):
     """Toggle Settings Panel"""
 
-    bl_idname = "nendo.toggle_n_panel"
-    bl_label = "Display settings Panel"
+    bl_label = "Display prefs Panel"
+    bl_idname = "touchview.toggle_n_panel"
 
-    def execute(self, context: Context):
-        if not isinstance(context.space_data, SpaceView3D):
+    @classmethod
+    def poll(cls, context):
+        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
+
+    def execute(self, context):
+        if not isinstance(context.space_data, bpy.types.SpaceView3D):
             return CANCEL
         context.space_data.show_region_ui ^= True
         return FINISHED
 
-    @classmethod
-    def poll(cls, context: Context):
-        return context.area.type == "VIEW_3D" and context.region.type == "WINDOW"
 
-
-class VIEW3D_OT_ToggleFloatingMenu(Operator):
+class TOUCHVIEW_OT_toggle_floating_menu(Operator):
     """Toggle Floating Menu"""
 
-    bl_idname = "view3d.toggle_floating_menu"
     bl_label = "Toggle Floating Menu"
+    bl_idname = "view3d.toggle_floating_menu"
 
-    def execute(self, context: Context):
-        settings = get_settings()
-        settings.show_float_menu = not settings.show_float_menu
+    def execute(self, context):
+        prefs = preferences()
+        prefs.show_float_menu = not prefs.show_float_menu
         return FINISHED
 
 
-class VIEW3D_OT_ViewportRecenter(Operator):
+class TOUCHVIEW_OT_viewport_recenter(Operator):
     """Recenter Viewport and Cursor on Selected Object"""
 
-    bl_idname = "nendo.viewport_recenter"
     bl_label = "Recenter Viewport and Cursor on Selected"
+    bl_idname = "touchview.viewport_recenter"
 
-    def execute(self, context: Context):
+    def execute(self, context):
         current = context.scene.tool_settings.transform_pivot_point
         context.scene.tool_settings.transform_pivot_point = "ACTIVE_ELEMENT"
         bpy.ops.view3d.snap_cursor_to_selected()
@@ -114,16 +114,16 @@ class VIEW3D_OT_ViewportRecenter(Operator):
         return FINISHED
 
 
-class VIEW3D_OT_ViewportLock(Operator):
+class TOUCHVIEW_OT_viewport_lock(Operator):
     """Toggle Viewport Rotation"""
 
-    bl_idname = "nendo.viewport_lock"
     bl_label = "Viewport rotation lock toggle"
+    bl_idname = "touchview.viewport_lock"
 
     region_ids = []
 
-    def execute(self, context: Context):
-        if not isinstance(context.area.spaces.active, SpaceView3D):
+    def execute(self, context):
+        if not isinstance(context.area.spaces.active, bpy.types.SpaceView3D):
             return CANCEL
         if len(context.area.spaces.active.region_quadviews) == 0:
             context.region_data.lock_rotation ^= True
@@ -147,24 +147,26 @@ class VIEW3D_OT_ViewportLock(Operator):
         return FINISHED
 
 
-class VIEW3D_OT_BrushResize(Operator):
+class TOUCHVIEW_OT_brush_resize(Operator):
     """Brush Resize"""
 
-    bl_idname = "nendo.brush_resize"
     bl_label = "Brush Size Adjust"
+    bl_idname = "touchview.brush_resize"
+
+    def invoke(self, context, event):
+        self.mouse_x = event.mouse_region_x
+        self.mouse_y = event.mouse_region_y
+        self.execute(context)
+        return FINISHED
 
     # activate radial_control to change sculpt brush size
-    def execute(self, context: Context):
-        settings = get_settings()
-        if settings.menu_style in ["fixed.bar"]:
-            if settings.gizmo_position in ["LEFT", "RIGHT"]:
-                context.window.cursor_warp(
-                    math.floor(context.region.width / 2), self.mousey
-                )
+    def execute(self, context):
+        prefs = preferences()
+        if prefs.menu_style in {"fixed.bar"}:
+            if prefs.gizmo_position in ["LEFT", "RIGHT"]:
+                context.window.cursor_warp(math.floor(context.region.width / 2), self.mouse_y)
             else:
-                context.window.cursor_warp(
-                    self.mousex, math.floor(context.region.height / 2)
-                )
+                context.window.cursor_warp(self.mouse_x, math.floor(context.region.height / 2))
         if context.mode in [
             "PAINT_GPENCIL",
             "EDIT_GPENCIL",
@@ -175,7 +177,7 @@ class VIEW3D_OT_BrushResize(Operator):
             return self.resize2d(context)
         return self.resize3d(context)
 
-    def resize2d(self, context: Context):
+    def resize2d(self, context):
         data_path = "tool_settings.gpencil_paint.brush.size"
         if context.mode == "SCULPT_GPENCIL":
             data_path = "tool_settings.gpencil_sculpt_paint.brush.size"
@@ -189,7 +191,7 @@ class VIEW3D_OT_BrushResize(Operator):
         )
         return FINISHED
 
-    def resize3d(self, context: Context):
+    def resize3d(self, context):
         data_path = "tool_settings.sculpt.brush.size"
         if context.mode == "PAINT_VERTEX":
             data_path = "tool_settings.vertex_paint.brush.size"
@@ -210,31 +212,27 @@ class VIEW3D_OT_BrushResize(Operator):
         )
         return FINISHED
 
-    def invoke(self, context: Context, event: Event):
-        self.mousex = event.mouse_region_x
-        self.mousey = event.mouse_region_y
+
+class TOUCHVIEW_OT_brush_strength(Operator):
+    """Brush Strength"""
+
+    bl_label = "Brush Strength Adjust"
+    bl_idname = "touchview.brush_strength"
+
+    def invoke(self, context, event):
+        self.mouse_x = event.mouse_region_x
+        self.mouse_y = event.mouse_region_y
         self.execute(context)
         return FINISHED
 
-
-class VIEW3D_OT_BrushStrength(Operator):
-    """Brush Strength"""
-
-    bl_idname = "nendo.brush_strength"
-    bl_label = "Brush Strength Adjust"
-
     # activate radial_control to change sculpt brush size
-    def execute(self, context: Context):
-        settings = get_settings()
-        if settings.menu_style in ["fixed.bar"]:
-            if settings.gizmo_position in ["LEFT", "RIGHT"]:
-                context.window.cursor_warp(
-                    math.floor(context.region.width / 2), self.mousey
-                )
+    def execute(self, context):
+        prefs = preferences()
+        if prefs.menu_style in {"fixed.bar"}:
+            if prefs.gizmo_position in ["LEFT", "RIGHT"]:
+                context.window.cursor_warp(math.floor(context.region.width / 2), self.mouse_y)
             else:
-                context.window.cursor_warp(
-                    self.mousex, math.floor(context.region.height / 2)
-                )
+                context.window.cursor_warp(self.mouse_x, math.floor(context.region.height / 2))
         if context.mode in [
             "PAINT_GPENCIL",
             "EDIT_GPENCIL",
@@ -245,23 +243,21 @@ class VIEW3D_OT_BrushStrength(Operator):
             return self.resize2d(context)
         return self.resize3d(context)
 
-    def resize2d(self, context: Context):
+    def resize2d(self, context):
         data_path = "tool_settings.gpencil_paint.brush.gpencil_settings.pen_strength"
         if context.mode == "SCULPT_GPENCIL":
             data_path = "tool_settings.gpencil_sculpt_paint.brush.strength"
         if context.mode == "WEIGHT_GPENCIL":
             data_path = "tool_settings.gpencil_weight_paint.brush.strength"
         if context.mode == "VERTEX_GPENCIL":
-            data_path = (
-                "tool_settings.gpencil_vertex_paint.brush.gpencil_settings.pen_strength"
-            )
+            data_path = "tool_settings.gpencil_vertex_paint.brush.gpencil_settings.pen_strength"
         bpy.ops.wm.radial_control(
             "INVOKE_DEFAULT",  # type: ignore
             data_path_primary=data_path,
         )
         return FINISHED
 
-    def resize3d(self, context: Context):
+    def resize3d(self, context):
         data_path = "tool_settings.sculpt.brush.strength"
         if context.mode == "PAINT_VERTEX":
             data_path = "tool_settings.vertex_paint.brush.strength"
@@ -282,35 +278,29 @@ class VIEW3D_OT_BrushStrength(Operator):
         )
         return FINISHED
 
-    def invoke(self, context: Context, event: Event):
-        self.mousex = event.mouse_region_x
-        self.mousey = event.mouse_region_y
-        self.execute(context)
-        return FINISHED
 
-
-class VIEW3D_OT_IncreaseMultires(Operator):
+class TOUCHVIEW_OT_increase_multires(Operator):
     """Increment Multires by 1 or add subdivision"""
 
-    bl_idname = "nendo.increment_multires"
     bl_label = "Increment Multires modifier by 1 or add subdivision level"
+    bl_idname = "touchview.increment_multires"
 
-    def execute(self, context: Context):
-        settings = get_settings()
+    def execute(self, context):
+        prefs = preferences()
         if not context.active_object or not len(context.active_object.modifiers):
             return CANCEL
         for mod in context.active_object.modifiers:
-            # if mod is type of MultiresModifier
-            if isinstance(mod, MultiresModifier):
+            # if mod is type of bpy.types.MultiresModifier
+            if isinstance(mod, bpy.types.MultiresModifier):
                 if context.mode == "SCULPT":
                     if mod.sculpt_levels == mod.total_levels:
-                        if mod.sculpt_levels < settings.subdivision_limit:
+                        if mod.sculpt_levels < prefs.subdivision_limit:
                             bpy.ops.object.multires_subdivide(modifier=mod.name)
                     else:
                         mod.sculpt_levels += 1
                 else:
                     if mod.levels == mod.total_levels:
-                        if mod.levels < settings.subdivision_limit:
+                        if mod.levels < prefs.subdivision_limit:
                             bpy.ops.object.multires_subdivide(modifier=mod.name)
                     else:
                         mod.levels += 1
@@ -318,17 +308,17 @@ class VIEW3D_OT_IncreaseMultires(Operator):
         return CANCEL
 
 
-class VIEW3D_OT_DecreaseMultires(Operator):
+class TOUCHVIEW_OT_decrease_multires(Operator):
     """Decrement Multires by 1"""
 
-    bl_idname = "nendo.decrement_multires"
     bl_label = "decrement Multires modifier by 1"
+    bl_idname = "touchview.decrement_multires"
 
-    def execute(self, context: Context):
+    def execute(self, context):
         if not context.active_object or not len(context.active_object.modifiers):
             return CANCEL
         for mod in context.active_object.modifiers:
-            if not isinstance(mod, MultiresModifier):
+            if not isinstance(mod, bpy.types.MultiresModifier):
                 return FINISHED
             if context.mode == "SCULPT":
                 if mod.sculpt_levels == 0:
@@ -344,17 +334,17 @@ class VIEW3D_OT_DecreaseMultires(Operator):
         return CANCEL
 
 
-class VIEW3D_OT_DensityUp(Operator):
+class TOUCHVIEW_OT_density_up(Operator):
     """Increase voxel density"""
 
-    bl_idname = "nendo.density_up"
     bl_label = "Increase voxel density and remesh"
+    bl_idname = "touchview.density_up"
 
-    def execute(self, context: Context):
+    def execute(self, context):
         if not context.active_object:
             return CANCEL
         for mod in context.active_object.modifiers:
-            if isinstance(mod, MultiresModifier):
+            if isinstance(mod, bpy.types.MultiresModifier):
                 return CANCEL
         mesh = bpy.data.meshes[context.active_object.name]
         mesh.remesh_voxel_size *= 0.8
@@ -362,19 +352,39 @@ class VIEW3D_OT_DensityUp(Operator):
         return FINISHED
 
 
-class VIEW3D_OT_DensityDown(Operator):
+class TOUCHVIEW_OT_density_down(Operator):
     """Decrease voxel density"""
 
-    bl_idname = "nendo.density_down"
     bl_label = "Decrease voxel density and remesh"
+    bl_idname = "touchview.density_down"
 
-    def execute(self, context: Context):
+    def execute(self, context):
         if not context.active_object:
             return CANCEL
         for mod in context.active_object.modifiers:
-            if isinstance(mod, MultiresModifier):
+            if isinstance(mod, bpy.types.MultiresModifier):
                 return CANCEL
         mesh = bpy.data.meshes[context.active_object.name]
         mesh.remesh_voxel_size /= 0.8
         bpy.ops.object.voxel_remesh()
         return FINISHED
+
+
+classes = (
+    TOUCHVIEW_OT_brush_resize,
+    TOUCHVIEW_OT_brush_strength,
+    TOUCHVIEW_OT_decrease_multires,
+    TOUCHVIEW_OT_density_down,
+    TOUCHVIEW_OT_density_up,
+    TOUCHVIEW_OT_flip_tools,
+    TOUCHVIEW_OT_increase_multires,
+    TOUCHVIEW_OT_next_pivot_mode,
+    TOUCHVIEW_OT_toggle_floating_menu,
+    TOUCHVIEW_OT_toggle_npanel,
+    TOUCHVIEW_OT_toggle_touch_controls,
+    TOUCHVIEW_OT_viewport_lock,
+    TOUCHVIEW_OT_viewport_recenter,
+)
+
+
+register, unregister = bpy.utils.register_classes_factory(classes)
