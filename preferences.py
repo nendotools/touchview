@@ -673,7 +673,7 @@ def register():
 
 
 def unregister():
-    for cls in classes:
+    for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
 
     bpy.types.NODE_HT_header.remove(NODE_HT_nendo_header)
