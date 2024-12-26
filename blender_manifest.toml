@@ -3,11 +3,9 @@ schema_version = "1.0.0"
 id = "touchview"
 version = "4.2.0"
 name = "Touch Viewport"
-tagline = "Creates active touch zones over View 2D and 3D areas for easier viewport navigation with touch screens and pen tablets"
+tagline = "Creates active touch zones over View 2D and 3D areas"
 maintainer = "NENDO, Karan(b3dhub)"
 type = "add-on"
-
-permissions = ["files"]
 
 website = "https://github.com/nendotools/touchview"
 
@@ -18,7 +16,10 @@ tags = ["3D View", "User Interface"]
 blender_version_min = "4.2.0"
 
 # License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
-license = ["SPDX:GPL-2.0-or-later"]
+license = ["SPDX:GPL-3.0-or-later"]
+
+[permissions]
+files = "preserve settings when enabling/disabling the add-on"
 
 [build]
 paths_exclude_pattern = [
