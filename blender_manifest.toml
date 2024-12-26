@@ -19,3 +19,13 @@ blender_version_min = "4.2.0"
 
 # License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
 license = ["SPDX:GPL-2.0-or-later"]
+
+[build]
+paths_exclude_pattern = [
+  "__pycache__/",
+  "/.git/",
+  ".gitignore",
+  "/*.zip",
+  "/bin",
+  "settings.json"
+]
