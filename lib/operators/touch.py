@@ -130,7 +130,7 @@ class VIEW2D_OT_TouchInput(Operator):
         settings = get_settings()
         if not settings.is_enabled:
             return PASSTHROUGH
-        if settings.input_mode == "both" and (event.type == PEN or not isTouch(event)):
+        if settings.input_mode == "full" and (event.type == PEN or not isTouch(event)):
             return PASSTHROUGH
 
         if event.value != PRESS:
