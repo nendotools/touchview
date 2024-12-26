@@ -1,8 +1,8 @@
 import bpy
-
 from mathutils import Vector
 
-from ... import __package__ as package  # relative import from the root directory
+from ... import \
+    __package__ as package  # relative import from the root directory
 
 
 def preferences() -> dict:

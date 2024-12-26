@@ -1,6 +1,6 @@
 # type: ignore
 import bpy
-from bpy.types import Panel, Menu, UILayout
+from bpy.types import Menu, Panel, UILayout
 
 from ..utils.blender import preferences
 

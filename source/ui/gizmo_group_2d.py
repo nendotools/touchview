@@ -1,33 +1,20 @@
+from math import cos, radians, sin
+
 import bpy
 from bpy.types import GizmoGroup
-
-from math import cos, radians, sin
 from mathutils import Vector
 
 from ..utils.blender import *
 from .gizmo_2d import GizmoSet, GizmoSetBoolean
-from .gizmo_config import (
-    brushResizeConfig,
-    brushStrengthConfig,
-    controlGizmoConfig,
-    controllerConfig,
-    floatingConfig,
-    floatingToggleConfig,
-    fullscreenToggleConfig,
-    nPanelConfig,
-    quadviewToggleConfig,
-    redoConfig,
-    rotLocToggleConfig,
-    snapViewConfig,
-    subdivConfig,
-    touchViewConfig,
-    undoConfig,
-    unsubdivConfig,
-    voxelRemeshConfig,
-    voxelSizeConfig,
-    voxelStepDownConfig,
-    voxelStepUpConfig,
-)
+from .gizmo_config import (brushResizeConfig, brushStrengthConfig,
+                           controlGizmoConfig, controllerConfig,
+                           floatingConfig, floatingToggleConfig,
+                           fullscreenToggleConfig, nPanelConfig,
+                           quadviewToggleConfig, redoConfig,
+                           rotLocToggleConfig, snapViewConfig, subdivConfig,
+                           touchViewConfig, undoConfig, unsubdivConfig,
+                           voxelRemeshConfig, voxelSizeConfig,
+                           voxelStepDownConfig, voxelStepUpConfig)
 
 __module__ = __name__.split(".")[0]
 

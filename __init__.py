@@ -33,8 +33,7 @@ bl_info = {
 
 import bpy
 
-from . import source
-from . import preferences
+from . import preferences, source
 
 
 def register():

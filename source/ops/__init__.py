@@ -1,7 +1,5 @@
 # flake8: noqa
-from . import actions
-from . import touch
-from . import gizmo
+from . import actions, gizmo, touch
 
 
 def register():

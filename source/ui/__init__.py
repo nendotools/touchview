@@ -6,8 +6,7 @@
 # layout (vertical, horizontal, etc)
 # to be managed through inheritance.
 ###
-from . import gizmo_group_2d
-from . import panel
+from . import gizmo_group_2d, panel
 
 
 def register():

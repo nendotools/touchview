@@ -1,7 +1,7 @@
+import math
+
 import bpy
 from bpy.types import Operator
-
-import math
 
 from ..utils.blender import preferences
 from ..utils.constants import CANCEL, FINISHED, pivot_items

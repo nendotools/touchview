@@ -1,6 +1,4 @@
-from . import ops
-from . import ui
-from . import utils
+from . import ops, ui, utils
 
 
 def register():

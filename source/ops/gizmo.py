@@ -1,6 +1,5 @@
 import bpy
 from bpy.types import Operator
-
 from mathutils import Vector
 
 from ..utils.blender import *

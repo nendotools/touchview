@@ -1,5 +1,4 @@
 import bpy
-
 from mathutils import Matrix, Vector
 
 from .blender import *

@@ -1,21 +1,15 @@
 # type: ignore
-import bpy
-from bpy.types import AddonPreferences, PropertyGroup, UILayout
-from bpy.props import *
-
 import json
 from os import path
 
-from .source.utils.constants import (
-    double_click_items,
-    edit_modes,
-    gizmo_sets,
-    menu_defaults,
-    menu_orientation_items,
-    menu_style_items,
-    pivot_items,
-    position_items,
-)
+import bpy
+from bpy.props import *
+from bpy.types import AddonPreferences, PropertyGroup, UILayout
+
+from .source.utils.constants import (double_click_items, edit_modes,
+                                     gizmo_sets, menu_defaults,
+                                     menu_orientation_items, menu_style_items,
+                                     pivot_items, position_items)
 
 
 def NODE_HT_nendo_header(s, c):
