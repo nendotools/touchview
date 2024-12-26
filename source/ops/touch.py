@@ -110,7 +110,7 @@ class TOUCHVIEW_OT_touch_input_2d(Operator):
         prefs = preferences()
         if not prefs.is_enabled:
             return PASSTHROUGH
-        if prefs.input_mode == "both" and (event.type == PEN or not is_touch(event)):
+        if settings.input_mode == "full" and (event.type == PEN or not isTouch(event)):
             return PASSTHROUGH
 
         if event.value != PRESS:
