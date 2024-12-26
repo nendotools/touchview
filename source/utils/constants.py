@@ -15,7 +15,14 @@ CANCEL = {"CANCELLED"}
 PASSTHROUGH = {"PASS_THROUGH"}
 
 # DICTIONARIES
-flat_modes = ["Node Editor", "Image", "Image Paint", "UV Editor", "View2D"]
+flat_modes = [
+    "Node Editor",
+    "Image",
+    "Image Paint",
+    "UV Editor",
+    "View2D",
+]
+
 top_level_names = (
     "Node Editor",
     "UV Editor",
@@ -28,16 +35,16 @@ top_level_names = (
 )
 
 input_mode_items = [
-    ("ORBIT", "rotate", "Rotate the viewport"),
-    ("PAN", "pan", "Move the viewport"),
-    ("DOLLY", "zoom", "Zoom in/out the viewport"),
+    ("ORBIT", "Rotate", "Rotate the viewport"),
+    ("PAN", "Pan", "Move the viewport"),
+    ("DOLLY", "Zoom", "Zoom in/out the viewport"),
 ]
 
 position_items = [
-    ("TOP", "top", "Set Gizmo position to top of viewport"),
-    ("RIGHT", "right", "Set Gizmo position to right of viewport"),
-    ("BOTTOM", "bottom", "Set Gizmo position to bottom of viewport"),
-    ("LEFT", "left", "Set Gizmo position to left of viewport"),
+    ("TOP", "Top", "Set Gizmo position to top of viewport"),
+    ("RIGHT", "Right", "Set Gizmo position to right of viewport"),
+    ("BOTTOM", "Bottom", "Set Gizmo position to bottom of viewport"),
+    ("LEFT", "Left", "Set Gizmo position to left of viewport"),
 ]
 
 pivot_items = [
@@ -71,7 +78,13 @@ pivot_icon_items = [
     ("SURFACE", "PIVOT_MEDIAN"),
 ]
 
-brush_modes = ["SCULPT", "PAINT_VERTEX", "PAINT_WEIGHT", "PAINT_TEXTURE"]
+brush_modes = [
+    "SCULPT",
+    "PAINT_VERTEX",
+    "PAINT_WEIGHT",
+    "PAINT_TEXTURE",
+]
+
 edit_modes = [
     ("OBJECT", "Object Mode", ""),
     ("EDIT_MESH", "Edit Mode", ""),
@@ -93,14 +106,14 @@ menu_defaults = {
 
 double_click_items = [
     ("object.transfer_mode", "Transfer Mode", ""),
-    ("nendo.toggle_touch", "Toggle Touch View", ""),
+    ("touchview.toggle_touch", "Toggle Touch View", ""),
     ("view3d.localview", "Toggle Local View", ""),
     ("wm.window_fullscreen_toggle", "Toggle Full Screen", ""),
 ]
 
 menu_style_items = [
-    ("fixed.bar", "Fixed Bar", ""),
     ("float.radial", "Floating Radial", ""),
+    ("fixed.bar", "Fixed Bar", ""),
 ]
 
 menu_orientation_items = [

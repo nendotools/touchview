@@ -15,35 +15,34 @@
 #  Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
 # ##### END GPL LICENSE BLOCK #####
-import bpy
 
-from . import lib
-from .Settings import MenuModeGroup, OverlaySettings
 
 bl_info = {
     "name": "Touch Viewport",
-    "description": "Creates active touch zones over View 2D and 3D areas for"
-    "easier viewport navigation with touch screens and pen tablets.",
-    "author": "NENDO",
-    "version": (4, 0, 5),
+    "description": "Creates active touch zones over View 2D and 3D areas for easier viewport navigation with touch screens and pen tablets.",
+    "author": "NENDO, Karan(b3dhub)",
     "blender": (2, 93, 0),
+    "version": (4, 2, 0),
+    "category": "3D View",
     "location": "View3D > Tools > NENDO",
     "warning": "",
-    "doc_url": "",
+    "doc_url": "https://github.com/nendotools/touchview",
     "tracker_url": "https://github.com/nendotools/touchview/issues",
-    "category": "3D View",
 }
 
 
+import bpy
+
+from . import preferences, source
+
+
 def register():
-    bpy.utils.register_class(MenuModeGroup)
-    bpy.utils.register_class(OverlaySettings)
-    bpy.context.preferences.addons[__package__.split(".")[0]].preferences.load()  # type: ignore
-    lib.register()
+    source.register()
+    preferences.register()
+    bpy.context.preferences.addons[__package__].preferences.load()  # type: ignore
 
 
 def unregister():
-    lib.unregister()
-    bpy.context.preferences.addons[__package__.split(".")[0]].preferences.save()  # type: ignore
-    bpy.utils.unregister_class(OverlaySettings)
-    bpy.utils.unregister_class(MenuModeGroup)
+    bpy.context.preferences.addons[__package__].preferences.save()  # type: ignore
+    source.unregister()
+    preferences.unregister()

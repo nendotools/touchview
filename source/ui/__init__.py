@@ -6,16 +6,14 @@
 # layout (vertical, horizontal, etc)
 # to be managed through inheritance.
 ###
-from .gizmo_group_2d import GIZMO_GT_ViewportGizmoGroup
-
-__classes__ = (GIZMO_GT_ViewportGizmoGroup)
+from . import gizmo_group_2d, panel
 
 
 def register():
-    from bpy.utils import register_class
-    register_class(GIZMO_GT_ViewportGizmoGroup)
+    gizmo_group_2d.register()
+    panel.register()
 
 
 def unregister():
-    from bpy.utils import unregister_class
-    unregister_class(GIZMO_GT_ViewportGizmoGroup)
+    gizmo_group_2d.unregister()
+    panel.unregister()
