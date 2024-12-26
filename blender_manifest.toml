@@ -24,8 +24,13 @@ license = ["SPDX:GPL-2.0-or-later"]
 paths_exclude_pattern = [
   "__pycache__/",
   "/.git/",
+  "docs/",
   ".gitignore",
   "/*.zip",
   "/bin",
-  "settings.json"
+  "settings.json",
+  "bundle.sh",
+  "mypy.ini",
+  "requirements.txt",
+  "README.md"
 ]
