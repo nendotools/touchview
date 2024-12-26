@@ -188,6 +188,7 @@ Select it and click `Install Add-on`.
 - `ADDED`: Support for Blender v4.2 (Extensions).
 - `FIXED`: Gizmo size and overlapping.
 - `FIXED`: Mouse position after moving the gizmo.
+- `FIXED`: Broken reference to full control mode in enabled check.
 - `CHANGED`: Class names, `register()`, and `unregister()` according to Blender conventions.
 - `CHANGED`: EnumProperty items according to Blender conventions.
 - `CHANGED`: Cursor type on hover over the gizmo.
