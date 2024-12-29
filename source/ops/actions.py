@@ -11,7 +11,7 @@ class TOUCHVIEW_OT_flip_tools(Operator):
     """Relocate Tools panel between left and right"""
 
     bl_label = "Tools Region Swap"
-    bl_idname = "view3d.tools_region_flip"
+    bl_idname = "touchview.tools_region_flip"
 
     @classmethod
     def poll(cls, context):
@@ -33,7 +33,7 @@ class TOUCHVIEW_OT_next_pivot_mode(Operator):
     """Step through Pivot modes"""
 
     bl_label = "Use next Pivot mode"
-    bl_idname = "view3d.step_pivot_mode"
+    bl_idname = "touchview.step_pivot_mode"
 
     @classmethod
     def poll(cls, context):
@@ -90,7 +90,7 @@ class TOUCHVIEW_OT_toggle_floating_menu(Operator):
     """Toggle Floating Menu"""
 
     bl_label = "Toggle Floating Menu"
-    bl_idname = "view3d.toggle_floating_menu"
+    bl_idname = "touchview.toggle_floating_menu"
 
     def execute(self, context):
         prefs = preferences()
