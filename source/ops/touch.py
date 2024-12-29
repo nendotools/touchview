@@ -1,15 +1,15 @@
-import math
-
 import bpy
 from bpy.props import EnumProperty
 from bpy.types import Operator
-from bpy_extras.view3d_utils import (region_2d_to_origin_3d,
-                                     region_2d_to_vector_3d)
+from bpy_extras.view3d_utils import region_2d_to_origin_3d, region_2d_to_vector_3d
 from mathutils import Vector
 
+# Built-in modules
+import math
+
+# Local modules
 from ..utils.blender import preferences
-from ..utils.constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS,
-                               RMOUSE, brush_modes, input_mode_items)
+from ..utils.constants import FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE, brush_modes, input_mode_items
 
 
 def is_touch(event):
@@ -112,7 +112,7 @@ class TOUCHVIEW_OT_touch_input_2d(Operator):
         prefs = preferences()
         if not prefs.is_enabled:
             return PASSTHROUGH
-        if settings.input_mode == "full" and (event.type == PEN or not isTouch(event)):
+        if prefs.input_mode == "FULL" and (event.type == PEN or not is_touch(event)):
             return PASSTHROUGH
 
         if event.value != PRESS:
