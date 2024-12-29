@@ -6,10 +6,16 @@ import bpy
 from bpy.props import *
 from bpy.types import AddonPreferences, PropertyGroup, UILayout
 
-from .source.utils.constants import (double_click_items, edit_modes,
-                                     gizmo_sets, menu_defaults,
-                                     menu_orientation_items, menu_style_items,
-                                     pivot_items, position_items)
+from .source.utils.constants import (
+    double_click_items,
+    edit_modes,
+    gizmo_sets,
+    menu_defaults,
+    menu_orientation_items,
+    menu_style_items,
+    pivot_items,
+    position_items,
+)
 
 
 def NODE_HT_nendo_header(s, c):
@@ -611,9 +617,9 @@ class TOUCHVIEW_AP_OverlaySettings(AddonPreferences):
 
         if self.gizmo_tabs == "ACTIONS":
             if not self.show_float_menu:
-                col.operator("view3d.toggle_floating_menu", text="Show Action Menu")
+                col.operator("touchview.toggle_floating_menu", text="Show Action Menu")
             else:
-                col.operator("view3d.toggle_floating_menu", text="Hide Action Menu", depress=True)
+                col.operator("touchview.toggle_floating_menu", text="Hide Action Menu", depress=True)
                 box = col.box()
                 box.active = self.show_float_menu
                 col = box.column()
