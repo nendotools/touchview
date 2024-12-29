@@ -37,9 +37,10 @@ class TOUCHVIEW_PT_view_3d_panel(TouchView, Panel):
             col.prop(prefs, "enable_floating_toggle")
 
 
-class TOUCHVIEW_PT_ControlZones(TouchView, Panel):
+class TOUCHVIEW_PT_control_zones(TouchView, Panel):
     bl_label = "Control Zones"
     bl_parent_id = "TOUCHVIEW_PT_view_3d_panel"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw_header(self, context):
         prefs = preferences()
@@ -78,6 +79,7 @@ class TOUCHVIEW_PT_ControlZones(TouchView, Panel):
 class TOUCHVIEW_PT_gizmo_bar(TouchView, Panel):
     bl_label = "Gizmo"
     bl_parent_id = "TOUCHVIEW_PT_view_3d_panel"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         prefs = preferences()
@@ -101,6 +103,7 @@ class TOUCHVIEW_PT_gizmo_bar(TouchView, Panel):
 class TOUCHVIEW_PT_right_click(TouchView, Panel):
     bl_label = "Right Click Actions"
     bl_parent_id = "TOUCHVIEW_PT_view_3d_panel"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         prefs = preferences()
@@ -117,6 +120,7 @@ class TOUCHVIEW_PT_right_click(TouchView, Panel):
 class TOUCHVIEW_PT_double_click(TouchView, Panel):
     bl_label = "Double Click Actions"
     bl_parent_id = "TOUCHVIEW_PT_view_3d_panel"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         prefs = preferences()
@@ -133,6 +137,7 @@ class TOUCHVIEW_PT_double_click(TouchView, Panel):
 class TOUCHVIEW_PT_tool_settings(TouchView, Panel):
     bl_label = "Tool Options"
     bl_parent_id = "TOUCHVIEW_PT_view_3d_panel"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         prefs = preferences()
@@ -147,6 +152,7 @@ class TOUCHVIEW_PT_tool_settings(TouchView, Panel):
 class TOUCHVIEW_PT_viewport_options(TouchView, Panel):
     bl_label = "Viewport Options"
     bl_parent_id = "TOUCHVIEW_PT_view_3d_panel"
+    bl_options = {"DEFAULT_CLOSED"}
 
     def draw(self, context):
         prefs = preferences()
@@ -159,7 +165,7 @@ class TOUCHVIEW_PT_viewport_options(TouchView, Panel):
         space = context.area.spaces.active
 
         col = layout.column()
-        col.operator("view3d.tools_region_flip", text="Flip Tools")
+        col.operator("touchview.tools_region_flip", text="Flip Tools")
         if len(space.region_quadviews) > 0:
             col.operator("screen.region_quadview", text="Disable Quadview")
         else:
@@ -283,7 +289,7 @@ class TOUCHVIEW_MT_floating(Menu):
 
 classes = (
     TOUCHVIEW_PT_view_3d_panel,
-    TOUCHVIEW_PT_ControlZones,
+    TOUCHVIEW_PT_control_zones,
     TOUCHVIEW_PT_gizmo_bar,
     TOUCHVIEW_PT_right_click,
     TOUCHVIEW_PT_double_click,
