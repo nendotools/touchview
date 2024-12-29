@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "touchview"
-version = "4.2.0"
+version = "4.2.1"
 name = "Touch Viewport"
 tagline = "Creates active touch zones over View 2D and 3D areas"
 maintainer = "NENDO, Karan(b3dhub)"
@@ -23,15 +23,15 @@ files = "preserve settings when enabling/disabling the add-on"
 
 [build]
 paths_exclude_pattern = [
-  "__pycache__/",
-  "/.git/",
-  "docs/",
-  ".gitignore",
-  "/*.zip",
-  "/bin",
-  "settings.json",
-  "bundle.sh",
-  "mypy.ini",
-  "requirements.txt",
-  "README.md"
+    "__pycache__/",
+    "/.git/",
+    "docs/",
+    ".gitignore",
+    "/*.zip",
+    "/bin",
+    "settings.json",
+    "bundle.sh",
+    "mypy.ini",
+    "requirements.txt",
+    "README.md",
 ]
