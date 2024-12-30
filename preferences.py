@@ -611,9 +611,9 @@ class TOUCHVIEW_AP_OverlaySettings(AddonPreferences):
 
         if self.gizmo_tabs == "ACTIONS":
             if not self.show_float_menu:
-                col.operator("view3d.toggle_floating_menu", text="Show Action Menu")
+                col.operator("touchview.toggle_floating_menu", text="Show Action Menu")
             else:
-                col.operator("view3d.toggle_floating_menu", text="Hide Action Menu", depress=True)
+                col.operator("touchview.toggle_floating_menu", text="Hide Action Menu", depress=True)
                 box = col.box()
                 box.active = self.show_float_menu
                 col = box.column()

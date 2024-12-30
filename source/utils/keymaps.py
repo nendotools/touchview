@@ -30,7 +30,7 @@ def assign_keymaps():
     kmi = km.keymap_items.new("view2d.pan", LMOUSE, PRESS)
     modified_keymaps.append((km, kmi))
 
-    # add LEFT MOUSE ACTION for view3d.view_ops
+    # add LEFT MOUSE ACTION for touchview.view_ops
     for kmap in wm.keyconfigs["Blender"].keymaps:
         km = wm.keyconfigs.addon.keymaps.new(name=kmap.name, space_type=kmap.space_type, region_type=kmap.region_type)
         if kmap.name in top_level_names:
