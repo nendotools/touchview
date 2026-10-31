@@ -31,6 +31,15 @@ def update_header_toggle_position(c):
         bpy.types.IMAGE_HT_header.append(NODE_HT_nendo_header)
 
 
+# preference changes made outside the viewport (e.g. in the Preferences window)
+# don't redraw the viewport gizmos on their own
+def redraw_viewports(_, c):
+    for window in c.window_manager.windows:
+        for area in window.screen.areas:
+            if area.type == "VIEW_3D":
+                area.tag_redraw()
+
+
 ##
 # Action Menu Settings
 ##
@@ -128,12 +137,17 @@ class TOUCHVIEW_AP_OverlaySettings(AddonPreferences):
             ("TOUCH", "Touch", "Mouse/Touch input only", "VIEW_PAN", 2),
         ],
         default="FULL",
+        update=redraw_viewports,
     )
 
     enable_floating_toggle: BoolProperty(
         name="Floating Toggle",
-        description="Allows using floating toggle on mixed input mode",
+        description=(
+            "Show a floating button in the viewport (bottom-left by default, drag to move) "
+            "that turns touch controls on/off. Always shown in Pen and Touch input modes"
+        ),
         default=False,
+        update=redraw_viewports,
     )
 
     enable_double_click: BoolProperty(
@@ -228,12 +242,14 @@ class TOUCHVIEW_AP_OverlaySettings(AddonPreferences):
         name="Menu Style",
         items=menu_style_items,
         default="float.radial",
+        update=redraw_viewports,
     )
 
     gizmo_position: EnumProperty(
         name="Gizmo Position",
         items=position_items,
         default="RIGHT",
+        update=redraw_viewports,
     )
 
     menu_orientation: EnumProperty(

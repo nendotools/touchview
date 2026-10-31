@@ -1,7 +1,7 @@
 schema_version = "1.0.0"
 
 id = "touchview"
-version = "4.2.1"
+version = "4.3.0"
 name = "Touch Viewport"
 tagline = "Creates active touch zones over View 2D and 3D areas"
 maintainer = "NENDO, Karan(b3dhub)"
@@ -13,7 +13,7 @@ website = "https://github.com/nendotools/touchview"
 # https://docs.blender.org/manual/en/dev/extensions/tags.html
 tags = ["3D View", "User Interface"]
 
-blender_version_min = "4.2.0"
+blender_version_min = "5.2.0"
 
 # License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
 license = ["SPDX:GPL-3.0-or-later"]
