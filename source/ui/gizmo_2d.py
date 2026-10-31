@@ -105,7 +105,7 @@ class GizmoSet:
         gizmo = self.group.gizmos.new("GIZMO_GT_button_2d")
         gizmo.target_set_operator(command)
         gizmo.icon = icon  # type: ignore
-        gizmo.use_tooltip = False  # show tooltip
+        gizmo.use_tooltip = True  # show operator description on hover
         gizmo.use_event_handle_all = True  # don't pass events e.g. shift+a to add
         gizmo.use_grab_cursor = "use_grab_cursor" in self.config
         gizmo.show_drag = False  # show default cursor
@@ -154,14 +154,17 @@ class GizmoSetBoolean(GizmoSet):
     def __updatevisible(self):
         prefs = preferences()
         bind = self.binding
+        # the floating toggle is a standalone button, independent of the gizmo menu
+        if bind["name"] == "float_toggle":
+            self.visible = prefs.input_mode != "FULL" or prefs.enable_floating_toggle
+            self.__setActiveGizmo(prefs.is_enabled)
+            self.primary.hide = not self.visible
+            return
         if not preferences().show_menu and (bind["name"] not in ["float_menu"]):
             self.visible = False
             self.primary.hide = True
             return
-        if bind["name"] == "float_toggle":
-            self.visible = prefs.input_mode != "FULL" or prefs.enable_floating_toggle
-        else:
-            self.visible = getattr(preferences(), "show_" + self.binding["name"])
+        self.visible = getattr(preferences(), "show_" + self.binding["name"])
 
         if self.visible:
             self.visible = (
@@ -169,10 +172,7 @@ class GizmoSetBoolean(GizmoSet):
                 and not self._GizmoSet__checkAttributeBind()  # type: ignore
             )  # type: ignore
 
-        if bind["name"] == "float_toggle":
-            self.__setActiveGizmo(prefs.is_enabled)
-        else:
-            self.__setActiveGizmo(self._GizmoSet__findAttribute(bind["location"], bind["name"]))  # type: ignore
+        self.__setActiveGizmo(self._GizmoSet__findAttribute(bind["location"], bind["name"]))  # type: ignore
         self.primary.hide = not self.visible
 
     def __setToggleColors(self, gizmo: bpy.types.Gizmo):

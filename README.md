@@ -183,7 +183,26 @@ Select it and click `Install Add-on`.
 
 # Changelog
 
-<details open><summary><b>v4.2.0</b></summary><br>
+<details open><summary><b>v4.3.0</b></summary><br>
+
+- `CHANGED`: Requires Blender v5.2 or newer.
+- `ADDED`: Tooltips on every on-screen button.
+- `ADDED`: Brush Dynamics buttons in Grease Pencil 3 and Curves Sculpt modes.
+- `FIXED`: Brush size button had no effect in Blender 5.x (unified paint settings moved per paint mode).
+- `FIXED`: On-screen buttons disappeared in quad view; each quad view now shows its own menu.
+- `FIXED`: Fixed bar overlapped Blender's navigation gizmo; side bars now stay in the lower half of the viewport and wrap into extra columns/rows when needed.
+- `FIXED`: Fixed bar covered the floating toggle and action menu buttons in the bottom corners.
+- `FIXED`: Floating toggle was hidden along with the gizmo menu.
+- `FIXED`: Viewport didn't redraw when changing gizmo settings in the Preferences window.
+- `FIXED`: Decrease Multires stopped at the first non-Multires modifier.
+- `FIXED`: Voxel density buttons failed when the mesh name differed from the object name.
+- `IMPROVED`: Gizmo safe area now avoids the toolbar, sidebar, headers and asset shelf per region.
+- `IMPROVED`: Clearer description for the Floating Toggle option.
+- `REMOVED`: Unused duplicate gizmo modules.
+
+</details>
+
+<details><summary><b>v4.2.0</b></summary><br>
 
 - `ADDED`: Support for Blender v4.2 (Extensions).
 - `FIXED`: Gizmo size and overlapping.

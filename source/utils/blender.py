@@ -38,35 +38,46 @@ def dpi() -> int:
     return bpy.context.preferences.system.dpi
 
 
+# region types that may overlap the viewport and should be avoided by gizmos
+overlay_regions = {"TOOLS", "UI", "HEADER", "TOOL_HEADER", "ASSET_SHELF", "ASSET_SHELF_HEADER"}
+
+
 # returns a tuple (bottom-left, top-right)
-# safe area in viewport for UI elements
+# safe area in the current region for UI elements, relative to the region.
+# Works per-region, so each quad view region gets its own safe area.
 def safe_area_3d(padding: float = 28) -> tuple[Vector, Vector]:
+    region = bpy.context.region
     buffer = padding * ui_scale()
-    min = Vector((buffer, buffer))
-    max = Vector(
-        (
-            bpy.context.area.width - buffer,
-            bpy.context.area.height - buffer,
-        )
+    left, bottom = region.x, region.y
+    right, top = region.x + region.width, region.y + region.height
+
+    for r in bpy.context.area.regions:
+        if r.type not in overlay_regions or r.width <= 1 or r.height <= 1:
+            continue
+        # skip panels that don't touch this region (e.g. other quad views)
+        if r.x >= right or r.x + r.width <= left or r.y >= top or r.y + r.height <= bottom:
+            continue
+        if r.alignment == "LEFT":
+            left = max(left, r.x + r.width)
+        elif r.alignment == "RIGHT":
+            right = min(right, r.x)
+        elif r.alignment == "BOTTOM":
+            bottom = max(bottom, r.y + r.height)
+        elif r.alignment == "TOP":
+            top = min(top, r.y)
+
+    return (
+        Vector((left - region.x + buffer, bottom - region.y + buffer)),
+        Vector((right - region.x - buffer, top - region.y - buffer)),
     )
 
-    if panel("TOOLS")[2] == "LEFT":
-        min.x += panel("TOOLS")[0]
-    elif panel("TOOLS")[2] == "RIGHT":
-        max.x -= panel("TOOLS")[0]
 
-    if panel("UI")[2] == "LEFT":
-        min.x += panel("UI")[0]
-    elif panel("UI")[2] == "RIGHT":
-        max.x -= panel("UI")[0]
-
-    if panel("HEADER")[2] == "BOTTOM":
-        min.y += panel("HEADER")[1]
-    elif panel("HEADER")[2] == "TOP":
-        max.y -= panel("HEADER")[1]
-
-    if panel("TOOL_HEADER")[2] == "BOTTOM":
-        min.y += panel("TOOL_HEADER")[1]
-    elif panel("TOOL_HEADER")[2] == "TOP":
-        max.y -= panel("TOOL_HEADER")[1]
-    return (min, max)
+# approximate height of Blender's navigation gizmo column in the top-right corner
+def navigation_gizmo_height() -> float:
+    space = bpy.context.space_data
+    if not getattr(space, "show_gizmo", False) or not getattr(space, "show_gizmo_navigate", False):
+        return 0.0
+    view = bpy.context.preferences.view
+    axis = {"GIZMO": view.gizmo_size_navigate_v3d, "MINIMAL": 40}.get(view.mini_axis_type, 0)
+    buttons = 4 * 40  # zoom, pan, camera, perspective toggle
+    return (axis + buttons) * ui_scale()

@@ -78,12 +78,30 @@ pivot_icon_items = [
     ("SURFACE", "PIVOT_MEDIAN"),
 ]
 
-brush_modes = [
-    "SCULPT",
-    "PAINT_VERTEX",
-    "PAINT_WEIGHT",
-    "PAINT_TEXTURE",
-]
+# context.mode -> tool_settings attribute holding the paint settings
+paint_settings = {
+    "SCULPT": "sculpt",
+    "PAINT_VERTEX": "vertex_paint",
+    "PAINT_WEIGHT": "weight_paint",
+    "PAINT_TEXTURE": "image_paint",
+    "SCULPT_CURVES": "curves_sculpt",
+    "PAINT_GREASE_PENCIL": "gpencil_paint",
+    "SCULPT_GREASE_PENCIL": "gpencil_sculpt_paint",
+    "WEIGHT_GREASE_PENCIL": "gpencil_weight_paint",
+    "VERTEX_GREASE_PENCIL": "gpencil_vertex_paint",
+    # legacy grease pencil mode names
+    "PAINT_GPENCIL": "gpencil_paint",
+    "SCULPT_GPENCIL": "gpencil_sculpt_paint",
+    "WEIGHT_GPENCIL": "gpencil_weight_paint",
+    "VERTEX_GPENCIL": "gpencil_vertex_paint",
+}
+
+
+def paint_settings_name(mode: str) -> str | None:
+    return paint_settings.get(mode)
+
+
+brush_modes = list(paint_settings)
 
 edit_modes = [
     ("OBJECT", "Object Mode", ""),
@@ -152,9 +170,13 @@ gizmo_sets = {
     "PAINT_TEXTURE": {"brush_dynamics"},
     "PAINT_VERTEX": {"brush_dynamics"},
     "PAINT_WEIGHT": {"brush_dynamics"},
+    "SCULPT_CURVES": {"brush_dynamics"},
+    "PAINT_GREASE_PENCIL": {"brush_dynamics"},
+    "SCULPT_GREASE_PENCIL": {"brush_dynamics"},
+    "WEIGHT_GREASE_PENCIL": {"brush_dynamics"},
+    "VERTEX_GREASE_PENCIL": {"brush_dynamics"},
     "WEIGHT_GPENCIL": {"brush_dynamics"},
     "VERTEX_GPENCIL": {"brush_dynamics"},
     "SCULPT_GPENCIL": {"brush_dynamics"},
     "PAINT_GPENCIL": {"brush_dynamics"},
-    "EDIT_GPENCIL": {"brush_dynamics"},
 }

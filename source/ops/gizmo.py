@@ -7,6 +7,8 @@ from ..utils.constants import CANCEL, FINISHED, MODAL
 
 
 class TOUCHVIEW_OT_move_float_menu(Operator):
+    """Tap to show/hide the menu buttons, drag to move the menu"""
+
     bl_label = "Relocate Gizmo Menu"
     bl_idname = "touchview.move_float_menu"
 
@@ -65,6 +67,8 @@ class TOUCHVIEW_OT_move_float_menu(Operator):
 
 
 class TOUCHVIEW_OT_menu_controller(Operator):
+    """Tap to open the action menu, drag to move it"""
+
     bl_label = "Relocate Action Menu"
     bl_idname = "touchview.move_action_menu"
 
@@ -126,6 +130,8 @@ class TOUCHVIEW_OT_menu_controller(Operator):
 
 
 class TOUCHVIEW_OT_cycle_controlGizmo(Operator):
+    """Cycle the object gizmo between move, rotate, scale and none"""
+
     bl_label = "switch object control gizmo"
     bl_idname = "touchview.cycle_control_gizmo"
 
@@ -163,6 +169,8 @@ class TOUCHVIEW_OT_cycle_controlGizmo(Operator):
 
 
 class TOUCHVIEW_OT_float_controller(Operator):
+    """Tap to toggle touch controls, drag to move this button"""
+
     bl_label = "Relocate Toggle Button"
     bl_idname = "touchview.move_toggle_button"
 
@@ -201,8 +209,8 @@ class TOUCHVIEW_OT_float_controller(Operator):
         if (
             event.mouse_region_x < 0
             or event.mouse_region_y < 0
-            or event.mouse_region_x > context.area.width
-            or event.mouse_region_y > context.area.height
+            or event.mouse_region_x > context.region.width
+            or event.mouse_region_y > context.region.height
         ):
             # mouse out of region area broken in Blender 4.x, exit early
             return FINISHED
