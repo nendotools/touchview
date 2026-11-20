@@ -1,20 +1,17 @@
-# type: ignore
 import bpy
 from bpy.types import Menu, Panel, UILayout
 
-from ..utils.blender import preferences
+from ..utils.addon import preferences
 
 
 class TouchView:
-    bl_label = "Touchview Settings"
+    bl_label = "Touch View"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "Touchview"
+    bl_category = "Touch View"
 
 
 class TOUCHVIEW_PT_view_3d_panel(TouchView, Panel):
-    # bl_label = "Touchview Settings"
-
     def draw(self, context):
         prefs = preferences()
 
@@ -64,7 +61,7 @@ class TOUCHVIEW_PT_control_zones(TouchView, Panel):
         layout.use_property_split = True
 
         col = layout.column(align=True)
-        col.prop(prefs, "isVisible", text="Show Overlay")
+        col.prop(prefs, "show_overlay", text="Show Overlay")
         col.prop(prefs, "swap_panrotate")
         col.prop(prefs, "use_multiple_colors")
 
@@ -242,7 +239,7 @@ class TOUCHVIEW_PT_gizmo_display(Panel):
 
         layout = self.layout
         col = layout.column()
-        available_gizmos = prefs.getGizmoSet(context.object.mode)
+        available_gizmos = prefs.get_gizmo_set(context.mode)
 
         col = col.column(align=True)
         col.active = context.space_data.show_gizmo
@@ -261,7 +258,7 @@ class TOUCHVIEW_MT_floating(Menu):
 
     def draw(self, context):
         prefs = preferences()
-        menu = prefs.getMenuSettings(context.mode)
+        menu = prefs.get_menu_settings(context.mode)
 
         layout = self.layout
         pie = layout.menu_pie()

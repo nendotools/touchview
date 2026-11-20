@@ -1,7 +1,5 @@
-preferences.json
-bin
-deploy.sh
 __pycache__/
-venv
-.venv
-settings.json
+.vscode/
+releases/
+tests/
+preferences.json

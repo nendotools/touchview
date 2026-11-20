@@ -1,21 +1,29 @@
-# Built-in modules
 import math
 
 import bpy
 from bpy.props import EnumProperty
 from bpy.types import Operator
-from bpy_extras.view3d_utils import (region_2d_to_origin_3d,
-                                     region_2d_to_vector_3d)
+from bpy_extras.view3d_utils import region_2d_to_origin_3d, region_2d_to_vector_3d
 from mathutils import Vector
 
-# Local modules
-from ..utils.blender import preferences
-from ..utils.constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS,
-                               RMOUSE, brush_modes, input_mode_items)
+from ..utils.addon import preferences
+from ..utils.constants import FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE, brush_modes, input_mode_items
 
 
-def is_touch(event):
-    return event.pressure in [0.0, 1.0]
+def is_pen(event):
+    """Pen input, as opposed to finger, mouse, or touchpad."""
+    return event.is_tablet or event.type == PEN
+
+
+def passes_through(prefs, event):
+    """Whether Blender should handle this event instead of the control zones.
+
+    In Pen mode only the pen moves the camera; in every other mode the pen
+    draws and finger/mouse/touchpad move the camera.
+    """
+    if prefs.input_mode == "PEN":
+        return not is_pen(event)
+    return is_pen(event)
 
 
 class TOUCHVIEW_OT_right_click_action(Operator):
@@ -34,9 +42,9 @@ class TOUCHVIEW_OT_right_click_action(Operator):
             return PASSTHROUGH
         if event.type not in [RMOUSE]:
             return PASSTHROUGH
-        if is_touch(event) and prefs.right_click_source == "PEN":
+        if not is_pen(event) and prefs.right_click_source == "PEN":
             return PASSTHROUGH
-        if not is_touch(event) and prefs.right_click_source == "MOUSE":
+        if is_pen(event) and prefs.right_click_source == "MOUSE":
             return PASSTHROUGH
         if event.value == "DOUBLE_CLICK":
             return PASSTHROUGH
@@ -64,12 +72,15 @@ class TOUCHVIEW_OT_double_click_action(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.area.type in {"NODE_EDITOR", "VIEW_2D", "VIEW_3D", "IMAGE_EDITOR"} and context.region.type == "WINDOW"
+        return (
+            context.area.type in {"NODE_EDITOR", "VIEW_2D", "VIEW_3D", "IMAGE_EDITOR"}
+            and context.region.type == "WINDOW"
+        )
 
     def invoke(self, context, event):
         if event.type not in [PEN, LMOUSE]:
             return PASSTHROUGH
-        if not is_touch(event):
+        if is_pen(event):
             return PASSTHROUGH
         if event.value != "DOUBLE_CLICK":
             return PASSTHROUGH
@@ -114,7 +125,7 @@ class TOUCHVIEW_OT_touch_input_2d(Operator):
         prefs = preferences()
         if not prefs.is_enabled:
             return PASSTHROUGH
-        if prefs.input_mode == "FULL" and (event.type == PEN or not is_touch(event)):
+        if passes_through(prefs, event):
             return PASSTHROUGH
 
         if event.value != PRESS:
@@ -123,19 +134,13 @@ class TOUCHVIEW_OT_touch_input_2d(Operator):
 
         mid_point = Vector((context.region.width / 2, context.region.height / 2))
 
-        dolly_scale = prefs.getWidth()
+        dolly_scale = prefs.get_width()
         dolly_wid = mid_point.x * dolly_scale
 
         if dolly_wid > self.delta[0] or self.delta[0] > context.region.width - dolly_wid:
             self.mode = "DOLLY"
         else:
             self.mode = "PAN"
-
-        if prefs.swap_panrotate:
-            if self.mode == "PAN":
-                self.mode = "ORBIT"
-            elif self.mode == "ORBIT":
-                self.mode = "PAN"
 
         self.execute(context)
         return FINISHED
@@ -187,8 +192,8 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
 
         mid_point = Vector((context.region.width / 2, context.region.height / 2))
 
-        dolly_scale = prefs.getWidth()
-        pan_scale = prefs.getRadius()
+        dolly_scale = prefs.get_width()
+        pan_scale = prefs.get_radius()
 
         dolly_wid = mid_point.x * dolly_scale
         pan_diameter = math.dist(
@@ -196,7 +201,9 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
             mid_point,  # type: ignore
         ) * (pan_scale * 0.5)
 
-        is_quadview_orthographic = context.region_data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
+        is_quadview_orthographic = (
+            context.region_data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
+        )
         is_locked = context.region_data.lock_rotation or is_quadview_orthographic
 
         if dolly_wid > self.delta[0] or self.delta[0] > context.region.width - dolly_wid:
@@ -243,22 +250,22 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
             prefs.lazy_mode
             and not prefs.is_enabled
             and event.value == PRESS
-            and brush_modes.__contains__(context.mode)
-            and self.mouseTarget(context, event) != context.active_object
+            and context.mode in brush_modes
+            and self.mouse_target(context, event) != context.active_object
         ):
             return False
 
         if not prefs.is_enabled:
             return True
 
-        if prefs.input_mode == "FULL" and (event.type == PEN or not is_touch(event)):
+        if passes_through(prefs, event):
             return True
 
         if event.value != PRESS:
             return True
         return False
 
-    def mouseTarget(self, context, event):
+    def mouse_target(self, context, event):
         # get the context arguments
         region = context.region
         rv3d = context.region_data
@@ -269,10 +276,9 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
         self.ray_origin = region_2d_to_origin_3d(region, rv3d, coord)
 
         self.ray_target = self.ray_origin + view_vector
-        return self.isCurrentObject(context)
+        return self.is_current_object(context)
 
-    def visible_objects_and_duplicates(self, context):
-        depsgraph = context.evaluated_depsgraph_get()
+    def visible_objects_and_duplicates(self, depsgraph):
         for dup in depsgraph.object_instances:
             if dup.is_instance:  # Real dupli instance
                 obj = dup.instance_object
@@ -281,35 +287,41 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
                 obj = dup.object
                 yield (obj, obj.matrix_world.copy())  # type: ignore
 
-    def obj_ray_cast(self, obj, matrix):
+    def obj_ray_cast(self, obj, matrix, depsgraph):
         # get the ray relative to the object
         matrix_inv = matrix.inverted()
         ray_origin_obj = matrix_inv @ self.ray_origin
         ray_target_obj = matrix_inv @ self.ray_target
         ray_direction_obj = ray_target_obj - ray_origin_obj
 
-        # cast the ray
-        success, location, normal, face_index = obj.ray_cast(ray_origin_obj, ray_direction_obj)
+        # cast the ray against the evaluated mesh so sculpt strokes are seen
+        success, location, normal, face_index = obj.ray_cast(ray_origin_obj, ray_direction_obj, depsgraph=depsgraph)
 
         if success:
             return location, normal, face_index
         else:
             return None, None, None
 
-    def isCurrentObject(self, context):
+    def is_current_object(self, context):
         # cast rays and find the closest object
         best_length_squared = -1.0
         best_obj = None
 
-        for obj, matrix in self.visible_objects_and_duplicates(context):
-            if obj.type == "MESH":
-                hit, _, _ = self.obj_ray_cast(obj, matrix)
-                if hit is not None:
-                    hit_world = matrix @ hit
-                    length_squared = (hit_world - self.ray_origin).length_squared
-                    if best_obj is None or length_squared < best_length_squared:
-                        best_length_squared = length_squared
-                        best_obj = obj
+        depsgraph = context.evaluated_depsgraph_get()
+        if context.mode in brush_modes:
+            # the sculpt BVH lags a frame behind the evaluated depsgraph
+            depsgraph.update()
+
+        for obj, matrix in self.visible_objects_and_duplicates(depsgraph):
+            if obj is None or obj.type != "MESH":
+                continue
+            hit, _, _ = self.obj_ray_cast(obj, matrix, depsgraph)
+            if hit is not None:
+                hit_world = matrix @ hit
+                length_squared = (hit_world - self.ray_origin).length_squared
+                if best_obj is None or length_squared < best_length_squared:
+                    best_length_squared = length_squared
+                    best_obj = obj
 
         return best_obj.original if best_obj is not None else None
 

@@ -3,8 +3,8 @@ import math
 import bpy
 from bpy.types import Operator
 
-from ..utils.blender import preferences
-from ..utils.constants import CANCEL, FINISHED, pivot_items
+from ..utils.addon import preferences
+from ..utils.constants import CANCEL, FINISHED, paint_settings_name, pivot_items
 
 
 class TOUCHVIEW_OT_flip_tools(Operator):
@@ -70,7 +70,7 @@ class TOUCHVIEW_OT_toggle_touch_controls(Operator):
 
 
 class TOUCHVIEW_OT_toggle_npanel(Operator):
-    """Toggle Settings Panel"""
+    """Toggle the sidebar (N panel)"""
 
     bl_label = "Display prefs Panel"
     bl_idname = "touchview.toggle_n_panel"
@@ -115,27 +115,24 @@ class TOUCHVIEW_OT_viewport_recenter(Operator):
 
 
 class TOUCHVIEW_OT_viewport_lock(Operator):
-    """Toggle Viewport Rotation"""
+    """Toggle viewport rotation lock"""
 
     bl_label = "Viewport rotation lock toggle"
     bl_idname = "touchview.viewport_lock"
 
-    region_ids = []
-
     def execute(self, context):
-        if not isinstance(context.area.spaces.active, bpy.types.SpaceView3D):
+        space = context.area.spaces.active
+        if not isinstance(space, bpy.types.SpaceView3D):
             return CANCEL
-        if len(context.area.spaces.active.region_quadviews) == 0:
+        if len(space.region_quadviews) == 0:
             context.region_data.lock_rotation ^= True
             return FINISHED
 
-        for region in context.area.spaces.active.region_quadviews:
-            self.region_ids.append((region.as_pointer(), region.lock_rotation))
+        regions = {region.as_pointer(): region.lock_rotation for region in space.region_quadviews}
 
         start_change = False
-        regions = dict(self.region_ids)
         for i in range(3, -1, -1):
-            region_data = context.area.spaces.active.region_quadviews[i]
+            region_data = space.region_quadviews[i]
             if context.region_data.as_pointer() == region_data.as_pointer():
                 start_change = True
                 context.region_data.lock_rotation ^= True
@@ -143,144 +140,85 @@ class TOUCHVIEW_OT_viewport_lock(Operator):
 
             if start_change:
                 region_data.lock_rotation = regions[region_data.as_pointer()]
-        self.region_ids = []
         return FINISHED
 
 
-class TOUCHVIEW_OT_brush_resize(Operator):
-    """Brush Resize"""
+def unified_paint_path(tool_settings, paint: str) -> str:
+    """Blender 5.x moved unified paint settings into each paint mode."""
+    paint_settings = getattr(tool_settings, paint, None)
+    if paint_settings is not None and hasattr(paint_settings, "unified_paint_settings"):
+        return f"tool_settings.{paint}.unified_paint_settings"
+    if hasattr(tool_settings, "unified_paint_settings"):
+        return "tool_settings.unified_paint_settings"
+    return ""
+
+
+class BrushRadialControl:
+    """Shared radial control for brush properties, mirroring Blender's own keymap"""
+
+    prop = ""
+
+    def invoke(self, context, event):
+        prefs = preferences()
+        if prefs.menu_style == "fixed.bar":
+            if prefs.gizmo_position in {"LEFT", "RIGHT"}:
+                context.window.cursor_warp(
+                    context.region.x + math.floor(context.region.width / 2),
+                    context.region.y + event.mouse_region_y,
+                )
+            else:
+                context.window.cursor_warp(
+                    context.region.x + event.mouse_region_x,
+                    context.region.y + math.floor(context.region.height / 2),
+                )
+        return self.execute(context)
+
+    def execute(self, context):
+        paint = paint_settings_name(context.mode)
+        if paint is None:
+            return CANCEL
+        brush_path = f"tool_settings.{paint}.brush"
+        unified_path = unified_paint_path(context.scene.tool_settings, paint)
+        # brushes without unified settings (e.g. Grease Pencil draw) use the brush directly
+        if not unified_path:
+            bpy.ops.wm.radial_control(
+                "INVOKE_DEFAULT",  # type: ignore
+                data_path_primary=f"{brush_path}.{self.prop}",
+            )
+            return FINISHED
+
+        bpy.ops.wm.radial_control(
+            "INVOKE_DEFAULT",  # type: ignore
+            data_path_primary=f"{brush_path}.{self.prop}",
+            data_path_secondary=f"{unified_path}.{self.prop}",
+            use_secondary=f"{unified_path}.use_unified_{self.prop}",
+            rotation_path=f"{brush_path}.texture_slot.angle",
+            color_path=f"{brush_path}.cursor_color_add",
+            image_id=brush_path,
+        )
+        return FINISHED
+
+
+class TOUCHVIEW_OT_brush_resize(BrushRadialControl, Operator):
+    """Adjust the brush size"""
 
     bl_label = "Brush Size Adjust"
     bl_idname = "touchview.brush_resize"
 
-    def invoke(self, context, event):
-        self.mouse_x = event.mouse_region_x
-        self.mouse_y = event.mouse_region_y
-        self.execute(context)
-        return FINISHED
-
-    # activate radial_control to change sculpt brush size
-    def execute(self, context):
-        prefs = preferences()
-        if prefs.menu_style in {"fixed.bar"}:
-            if prefs.gizmo_position in ["LEFT", "RIGHT"]:
-                context.window.cursor_warp(math.floor(context.region.width / 2), self.mouse_y)
-            else:
-                context.window.cursor_warp(self.mouse_x, math.floor(context.region.height / 2))
-        if context.mode in [
-            "PAINT_GPENCIL",
-            "EDIT_GPENCIL",
-            "SCULPT_GPENCIL",
-            "WEIGHT_GPENCIL",
-            "VERTEX_GPENCIL",
-        ]:
-            return self.resize2d(context)
-        return self.resize3d(context)
-
-    def resize2d(self, context):
-        data_path = "tool_settings.gpencil_paint.brush.size"
-        if context.mode == "SCULPT_GPENCIL":
-            data_path = "tool_settings.gpencil_sculpt_paint.brush.size"
-        if context.mode == "WEIGHT_GPENCIL":
-            data_path = "tool_settings.gpencil_weight_paint.brush.size"
-        if context.mode == "VERTEX_GPENCIL":
-            data_path = "tool_settings.gpencil_vertex_paint.brush.size"
-        bpy.ops.wm.radial_control(
-            "INVOKE_DEFAULT",  # type: ignore
-            data_path_primary=data_path,
-        )
-        return FINISHED
-
-    def resize3d(self, context):
-        data_path = "tool_settings.sculpt.brush.size"
-        if context.mode == "PAINT_VERTEX":
-            data_path = "tool_settings.vertex_paint.brush.size"
-        if context.mode == "PAINT_WEIGHT":
-            data_path = "tool_settings.weight_paint.brush.size"
-        if context.mode == "PAINT_IMAGE":
-            data_path = "tool_settings.image_paint.brush.size"
-        if context.mode == "PAINT_TEXTURE":
-            data_path = "tool_settings.image_paint.brush.size"
-        bpy.ops.wm.radial_control(
-            "INVOKE_DEFAULT",  # type: ignore
-            data_path_primary=data_path,
-            data_path_secondary="tool_settings.unified_paint_settings.size",
-            use_secondary=("tool_settings.unified_paint_settings.use_unified_size"),
-            rotation_path="tool_settings.sculpt.brush.texture_slot.angle",
-            color_path="tool_settings.sculpt.brush.cursor_color_add",
-            image_id="tool_settings.sculpt.brush",
-        )
-        return FINISHED
+    prop = "size"
 
 
-class TOUCHVIEW_OT_brush_strength(Operator):
-    """Brush Strength"""
+class TOUCHVIEW_OT_brush_strength(BrushRadialControl, Operator):
+    """Adjust the brush strength"""
 
     bl_label = "Brush Strength Adjust"
     bl_idname = "touchview.brush_strength"
 
-    def invoke(self, context, event):
-        self.mouse_x = event.mouse_region_x
-        self.mouse_y = event.mouse_region_y
-        self.execute(context)
-        return FINISHED
-
-    # activate radial_control to change sculpt brush size
-    def execute(self, context):
-        prefs = preferences()
-        if prefs.menu_style in {"fixed.bar"}:
-            if prefs.gizmo_position in ["LEFT", "RIGHT"]:
-                context.window.cursor_warp(math.floor(context.region.width / 2), self.mouse_y)
-            else:
-                context.window.cursor_warp(self.mouse_x, math.floor(context.region.height / 2))
-        if context.mode in [
-            "PAINT_GPENCIL",
-            "EDIT_GPENCIL",
-            "SCULPT_GPENCIL",
-            "WEIGHT_GPENCIL",
-            "VERTEX_GPENCIL",
-        ]:
-            return self.resize2d(context)
-        return self.resize3d(context)
-
-    def resize2d(self, context):
-        data_path = "tool_settings.gpencil_paint.brush.gpencil_settings.pen_strength"
-        if context.mode == "SCULPT_GPENCIL":
-            data_path = "tool_settings.gpencil_sculpt_paint.brush.strength"
-        if context.mode == "WEIGHT_GPENCIL":
-            data_path = "tool_settings.gpencil_weight_paint.brush.strength"
-        if context.mode == "VERTEX_GPENCIL":
-            data_path = "tool_settings.gpencil_vertex_paint.brush.gpencil_settings.pen_strength"
-        bpy.ops.wm.radial_control(
-            "INVOKE_DEFAULT",  # type: ignore
-            data_path_primary=data_path,
-        )
-        return FINISHED
-
-    def resize3d(self, context):
-        data_path = "tool_settings.sculpt.brush.strength"
-        if context.mode == "PAINT_VERTEX":
-            data_path = "tool_settings.vertex_paint.brush.strength"
-        if context.mode == "PAINT_WEIGHT":
-            data_path = "tool_settings.weight_paint.brush.strength"
-        if context.mode == "PAINT_IMAGE":
-            data_path = "tool_settings.image_paint.brush.strength"
-        if context.mode == "PAINT_TEXTURE":
-            data_path = "tool_settings.image_paint.brush.strength"
-        bpy.ops.wm.radial_control(
-            "INVOKE_DEFAULT",  # type: ignore
-            data_path_primary=data_path,
-            data_path_secondary=("tool_settings.unified_paint_settings.strength"),
-            use_secondary=("tool_settings.unified_paint_settings.use_unified_strength"),
-            rotation_path="tool_settings.sculpt.brush.texture_slot.angle",
-            color_path="tool_settings.sculpt.brush.cursor_color_add",
-            image_id="tool_settings.sculpt.brush",
-        )
-        return FINISHED
+    prop = "strength"
 
 
 class TOUCHVIEW_OT_increase_multires(Operator):
-    """Increment Multires by 1 or add subdivision"""
+    """Increase the Multires level, subdividing when at the highest level"""
 
     bl_label = "Increment Multires modifier by 1 or add subdivision level"
     bl_idname = "touchview.increment_multires"
@@ -309,7 +247,7 @@ class TOUCHVIEW_OT_increase_multires(Operator):
 
 
 class TOUCHVIEW_OT_decrease_multires(Operator):
-    """Decrement Multires by 1"""
+    """Decrease the Multires level, unsubdividing when at the lowest level"""
 
     bl_label = "decrement Multires modifier by 1"
     bl_idname = "touchview.decrement_multires"
@@ -319,7 +257,7 @@ class TOUCHVIEW_OT_decrease_multires(Operator):
             return CANCEL
         for mod in context.active_object.modifiers:
             if not isinstance(mod, bpy.types.MultiresModifier):
-                return FINISHED
+                continue
             if context.mode == "SCULPT":
                 if mod.sculpt_levels == 0:
                     bpy.ops.object.multires_unsubdivide(modifier=mod.name)
@@ -335,36 +273,36 @@ class TOUCHVIEW_OT_decrease_multires(Operator):
 
 
 class TOUCHVIEW_OT_density_up(Operator):
-    """Increase voxel density"""
+    """Increase voxel density and remesh"""
 
     bl_label = "Increase voxel density and remesh"
     bl_idname = "touchview.density_up"
 
     def execute(self, context):
-        if not context.active_object:
+        if not context.active_object or context.active_object.type != "MESH":
             return CANCEL
         for mod in context.active_object.modifiers:
             if isinstance(mod, bpy.types.MultiresModifier):
                 return CANCEL
-        mesh = bpy.data.meshes[context.active_object.name]
+        mesh = context.active_object.data
         mesh.remesh_voxel_size *= 0.8
         bpy.ops.object.voxel_remesh()
         return FINISHED
 
 
 class TOUCHVIEW_OT_density_down(Operator):
-    """Decrease voxel density"""
+    """Decrease voxel density and remesh"""
 
     bl_label = "Decrease voxel density and remesh"
     bl_idname = "touchview.density_down"
 
     def execute(self, context):
-        if not context.active_object:
+        if not context.active_object or context.active_object.type != "MESH":
             return CANCEL
         for mod in context.active_object.modifiers:
             if isinstance(mod, bpy.types.MultiresModifier):
                 return CANCEL
-        mesh = bpy.data.meshes[context.active_object.name]
+        mesh = context.active_object.data
         mesh.remesh_voxel_size /= 0.8
         bpy.ops.object.voxel_remesh()
         return FINISHED
