@@ -1,14 +1,15 @@
-from . import ops, ui, utils
-
-_registered = []
+from . import changelog, ops, ui, utils
 
 
 def register():
-    for module in (ops, ui, utils):
-        module.register()
-        _registered.append(module)
+    changelog.register()
+    ops.register()
+    utils.register()
+    ui.register()
 
 
 def unregister():
-    while _registered:
-        _registered.pop().unregister()
+    changelog.unregister()
+    ops.unregister()
+    ui.unregister()
+    utils.unregister()

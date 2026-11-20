@@ -1,14 +1,13 @@
 from . import actions, gizmo, touch
 
-_registered = []
-
 
 def register():
-    for module in (actions, touch, gizmo):
-        module.register()
-        _registered.append(module)
+    actions.register()
+    touch.register()
+    gizmo.register()
 
 
 def unregister():
-    while _registered:
-        _registered.pop().unregister()
+    actions.unregister()
+    touch.unregister()
+    gizmo.unregister()

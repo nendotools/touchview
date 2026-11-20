@@ -1,6 +1,6 @@
 ---
 name: blender-conventions
-description: "Coding conventions for this Blender add-on template: SOLID principles, unabbreviated clean names, Blender class naming (XX_OT_/XX_PT_/XX_UL_/XX_MT_/XX_AP_/XX_PG_), registration patterns, panel mixin, operator poll/description, and rules against unnecessary abstractions. Use when writing, refactoring, or reviewing any Python code in this add-on, adding operators/panels/properties, or forking the template for a new add-on."
+description: "Coding conventions for this Blender add-on template: SOLID principles, unabbreviated clean names, the no-comments-unless-needed rule, Blender class naming (XX_OT_/XX_PT_/XX_UL_/XX_MT_/XX_AP_/XX_PG_), registration patterns, panel mixin, operator poll/description, and rules against unnecessary abstractions. Use when writing, refactoring, or reviewing any Python code in this add-on, adding operators/panels/properties, or forking the template for a new add-on."
 ---
 
 # Blender Add-on Conventions
@@ -13,8 +13,19 @@ bake one add-on's specifics into shared modules.
 
 - Writing or modifying any Python in `source/`
 - Adding operators, panels, menus, UILists, property groups, preferences, keymaps
-- Reviewing code for SOLID/naming/flow compliance
+- Reviewing code for SOLID/naming/flow/comment compliance
 - Forking the template into a new add-on (the `XX_` prefix rename)
+
+## Comments
+
+- **No comments unless the code cannot speak for itself** — names and structure carry
+  the meaning
+- Comment only what a reader cannot infer: intent behind a non-obvious decision, a Blender
+  API quirk, a version-specific workaround (with the reason), or a deprecation
+- Never restate the next line, narrate the obvious, use banners/section dividers, or park
+  commented-out code — delete it or fix the name instead
+- Docstrings are the exception: Google style with `Args:`/`Returns:` blocks and type
+  annotations (see `source/utils/addon.py`)
 
 ## Naming
 
@@ -25,8 +36,6 @@ bake one add-on's specifics into shared modules.
   `XX_AP_preference` (AddonPreferences), `XX_PG_test` (PropertyGroup)
 - `XX_` is the placeholder prefix — replace consistently across ALL files when forking
 - Modules: lowercase underscore (`ops/`, `ui/`, `utils/`); one concern per module
-- Docstrings: Google style with `Args:`/`Returns:` blocks and type annotations (see
-  `source/utils/addon.py`)
 
 ## SOLID
 

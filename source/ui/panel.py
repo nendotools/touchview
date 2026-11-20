@@ -1,20 +1,17 @@
-# type: ignore
 import bpy
 from bpy.types import Menu, Panel, UILayout
 
-from ..utils.blender import preferences
+from ..utils.addon import preferences
 
 
 class TouchView:
-    bl_label = "Touchview Settings"
+    bl_label = "Touch View"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "Touchview"
+    bl_category = "Touch View"
 
 
 class TOUCHVIEW_PT_view_3d_panel(TouchView, Panel):
-    # bl_label = "Touchview Settings"
-
     def draw(self, context):
         prefs = preferences()
 

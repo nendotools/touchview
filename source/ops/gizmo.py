@@ -2,6 +2,7 @@ import bpy
 from bpy.types import Operator
 from mathutils import Vector
 
+from ..utils.addon import preferences
 from ..utils.blender import *
 from ..utils.constants import CANCEL, FINISHED, MODAL
 
@@ -65,8 +66,8 @@ class TOUCHVIEW_OT_modal_move(Operator):
         return (
             event.mouse_region_x < 0
             or event.mouse_region_y < 0
-            or event.mouse_region_x > context.area.width
-            or event.mouse_region_y > context.area.height
+            or event.mouse_region_x > context.region.width
+            or event.mouse_region_y > context.region.height
         )
 
     def _has_moved(self) -> bool:
@@ -77,6 +78,8 @@ class TOUCHVIEW_OT_modal_move(Operator):
 
 
 class TOUCHVIEW_OT_move_float_menu(TOUCHVIEW_OT_modal_move):
+    """Tap to show/hide the menu buttons, drag to move the menu"""
+
     bl_label = "Relocate Gizmo Menu"
     bl_idname = "touchview.move_float_menu"
 
@@ -88,6 +91,8 @@ class TOUCHVIEW_OT_move_float_menu(TOUCHVIEW_OT_modal_move):
 
 
 class TOUCHVIEW_OT_menu_controller(TOUCHVIEW_OT_modal_move):
+    """Tap to open the action menu, drag to move it"""
+
     bl_label = "Relocate Action Menu"
     bl_idname = "touchview.move_action_menu"
 
@@ -101,6 +106,8 @@ class TOUCHVIEW_OT_menu_controller(TOUCHVIEW_OT_modal_move):
 
 
 class TOUCHVIEW_OT_float_controller(TOUCHVIEW_OT_modal_move):
+    """Tap to toggle touch controls, drag to move this button"""
+
     bl_label = "Relocate Toggle Button"
     bl_idname = "touchview.move_toggle_button"
 
@@ -112,6 +119,8 @@ class TOUCHVIEW_OT_float_controller(TOUCHVIEW_OT_modal_move):
 
 
 class TOUCHVIEW_OT_cycle_control_gizmo(Operator):
+    """Cycle the object gizmo between move, rotate, scale and none"""
+
     bl_label = "switch object control gizmo"
     bl_idname = "touchview.cycle_control_gizmo"
 

@@ -2,7 +2,7 @@
 
 Pan, rotate, and zoom the viewport with touch or pen input. TouchView overlays configurable control zones and a customizable gizmo bar on top of Blender, making it comfortable to use without a keyboard or mouse.
 
-![Blender Version](https://img.shields.io/badge/Blender-3.3%2B-orange?logo=blender)
+![Blender Version](https://img.shields.io/badge/Blender-4.2%2B-orange?logo=blender)
 ![License](https://img.shields.io/badge/License-GPL--3.0-blue)
 
 ## Features
@@ -14,7 +14,7 @@ Pan, rotate, and zoom the viewport with touch or pen input. TouchView overlays c
 - **Custom double-tap** - finger or click double-tap triggers Transfer Mode, Toggle Touch Control, Toggle Local View, or Toggle Full-screen; the pen never triggers it while drawing
 - **Custom on-screen buttons** - Undo/Redo, Fullscreen, Quad-view, Recenter, Rotation Center, N-panel, Rotation Lock, Topology Control, and Sculpt Brush Dynamics, each toggleable from the overlay menu
 - **Topology control** - retopology tools in Sculpt Mode; switches to subdivision-level controls when the object has a Multires modifier, with a configurable subdivision limit
-- **Sculpt brush dynamics** - brush size and strength from the viewport in sculpt and paint modes
+- **Sculpt brush dynamics** - brush size and strength from the viewport in sculpt, paint, Grease Pencil and Curves Sculpt modes; tooltips on every on-screen button
 - **Floating action menu** - assign up to 8 commands per edit mode and drag it anywhere; disable it if you don't need it
 
 ![viewport touch control](/docs/simple_demo.gif)
@@ -26,7 +26,7 @@ Pan, rotate, and zoom the viewport with touch or pen input. TouchView overlays c
 
 ## Installation
 
-1. Download the latest release zip (`touch_view_vX.Y.Z.zip`) from the [releases page](https://github.com/b3dhub/touch_view/releases).
+1. Download the latest release zip (`touch_view_vX.Y.Z.zip`) from the [releases page](https://github.com/nendotools/touchview/releases).
 2. In Blender, open `Edit > Preferences > Add-ons` (or `Get Extensions` on Blender 4.2+), click the top-right dropdown, choose `Install from Disk...`, select the zip and enable **Touch Viewport**.
 
 > **Not showing up or no input?** Search the Add-ons list for **Touch Viewport** (the add-on name and sidebar category differ) and make sure it is enabled. On Linux, run Blender through X11/XWayland (`WAYLAND_DISPLAY= blender`) - Blender's native Wayland backend does not forward tablet or touch events to add-ons.
@@ -65,15 +65,29 @@ The floating action menu holds up to 8 custom commands per edit mode and can be 
 | **Subdivision Limit**  | Maximum subdivision levels offered by the topology controls.              |
 | **Floating Menu**      | Show the draggable per-mode action menu.                                  |
 
+## Building from source
+
+The release zip is produced by Blender's own extension builder, which reads `blender_manifest.toml` for the version and the files to exclude:
+
+```sh
+make build
+```
+
+This writes `releases/touch_view_vX.Y.Z.zip`. If Blender isn't on your `PATH`, point `BLENDER` at the executable:
+
+```sh
+make build BLENDER="/path/to/blender"
+```
+
 ## Links
 
-- [Documentation](https://github.com/b3dhub/touch_view)
-- [Report a Bug / Support](https://github.com/b3dhub/touch_view/issues)
+- [Documentation](https://github.com/nendotools/touchview)
+- [Report a Bug / Support](https://github.com/nendotools/touchview/issues)
 - [Gumroad](https://nendo.gumroad.com/l/touchview)
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md).
+See [CHANGELOG.md](CHANGELOG.md), or press `F3` in Blender and search **Changelog** to open the in-app popup.
 
 ## License
 

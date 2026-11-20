@@ -1,6 +1,7 @@
 import bpy
 from mathutils import Matrix, Vector
 
+from ..utils.addon import preferences
 from ..utils.blender import *
 from .gizmo_config import gizmo_colors, toggle_colors
 
@@ -108,7 +109,7 @@ class GizmoSet:
         gizmo = self.group.gizmos.new("GIZMO_GT_button_2d")
         gizmo.target_set_operator(command)
         gizmo.icon = icon  # type: ignore
-        gizmo.use_tooltip = False  # show tooltip
+        gizmo.use_tooltip = True  # show operator description on hover
         gizmo.use_event_handle_all = True  # don't pass events e.g. shift+a to add
         gizmo.use_grab_cursor = "use_grab_cursor" in self.config
         gizmo.show_drag = False  # show default cursor
@@ -151,22 +152,23 @@ class GizmoSetBoolean(GizmoSet):
     def _update_visible(self):
         prefs = preferences()
         bind = self.binding
+        # the floating toggle is a standalone button, independent of the gizmo menu
+        if bind["name"] == "float_toggle":
+            self.visible = prefs.input_mode != "FULL" or prefs.enable_floating_toggle
+            self._set_active_gizmo(prefs.is_enabled)
+            self.primary.hide = not self.visible
+            return
+
         if not prefs.show_menu and bind["name"] not in ["float_menu"]:
             self.visible = False
             self.primary.hide = True
             return
-        if bind["name"] == "float_toggle":
-            self.visible = prefs.input_mode != "FULL" or prefs.enable_floating_toggle
-        else:
-            self.visible = self._binding_enabled()
+        self.visible = self._binding_enabled()
 
         if self.visible:
             self.visible = self._visibility_lock() and not self._check_attribute_bind()
 
-        if bind["name"] == "float_toggle":
-            self._set_active_gizmo(prefs.is_enabled)
-        else:
-            self._set_active_gizmo(self._find_attribute(bind["location"], bind["name"]))
+        self._set_active_gizmo(self._find_attribute(bind["location"], bind["name"]))
         self.primary.hide = not self.visible
 
     def _set_toggle_colors(self, gizmo: bpy.types.Gizmo):

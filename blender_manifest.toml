@@ -1,22 +1,21 @@
 schema_version = "1.0.0"
 
 id = "touch_view"
-version = "4.2.2"
-name = "Touch Viewport"
+name = "Touch View"
+version = "4.3.0"
 tagline = "Creates active touch zones over View 2D and 3D areas"
 maintainer = "NENDO, Karan @b3dhub"
 type = "add-on"
-
-website = "https://github.com/b3dhub/touch_view"
-
-# Optional list defined by Blender and server, see:
-# https://docs.blender.org/manual/en/dev/extensions/tags.html
 tags = ["3D View", "User Interface"]
+website = "https://github.com/nendotools/touchview"
 
 blender_version_min = "4.2.0"
-
-# License conforming to https://spdx.org/licenses/ (use "SPDX: prefix)
 license = ["SPDX:GPL-3.0-or-later"]
+copyright = ["2022-2026 NENDO, Karan @b3dhub"]
+
+# Optional: bundle 3rd party Python modules.
+# https://docs.blender.org/manual/en/dev/advanced/extensions/python_wheels.html
+# wheels = ["./wheels/t3dn_bip-1.0.11-py3-none-any.whl"]
 
 [permissions]
 files = "preserve settings when enabling/disabling the add-on"
@@ -24,16 +23,21 @@ files = "preserve settings when enabling/disabling the add-on"
 [build]
 paths_exclude_pattern = [
   "__pycache__/",
-  "/.git/",
+
   "/.agents/",
+  "/.git/",
+  "/.github/",
+  "/.vscode/",
   "/docs/",
-  ".gitignore",
+  "/releases/",
+  "/tests/",
+
   "/*.zip",
-  "/tests",
+  "/.gitignore",
+  "/.gitmodules",
   "/AGENTS.md",
   "/Makefile",
-  "/build.bat",
-  "/CHANGELOG.md",
-  "README.md",
-  "preferences.json",
+  "/preferences.json",
+  "/README.md",
+  "/sync_agents.ps1",
 ]

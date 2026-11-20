@@ -5,7 +5,7 @@ import gpu
 from gpu_extras.batch import batch_for_shader
 from mathutils import Vector
 
-from .blender import preferences
+from .addon import preferences
 
 
 def _prefs():

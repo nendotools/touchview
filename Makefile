@@ -26,10 +26,12 @@ sync:
 sync_agents:
 	powershell -NoProfile -ExecutionPolicy Bypass -File sync_agents.ps1
 
-# Build project using build.bat script (defaults to dev branch)
-build:
-	$(eval branch ?= dev)
-	cmd /c "build.bat $(branch)"
+# Build project with Blender's extension build (override BLENDER to pick a binary)
+BLENDER ?= $(shell python -c "import glob, os, shutil; root=os.path.expanduser('~/Downloads/Blender/stable'); found=sorted(glob.glob(os.path.join(root,'blender-5*','blender.exe')) or glob.glob(os.path.join(root,'blender-5*','blender'))); print(shutil.which('blender') or found[-1])")
+build: get_version
+	$(eval ROOT_DIR := $(notdir $(CURDIR)))
+	python -c "import os; os.makedirs('releases', exist_ok=True)"
+	$(BLENDER) --command extension build --source-dir . --output-filepath releases/$(ROOT_DIR)_v$(VERSION).zip
 	@echo "Successfully built the release zip"
 
 # ===========================================

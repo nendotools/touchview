@@ -1,17 +1,13 @@
-# Built-in modules
 import math
 
 import bpy
 from bpy.props import EnumProperty
 from bpy.types import Operator
-from bpy_extras.view3d_utils import (region_2d_to_origin_3d,
-                                     region_2d_to_vector_3d)
+from bpy_extras.view3d_utils import region_2d_to_origin_3d, region_2d_to_vector_3d
 from mathutils import Vector
 
-# Local modules
-from ..utils.blender import preferences
-from ..utils.constants import (FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS,
-                               RMOUSE, brush_modes, input_mode_items)
+from ..utils.addon import preferences
+from ..utils.constants import FINISHED, LMOUSE, PASSTHROUGH, PEN, PRESS, RMOUSE, brush_modes, input_mode_items
 
 
 def is_pen(event):
@@ -76,7 +72,10 @@ class TOUCHVIEW_OT_double_click_action(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.area.type in {"NODE_EDITOR", "VIEW_2D", "VIEW_3D", "IMAGE_EDITOR"} and context.region.type == "WINDOW"
+        return (
+            context.area.type in {"NODE_EDITOR", "VIEW_2D", "VIEW_3D", "IMAGE_EDITOR"}
+            and context.region.type == "WINDOW"
+        )
 
     def invoke(self, context, event):
         if event.type not in [PEN, LMOUSE]:
@@ -202,7 +201,9 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
             mid_point,  # type: ignore
         ) * (pan_scale * 0.5)
 
-        is_quadview_orthographic = context.region_data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
+        is_quadview_orthographic = (
+            context.region_data.is_orthographic_side_view and context.region.alignment == "QUAD_SPLIT"
+        )
         is_locked = context.region_data.lock_rotation or is_quadview_orthographic
 
         if dolly_wid > self.delta[0] or self.delta[0] > context.region.width - dolly_wid:
@@ -294,9 +295,7 @@ class TOUCHVIEW_OT_touch_input_3d(Operator):
         ray_direction_obj = ray_target_obj - ray_origin_obj
 
         # cast the ray against the evaluated mesh so sculpt strokes are seen
-        success, location, normal, face_index = obj.ray_cast(
-            ray_origin_obj, ray_direction_obj, depsgraph=depsgraph
-        )
+        success, location, normal, face_index = obj.ray_cast(ray_origin_obj, ray_direction_obj, depsgraph=depsgraph)
 
         if success:
             return location, normal, face_index

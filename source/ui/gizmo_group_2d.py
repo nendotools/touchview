@@ -1,20 +1,34 @@
-from math import cos, radians, sin
+from math import ceil, cos, radians, sin
 
 import bpy
 from bpy.types import GizmoGroup
 from mathutils import Vector
 
+from ..utils.addon import preferences
 from ..utils.blender import *
 from .gizmo_2d import GizmoSet, GizmoSetBoolean
-from .gizmo_config import (brushResizeConfig, brushStrengthConfig,
-                           controlGizmoConfig, controllerConfig,
-                           floatingConfig, floatingToggleConfig,
-                           fullscreenToggleConfig, nPanelConfig,
-                           quadviewToggleConfig, redoConfig,
-                           rotLocToggleConfig, snapViewConfig, subdivConfig,
-                           touchViewConfig, undoConfig, unsubdivConfig,
-                           voxelRemeshConfig, voxelSizeConfig,
-                           voxelStepDownConfig, voxelStepUpConfig)
+from .gizmo_config import (
+    brushResizeConfig,
+    brushStrengthConfig,
+    controlGizmoConfig,
+    controllerConfig,
+    floatingConfig,
+    floatingToggleConfig,
+    fullscreenToggleConfig,
+    nPanelConfig,
+    quadviewToggleConfig,
+    redoConfig,
+    rotLocToggleConfig,
+    snapViewConfig,
+    subdivConfig,
+    touchViewConfig,
+    undoConfig,
+    unsubdivConfig,
+    voxelRemeshConfig,
+    voxelSizeConfig,
+    voxelStepDownConfig,
+    voxelStepUpConfig,
+)
 
 __module__ = __name__.split(".")[0]
 
@@ -114,38 +128,56 @@ class GIZMO_GT_viewport_gizmo_group(GizmoGroup):
 
     def _menu_bar(self, visible_gizmos: list[GizmoSet]):
         prefs = preferences()
-        origin = self.origin
-        count = len(visible_gizmos)
         safe_area = safe_area_3d()
-        origin = Vector(
-            (
-                (safe_area[0].x + safe_area[1].x) / 2,
-                (safe_area[0].y + safe_area[1].y) / 2,
-                0.0,
+        spacing = ((36 * prefs.gizmo_scale) + 2 * prefs.gizmo_padding) * ui_scale()
+        center = (safe_area[0] + safe_area[1]) / 2
+        # keep the bottom corners free for the floating toggle and action menu
+        bottom = safe_area[0].y + spacing
+
+        # side bars stay in the lower half and below the navigation gizmo,
+        # so they don't overlap Blender's own UI
+        if prefs.gizmo_position in {"LEFT", "RIGHT"}:
+            is_left = prefs.gizmo_position == "LEFT"
+            top = center.y
+            if not is_left:
+                top = min(top, safe_area[1].y - navigation_gizmo_height() - spacing / 2)
+            top = max(top, bottom)
+            start = Vector(
+                (
+                    safe_area[0].x if is_left else safe_area[1].x,
+                    (bottom + top) / 2,
+                    0.0,
+                )
             )
-        )
-
-        if prefs.gizmo_position == "TOP":
-            origin.y = safe_area[1].y
-        elif prefs.gizmo_position == "BOTTOM":
-            origin.y = safe_area[0].y
-        elif prefs.gizmo_position == "LEFT":
-            origin.x = safe_area[0].x
-        elif prefs.gizmo_position == "RIGHT":
-            origin.x = safe_area[1].x  # - 54  # to avoid overlapping
-
-        gizmo_scale = (36 * prefs.gizmo_scale) + prefs.gizmo_padding
-        gizmo_padding = prefs.gizmo_padding
-        spacing = (gizmo_scale + gizmo_padding) * ui_scale()
-
-        if prefs.gizmo_position in {"TOP", "BOTTOM"} and prefs.menu_style == "fixed.bar":
-            start = origin.x - ((count - 1) * spacing) / 2
-            for i, gizmo in enumerate(visible_gizmos):
-                self._move_gizmo(gizmo, Vector((start + (i * spacing), origin.y, 0.0)))
+            axis = Vector((0.0, -1.0, 0.0))
+            wrap = Vector((1.0 if is_left else -1.0, 0.0, 0.0))
+            length = top - bottom
         else:
-            start = origin.y + (count * spacing) / 2
-            for i, gizmo in enumerate(visible_gizmos):
-                self._move_gizmo(gizmo, Vector((origin.x, start - (i * spacing), 0.0)))
+            is_top = prefs.gizmo_position == "TOP"
+            start = Vector((center.x, safe_area[1].y if is_top else safe_area[0].y, 0.0))
+            axis = Vector((1.0, 0.0, 0.0))
+            wrap = Vector((0.0, -1.0 if is_top else 1.0, 0.0))
+            length = safe_area[1].x - safe_area[0].x - 2 * spacing
+
+        self._layout_lines(visible_gizmos, start, axis, wrap, length, spacing)
+
+    # center gizmos along `axis` around `start`, wrapping onto new lines
+    # (offset towards `wrap`) whenever a line would exceed `length`
+    def _layout_lines(
+        self,
+        gizmos: list[GizmoSet],
+        start: Vector,
+        axis: Vector,
+        wrap: Vector,
+        length: float,
+        spacing: float,
+    ):
+        per_line = max(1, int(length // spacing) + 1)
+        for line in range(ceil(len(gizmos) / per_line)):
+            row = gizmos[line * per_line : (line + 1) * per_line]
+            offset = -(len(row) - 1) * spacing / 2
+            for i, gizmo in enumerate(row):
+                self._move_gizmo(gizmo, start + axis * (offset + i * spacing) + wrap * (line * spacing))
 
     def _menu_radial(self, visible_gizmos: list[GizmoSet]):
         prefs = preferences()
